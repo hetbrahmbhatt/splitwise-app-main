@@ -9,8 +9,6 @@ function auth() {
     options.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
     options.secretOrKey = secret;
     passport.use(new JwtStrategy(options, function (jwt_payload, callback) {
-        // console.log( "JWT payload received", jwt_payload );
-
         users.findOne({ email: jwt_payload.email }, function (err, user) {
             if (err) {
                 console.log("Error in passport" + err)

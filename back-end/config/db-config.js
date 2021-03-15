@@ -6,6 +6,7 @@ mongoose.connect(mongodb_string, {
     useUnifiedTopology: true
 }, error => {
     if (error) {
+        console.log(error);
         console.log("Error in connection");
     } else {
         console.log("Successfully Connected");

@@ -5,10 +5,11 @@ var bodyParser = require( 'body-parser' );
 var mongoose = require( './config/db-config' );
 var { frontend_url } = require( './config/config' )
 var path = require( 'path' )
-var app = express();
+const app = express();
 var session = require( "express-session" );
 var cookieParser = require( "cookie-parser" );
 var cors = require( 'cors' );
+var user = require( './users/routes' )
 
 //session management
 app.use( bodyParser.json() );
@@ -27,6 +28,8 @@ app.use(
         }
     } )
 );
+app.use( '/users', user );
+
 //get index page
 app.get( '/', ( req, res ) => {
     res.send( 'Welcome to Splitwise' );
