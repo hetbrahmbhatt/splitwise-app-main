@@ -23,7 +23,7 @@ var userSchema = new Schema( {
     language: String,
     timezone: String,
     phoneno: String,
-    defaultCurrency: String,
+    defaultCurrency: {type : String , default : "$"},
     image: String,
     messages: [ messageSchema ],
 
