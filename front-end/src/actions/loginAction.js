@@ -37,7 +37,7 @@ var loginAction = (data) => (dispatch) => {
                     httpOnly: false,
                     maxAge: 90000
                 })
-                cookie.save("id", response.data.id, {
+                cookie.save("id", response.data._id, {
                     path: '/',
                     httpOnly: false,
                     maxAge: 90000
@@ -52,7 +52,7 @@ var loginAction = (data) => (dispatch) => {
                     httpOnly: false,
                     maxAge: 90000
                 })
-                cookie.save("defaultcurrency", response.data.currency, {
+                cookie.save("defaultcurrency", response.data.defaultCurrency, {
                     path: '/',
                     httpOnly: false,
                     maxAge: 90000

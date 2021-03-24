@@ -68,11 +68,15 @@ export class login extends Component {
     render() {
         let renderError = null
         let redirectVar = null
+        let invalidError = null
         if ( cookie.load( 'auth' )) {
             redirectVar = <Redirect to='/dashboard' />
         }
         if (this.state.error) {
             renderError = <div style={{ 'color': 'red' }}>{this.state.errorMessage}</div>
+        }
+        if(this.props.error){
+            invalidError = <div style={{ 'color': 'red' }}>{this.props.message}</div>
         }
         return (
             <div style={{ "marginLeft": "30%", "margin-top": "-40px" }}>
@@ -104,6 +108,7 @@ export class login extends Component {
 
                                 </form>
                                 {renderError}
+                                {invalidError}
                             </div>
 
                         </div>

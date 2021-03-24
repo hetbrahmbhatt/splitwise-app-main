@@ -31,6 +31,7 @@ var SignUpAction = (data) => (dispatch) => {
         .post(BACKEND_URL + '/users/signup', data)
         .then((response) => {
             if (response.status === 200) {
+                console.log(response.data);
                 if (response.status === 200) {
                     cookie.save("auth", true, {
                         path: '/',
@@ -52,12 +53,12 @@ var SignUpAction = (data) => (dispatch) => {
                         httpOnly: false,
                         maxAge: 90000
                     })
-                    cookie.save("defaultcurrency", response.data.currency, {
+                    cookie.save("defaultcurrency", response.data.defaultcurrency, {
                         path: '/',
                         httpOnly: false,
                         maxAge: 90000
                     })
-                    cookie.save("timezone", " ", {
+                    cookie.save("timezone", "American/Los_Angeles", {
                         path: '/',
                         httpOnly: false,
                         maxAge: 90000
