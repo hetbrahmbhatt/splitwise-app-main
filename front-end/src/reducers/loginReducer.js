@@ -2,10 +2,11 @@ let initialState = {
     id: "",
 }
 var login = (state = initialState, action) => {
+    console.log(action);
     let newState = { ...state }
     switch (action.type) {
         case "login_success":
-            newState.id = action.payload.response.data.id
+            newState.id = action.payload.response.data._id
             newState.error = false;
             newState.message = "Login Success";
             return newState;

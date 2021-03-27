@@ -79,6 +79,7 @@ export class Profile extends Component {
         })
     }
     handleImageChange = e => {
+
         this.setState({
             updatedProfileImage: e.target.files[0],
             profileImageUpdate: true
@@ -109,90 +110,35 @@ export class Profile extends Component {
                 errorMessage: "Please enter a username",
             })
         }
-        else if(this.state.email == ""){
+        else if (this.state.email == "") {
             this.setState({
                 error: true,
                 errorMessage: "Please enter email",
-            }) 
+            })
         }
-        else if(!this.state.error){
-            this.props.updateUserProfileAction( this.state ).then( response => {
+        else if (!this.state.error) {
+            if (this.state.profileImageUpdate) {
+                console.log("object")
+                const formData = new FormData();
+                formData.append('profileImage', this.state.updatedProfileImage, this.state.updatedProfileImage.name + "," + this.state.userID)
+                const config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                }
+                axios
+                    .post(BACKEND_URL + '/users/uploadprofileimage', formData, config).then((response) => {
+                        this.setState({
+                            profileImagePath: BACKEND_URL + '/images/profilepics/' + cookie.load('id') + '/' + response.data.fileName
+
+                        })
+                    }).catch(err => {
+                        toast.error("Error in image upload")
+                    })
+            }
+            console.log(this.state);
+            this.props.updateUserProfileAction(this.state).then(response => {
             });
-            // axios
-            //     .put(BACKEND_URL + "/users/editprofile", this.state).then(response => {
-            //         if (response.status === 200) {
-            //             if (this.state.profileImageUpdate) {
-            //                 console.log("object")
-            //                 const formData = new FormData();
-            //                 formData.append('profileImage', this.state.updatedProfileImage, this.state.updatedProfileImage.name + "," + this.state.userID)
-            //                 const config = {
-            //                     headers: {
-            //                         'content-type': 'multipart/form-data'
-            //                     }
-            //                 }
-            //                 for(var value of formData.values()){
-            //                     console.log(value);
-            //                 }
-            //                 axios
-            //                     .post(BACKEND_URL + '/users/uploadprofileimage', formData, config).then((response) => {
-            //                         this.setState({
-            //                             profileImagePath: BACKEND_URL + '/images/profilepics/' + cookie.load('id') + '/' + response.data.fileName
-
-            //                         })
-            //                     }).catch(err => {
-            //                         toast.error("Error in image upload")
-            //                     })
-            //             }
-            //             if (cookie.load('email') !== this.state.email) {
-            //                 cookie.remove("email", {
-            //                     path: '/'
-            //                 });
-            //                 cookie.save("email", this.state.email, {
-            //                     path: '/',
-            //                     httpOnly: false,
-            //                     maxAge: 90000
-            //                 })
-            //             }
-            //             if (cookie.load('name') !== this.state.name) {
-            //                 cookie.remove("name", {
-            //                     path: '/'
-            //                 });
-            //                 cookie.save("name", this.state.name, {
-            //                     path: '/',
-            //                     httpOnly: false,
-            //                     maxAge: 90000
-            //                 })
-            //             }
-            //             if (cookie.load('defaultcurrency') !== this.state.defaultcurrency) {
-            //                 cookie.remove("defaultcurrency", {
-            //                     path: '/'
-            //                 });
-            //                 cookie.save("defaultcurrency", this.state.defaultcurrency, {
-            //                     path: '/',
-            //                     httpOnly: false,
-            //                     maxAge: 90000
-            //                 })
-            //             }
-            //             if (cookie.load('timezone') !== this.state.timezone) {
-            //                 cookie.remove("timezone", {
-            //                     path: '/'
-            //                 });
-            //                 cookie.save("timezone", this.state.timezone, {
-            //                     path: '/',
-            //                     httpOnly: false,
-            //                     maxAge: 90000
-            //                 })
-            //             }
-            //             window.location.assign("/profile");
-            //         }
-
-            //     }).catch(err => {
-            //         console.log(err.response);
-            //         this.setState({
-            //             errorMessage: err.response.data,
-            //             emailError: true
-            //         })
-            //     })
         }
 
     }
@@ -200,6 +146,8 @@ export class Profile extends Component {
         try {
             const userID = cookie.load("id")
             console.log(userID);
+            axios.defaults.headers.common[ "authorization" ] = cookie.load( 'token' )
+            axios.defaults.withCredentials = true;
             const response = await axios.get(BACKEND_URL + "/users/userbyid/" + userID);
             console.log(response.data[0]);
             this.setState({
@@ -212,14 +160,14 @@ export class Profile extends Component {
                 language: response.data[0].language,
 
             })
-            if (response.data.image == null) {
+            if (response.data[0].image == null) {
                 this.setState({
                     profileImagePath: BACKEND_URL + '/images/avatar.png'
                 })
             }
             else {
                 this.setState({
-                    profileImagePath: BACKEND_URL + '/images/profilepics/' + cookie.load('id') + '/' + response.data.image
+                    profileImagePath: BACKEND_URL + '/images/profilepics/' + cookie.load('id') + '/' + response.data[0].image
                 })
             }
         }
@@ -337,7 +285,7 @@ export class Profile extends Component {
                                         <input type="text" className="form-control" name="phoneno"
                                             placeholder={this.state.phoneno} onChange={this.handleNumberChange} />
                                     </div>
-                                    
+
                                     <div className="col-3" style={{ "marginTop": "30px" }}>
                                         <Select
                                             options={language}
@@ -356,18 +304,20 @@ export class Profile extends Component {
         )
     }
 }
-const matchStateToProps = ( state ) => {
-    console.log( "inside matchStatetoProps", state )
+const matchStateToProps = (state) => {
+    console.log("inside matchStatetoProps", state)
     return {
-        error: state.loginReducer.error,
-        message: state.loginReducer.message
+        user: state.getUserProfileReducer.userData,
+        profileImagePath: state.getUserProfileReducer.profileImagePath,
+
     }
 
 }
-const matchDispatchToProps = ( dispatch ) => {
+const matchDispatchToProps = (dispatch) => {
+    // console.log(dispatch)
     return {
-        updateUserProfileAction: ( data ) => dispatch( updateUserProfileAction( data ) ),
-   }
+        updateUserProfileAction: (data) => dispatch(updateUserProfileAction(data)),
+    }
 }
 
-export default connect( matchStateToProps, matchDispatchToProps )( Profile )
+export default connect(matchStateToProps, matchDispatchToProps)(Profile)

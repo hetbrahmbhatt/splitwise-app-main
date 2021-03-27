@@ -6,6 +6,7 @@ let initialState = {
 
 }
 var getUserProfileReducer = ( state = initialState, action ) => {
+    console.log(action.payload)
     let newState = { ...state }
 
     switch ( action.type ) {

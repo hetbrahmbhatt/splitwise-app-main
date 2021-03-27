@@ -10,7 +10,8 @@ var session = require( "express-session" );
 var cookieParser = require( "cookie-parser" );
 var cors = require( 'cors' );
 var user = require( './users/routes' )
-
+const fileUpload = require('express-fileupload');
+app.use(fileUpload());
 //session management
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded( { extended: false } ) );

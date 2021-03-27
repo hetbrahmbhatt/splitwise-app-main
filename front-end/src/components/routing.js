@@ -6,7 +6,7 @@ import login from './login/login'
 import logout from './login/logout';
 import Navbar from './landing-page/navbar';
 // import Profile from './user/profile';
-// import NewGroup from './groups/new-group';
+import NewGroup from './groups/new-group';
 // import MyGroup from './groups/my-group';
 // import GroupDescription from './groups/group-description';
 // import RecentActivity from '../components/user/recent-activity';
@@ -27,7 +27,7 @@ export class Routing extends Component {
                 <Route path='/dashboard' component={Dashboard} /> */}
 
                 {/* Group */}
-                {/* <Route path='/new-group' component={NewGroup} /> */}
+                <Route path='/new-group' component={NewGroup} />
                 {/* <Route path='/all-group' component={MyGroup} /> */}
                 {/* <Route path='/group-description' component={GroupDescription} /> */}
 
