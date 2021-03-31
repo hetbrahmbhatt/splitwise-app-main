@@ -25,14 +25,14 @@ router.post('/signup', (req, res) => {
             image: "",
         })
         user.save().then(response => {
-            console.log("Signup successfull")
+            console.log("Signup successful")
             console.log(response);
             let payload = {
-                _id: doc._id,
-                email: doc.email,
-                name: doc.name,
-                defaultcurrency: doc.defaultcurrency,
-                timezone: doc.timezone
+                _id: response._id,
+                email: response.email,
+                name: response.name,
+                defaultcurrency: response.defaultcurrency,
+                timezone: response.timezone
             }
             let token = jwt.sign(payload, secret, {
                 expiresIn: 1008000
@@ -51,7 +51,7 @@ router.post('/signup', (req, res) => {
 router.post('/login',(req, res) => {
     userSchema.findOne({ email: req.body.email }).then(doc => {
         if (bcrypt.compareSync(req.body.password, doc.password)) {
-            console.log("Login Successfull");
+            console.log("Login Successful");
             let payload = {
                 _id: doc._id,
                 email: doc.email,
@@ -74,7 +74,7 @@ router.post('/login',(req, res) => {
     })
 
 })
-//get orders by users
+//get by users
 router.get('/userbyid/:id', checkAuth, (req, res) => {
     console.log(req.params.id);
     userSchema.find({ _id: req.params.id }).then(docs => {

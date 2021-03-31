@@ -10,6 +10,7 @@ var session = require( "express-session" );
 var cookieParser = require( "cookie-parser" );
 var cors = require( 'cors' );
 var user = require( './users/routes' )
+var groups = require( './groups/routes' )
 const fileUpload = require('express-fileupload');
 app.use(fileUpload());
 //session management
@@ -30,6 +31,7 @@ app.use(
     } )
 );
 app.use( '/users', user );
+app.use( '/groups', groups );
 
 //get index page
 app.get( '/', ( req, res ) => {

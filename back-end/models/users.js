@@ -14,7 +14,16 @@ var messageSchema = new Schema( {
     userName: String,
     conversations: [ individualMessageSchema ]
 } )
-
+var invitedGroupSchema = new Schema({
+    groupID : String,
+    groupName : String,
+    invitedBy : String
+})
+var acceptedGroupSchema = new Schema({
+    groupID : String,
+    groupName : String,
+    invitedBy : String
+})
 
 var userSchema = new Schema( {
     name: String,
@@ -26,7 +35,8 @@ var userSchema = new Schema( {
     defaultCurrency: {type : String , default : "$"},
     image: String,
     messages: [ messageSchema ],
-
+    invitedGroups : [invitedGroupSchema],
+    acceptedGroups : [acceptedGroupSchema]
 }
     , { collection: 'users' }
 );
