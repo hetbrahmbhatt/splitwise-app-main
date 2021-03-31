@@ -1,6 +1,7 @@
 import axios from 'axios';
 import BACKEND_URL from '../config/config'
 import cookie from "react-cookies";
+import jwt_decode from "jwt-decode"
 
 const SIGNUP_SUCCESS = "signup_success";
 const SIGNUP_FAILED = "signup_failed";
@@ -32,28 +33,30 @@ var SignUpAction = (data) => (dispatch) => {
         .then((response) => {
             if (response.status === 200) {
                 console.log(response.data);
+                let decoded = jwt_decode(response.data.split(' ')[1])
+
                 if (response.status === 200) {
                     cookie.save("auth", true, {
                         path: '/',
                         httpOnly: false,
                         maxAge: 90000
                     })
-                    cookie.save("id", response.data.id, {
+                    cookie.save("id", decoded._id, {
                         path: '/',
                         httpOnly: false,
                         maxAge: 90000
                     })
-                    cookie.save("name", response.data.name, {
+                    cookie.save("name", decoded.name, {
                         path: '/',
                         httpOnly: false,
                         maxAge: 90000
                     })
-                    cookie.save("email", response.data.email, {
+                    cookie.save("email", decoded.email, {
                         path: '/',
                         httpOnly: false,
                         maxAge: 90000
                     })
-                    cookie.save("defaultcurrency", response.data.defaultcurrency, {
+                    cookie.save("defaultcurrency", decoded.defaultcurrency, {
                         path: '/',
                         httpOnly: false,
                         maxAge: 90000

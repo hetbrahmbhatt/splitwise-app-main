@@ -8,10 +8,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Redirect } from 'react-router'
 import searchByEmailAction from '../../actions/searchbyEmailAction'
 import { connect } from "react-redux";
-
+import groupAddAction from '../../actions/groupAddAction'
 export class NewGroup extends Component {
     state = {
         userID: cookie.load('id'),
+        userName : cookie.load('name'),
         groupName: "",
         selectedUsers: [],
         groupError: false,
@@ -101,38 +102,40 @@ export class NewGroup extends Component {
             return;
         }
         if (!this.state.error) {
-            console.log(this.state);
-            axios
-                .post(BACKEND_URL + "/groups/new", this.state).then(response => {
-                    if (response.status === 200) {
-                        toast.success("Group Created Successfully");
-                        window.location.assign("/all-group");
-                        const formData = new FormData();
-                        formData.append('profileImage', this.state.updatedProfileImage, this.state.updatedProfileImage.name + "," + response.data.groupID)
-                        const config = {
-                            headers: {
-                                'content-type': 'multipart/form-data'
-                            }
-                        }
-                        axios
-                            .post(BACKEND_URL + '/groups/uploadprofileimage', formData, config).then((response) => {
-                                this.setState({
-                                    profileImagePath: BACKEND_URL + '/images/grouppics/' + response.data.groupID + '/' + response.data.fileName
+            console.log(this.props);
+            this.props.groupAddAction(this.state)
+            // console.log(this.state);
+            // axios
+            //     .post(BACKEND_URL + "/groups/new", this.state).then(response => {
+            //         if (response.status === 200) {
+            //             toast.success("Group Created Successfully");
+            //             window.location.assign("/all-group");
+            //             const formData = new FormData();
+            //             formData.append('profileImage', this.state.updatedProfileImage, this.state.updatedProfileImage.name + "," + response.data.groupID)
+            //             const config = {
+            //                 headers: {
+            //                     'content-type': 'multipart/form-data'
+            //                 }
+            //             }
+            //             axios
+            //                 .post(BACKEND_URL + '/groups/uploadprofileimage', formData, config).then((response) => {
+            //                     this.setState({
+            //                         profileImagePath: BACKEND_URL + '/images/grouppics/' + response.data.groupID + '/' + response.data.fileName
 
-                                })
+            //                     })
 
-                            }).catch(err => {
-                                toast.error("Error in image upload")
-                            })
-                    }
+            //                 }).catch(err => {
+            //                     toast.error("Error in image upload")
+            //                 })
+            //         }
 
-                }).catch(err => {
-                    if (err.response == null) {
+            //     }).catch(err => {
+            //         if (err.response == null) {
 
-                    }
-                    else
-                        toast.error(err.response.data);
-                })
+            //         }
+            //         else
+            //             toast.error(err.response.data);
+            //     })
         }
     }
 
@@ -214,7 +217,7 @@ const matchStateToProps = ( state ) => {
 
 const matchDispatchToProps = ( dispatch ) => {
     return {
-        searchByEmailAction: ( data ) => dispatch( searchByEmailAction( data ) ),
+        groupAddAction: ( data ) => dispatch( groupAddAction( data ) ),
     }
 }
 

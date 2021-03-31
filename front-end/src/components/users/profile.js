@@ -144,6 +144,7 @@ export class Profile extends Component {
     }
     async componentDidMount() {
         try {
+            console.log(this.props);
             const userID = cookie.load("id")
             console.log(userID);
             axios.defaults.headers.common[ "authorization" ] = cookie.load( 'token' )
