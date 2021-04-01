@@ -1,5 +1,10 @@
 const mongoose = require( 'mongoose' )
 var Schema = mongoose.Schema;
+var membersSchema = new Schema( {
+    groupID : String,
+    userID : String,
+    userName : String
+})
 var groupSchema = new Schema( {
     groupID: String,
     userID : String,
@@ -7,7 +12,9 @@ var groupSchema = new Schema( {
     timestamp : String,
     count : Number,
     image : String,
-    invitedBy : String
+    invitedBy : String,
+    membersSchema : [membersSchema]
+
 }
     , { collection: 'master_group' }
 );
