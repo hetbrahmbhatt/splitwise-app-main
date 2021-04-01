@@ -7,6 +7,7 @@ import insertGroupReducer from './groupsReducers/insertGroupReducer';
 import getByIDReducer from './UserReducers/getByIDUserReducer';
 import getGroupByIDReducer from './groupsReducers/getGroupByIDReducer';
 import getGroupByIDReducerForAccepted from './groupsReducers/getGroupByIDForAccepted';
+import editGroupReducer from './groupsReducers/editGroupReducer';
 
 var rootReducer = combineReducers({
     SignUpReducer: SignUpReducer,
@@ -16,7 +17,9 @@ var rootReducer = combineReducers({
     insertGroupReducer: insertGroupReducer,
     getByIDReducer: getByIDReducer,
     getGroupByIDReducer: getGroupByIDReducer,
-    getGroupByIDReducerForAccepted: getGroupByIDReducerForAccepted
+    getGroupByIDReducerForAccepted: getGroupByIDReducerForAccepted,
+    editGroupReducer: editGroupReducer,
+
 
 });
 

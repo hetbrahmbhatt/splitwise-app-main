@@ -20,7 +20,6 @@ export class IndividualGroup extends Component {
     async componentDidMount() {
         console.log(this.state)
         this.props.groupGetByIDAction(this.props.groupID.groupID).then(response => {
-            console.log(this.props.groupData[0].groupName);
             this.setState({
                 invitedBy: this.props.groupID.invitedBy,
                 groupName: this.props.groupData[0].groupName

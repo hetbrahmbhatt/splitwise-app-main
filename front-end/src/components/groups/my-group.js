@@ -20,6 +20,7 @@ export class MyGroup extends Component {
             groups: [],
             acceptedGroups: [],
             searchInput: "",
+            
             emptygroupsFlag: false,
             emptyAcceptedGroupsFlag: false
         }

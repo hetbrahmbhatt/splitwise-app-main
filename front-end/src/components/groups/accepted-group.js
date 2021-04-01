@@ -6,7 +6,7 @@ import cookie from "react-cookies";
 import { Link } from 'react-router-dom';
 import Modal from 'react-modal';
 import _ from 'lodash';
-// import EditGroup from './edit-group';
+import EditGroup from './edit-group';
 import { ToastContainer, toast } from 'react-toastify';
 
 // import getGroupByIDActionForAcceptedGroups from '../../actions/getGroupByIDActionForAcceptedGroups'
@@ -34,7 +34,7 @@ export class AcceptedGroup extends Component {
                 if (response.status === 200) {
                     this.setState({
                         groupName: response.data[0].groupName,
-                        invitedByy : response.data[0].invitedBy
+                        invitedByy: response.data[0].invitedBy
                     })
                 }
             }).catch((err) => {
@@ -78,6 +78,7 @@ export class AcceptedGroup extends Component {
         )
     }
     render() {
+        console.log(this.state);
         let invitedDivision = null
         if (!(cookie.load("auth"))) {
             return <Redirect to='/login' />
@@ -102,8 +103,8 @@ export class AcceptedGroup extends Component {
                     <button className="btn btn-warning" onClick={this.toggleGroupPopUp}>Edit Group</button>
                 </div>
                 <Modal isOpen={this.state.groupPopUp} >
-                    {/* <EditGroup groupData={this.state} ariaHideApp={false} */}
-                    {/* closePopUp={this.toggleGroupPopUp}/> */}
+                    <EditGroup groupsData={this.state} ariaHideApp={false}
+                        closePopUp={this.toggleGroupPopUp} />
                 </Modal>
             </div>
         let groupDescriptionOption =
