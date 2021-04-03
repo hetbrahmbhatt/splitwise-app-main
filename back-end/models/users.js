@@ -58,7 +58,7 @@ var userSchema = new Schema({
     email: { type: String, unique: true },
     password: String,
     language: String,
-    timezone:  {type: String, default: "America/Halifax" },
+    timezone:  {type: String, default: "America/Los_Angeles" },
     phoneno: String,
     defaultCurrency: { type: String, default: "$" },
     image: String,

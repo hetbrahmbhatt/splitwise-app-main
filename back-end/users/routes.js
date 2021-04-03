@@ -48,7 +48,7 @@ router.post('/signup', (req, res) => {
 
 
 //login
-router.post('/login',(req, res) => {
+router.post('/login', (req, res) => {
     userSchema.findOne({ email: req.body.email }).then(doc => {
         if (bcrypt.compareSync(req.body.password, doc.password)) {
             console.log("Login Successful");

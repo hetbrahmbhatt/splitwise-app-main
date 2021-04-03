@@ -11,6 +11,7 @@ import recentactivityAction from '../../actions/recentActivityAction';
 import { connect } from "react-redux";
 import ReactPaginate from 'react-paginate';
 import '../css/pagination.css';
+import groupGetByIDAction from '../../actions/getGroupByIDAction'
 
 export class RecentActivity extends Component {
     constructor(props) {
@@ -132,6 +133,7 @@ export class RecentActivity extends Component {
                 })
             }
         })
+        console.log(this.props);
 
     }
     onClear = () => {
@@ -280,6 +282,7 @@ const matchStateToProps = (state) => {
     return {
         error: state.recentActivityReducer.error,
         userData: state.recentActivityReducer.userData,
+        groupData : state.getGroupByIDReducer.groupData
 
     }
 
@@ -288,6 +291,8 @@ const matchDispatchToProps = (dispatch) => {
     // console.log(dispatch)
     return {
         recentactivityAction: (data) => dispatch(recentactivityAction(data)),
+        groupGetByIDAction: (data) => dispatch(groupGetByIDAction(data)),
+
     }
 }
 

@@ -4,6 +4,7 @@ var router = express.Router();
 var mongoose = require('../config/db-config');
 var groupSchema = require('../models/groups');
 const userSchema = require('../models/users');
+const groupSummarySchema = require('../models/groupSummary');
 
 var jwt = require('jsonwebtoken');
 var { secret } = require('../config/config');
@@ -165,6 +166,15 @@ router.put('/updategroup/', checkAuth, (req, res) => {
     }).catch(error => {
         console.log("Error in update", error)
         res.status(400).send(error)
+    })
+});
+router.get('/groupsummarybyid/:id', checkAuth, (req, res) => {
+    console.log(req.params.id)
+    groupSummarySchema.find({ groupID: req.params.id }).sort({ createdAt: '-1' }).then(docs => {
+        console.log("Group Summary by User", docs)
+        res.status(200).send(docs)
+    }).catch(error => {
+        console.log("Error in Fetching Group Summary", error)
     })
 });
 module.exports = router;

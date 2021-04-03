@@ -11,6 +11,8 @@ import grocerylogo from '../../images/grocery.png'
 import camera from '../../images/camera.png'
 import emptyplaceholder from '../../images/empty-placeholder.png'
 import profilePhoto from '../../images/profile-icon.png'
+import groupSummaryByIDAction from '../../actions/getGroupSummaryByGroupID'
+import { connect } from "react-redux";
 
 const customStyles = {
     content: {
@@ -65,6 +67,12 @@ export class GroupDescription extends Component {
         }
     }
     async componentDidMount() {
+        this.props.groupSummaryByIDAction(this.state).then(response =>{
+            console.log(this.props);
+            this.setState({
+                groupDescription : this.props.groupSummaryData.data
+            })
+        })
         const groupID = this.state.groupID;
         const response = await axios.get(BACKEND_URL + "/groups/description/" + groupID);
         const totalinternaldebt = await axios.get(BACKEND_URL + "/expense/totalinternaldebt/" + groupID);
@@ -262,7 +270,7 @@ export class GroupDescription extends Component {
                             </div>
                             <div className="col-3" style={{ marginLeft: "60px", marginTop: "15px", marginRight: "-40px" }}>
                                 <div className="row" style={{ color: "grey" }}>
-                                    {group.name}
+                                    {group.userName}
 
                                 </div>
                                 <div className="row">
@@ -345,4 +353,19 @@ export class GroupDescription extends Component {
     }
 }
 
-export default GroupDescription
+const matchStateToProps = (state) => {
+    console.log("inside matchStatetoProps", state)
+    return {
+        error: state.groupSummaryByIDReducer.error,
+        groupSummaryData: state.groupSummaryByIDReducer.groupSummaryData
+    }
+
+}
+
+const matchDispatchToProps = (dispatch) => {
+    return {
+        groupSummaryByIDAction: (data) => dispatch(groupSummaryByIDAction(data)),
+    }
+}
+
+export default connect(matchStateToProps, matchDispatchToProps)(GroupDescription)

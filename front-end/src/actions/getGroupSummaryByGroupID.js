@@ -3,11 +3,11 @@ import BACKEND_URL from '../config/config'
 import cookie from "react-cookies";
 
 
-const USER_GET_SUCCESS = "user_get_success";
-const USER_GET_FAIL = "user_get_fail";
+const GROUP_SUMMARY_SUCCESS = "group_summary_success";
+const GROUP_SUMMARY_FAIL = "group_summary_fail";
 var success = (response) => {
     return {
-        type: USER_GET_SUCCESS,
+        type: GROUP_SUMMARY_SUCCESS,
         payload: {
             response: response,
         }
@@ -17,18 +17,18 @@ var success = (response) => {
 var error = (err) => {
     console.log("err", err)
     return {
-        type: USER_GET_FAIL,
+        type: GROUP_SUMMARY_FAIL,
         payload: {
             response: err
         }
     }
 }
-var userGetByIDAction = (data) => (dispatch) => {
+var groupSummaryByIDAction = (data) => (dispatch) => {
     axios.defaults.headers.common["authorization"] = cookie.load('token')
     axios.defaults.withCredentials = true;
     console.log(data);
     return axios
-        .get(BACKEND_URL + "/users/userbyid/" + cookie.load('id')).then(response => {
+        .get(BACKEND_URL + "/groups/groupsummarybyid/" + data.groupID).then(response => {
             if (response.status === 200) {
                 console.log(response.data)
                 dispatch(success(response, data));
@@ -39,4 +39,4 @@ var userGetByIDAction = (data) => (dispatch) => {
         });
 }
 
-export default userGetByIDAction
+export default groupSummaryByIDAction

@@ -5,6 +5,7 @@ var mongoose = require('../config/db-config');
 var groupSchema = require('../models/groups');
 const userSchema = require('../models/users');
 const recentActivitySchema = require('../models/recentactivity');
+const groupSummarySchema = require('../models/groupSummary');
 var jwt = require('jsonwebtoken');
 var { secret } = require('../config/config');
 var kafka = require('../kafka/client');
@@ -69,6 +70,38 @@ router.post('/new', checkAuth, (req, res) => {
             }
 
         }
+
+        let groupSummary = new groupSummarySchema({
+            userID: req.body.userID,
+            userName: req.body.userName,
+            currency: req.body.currency,
+            groupID: req.body.groupID,
+            groupName: req.body.groupName,
+            description: req.body.description,
+            amount: req.body.amount,
+            settleFlag: 0
+        })
+        groupSummary.save().then(response => {
+            console.log("Group Summary Saved successfully")
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         console.log(takingAmount);
         console.log(givingAmount);
