@@ -31,7 +31,7 @@ router.post('/signup', (req, res) => {
                 _id: response._id,
                 email: response.email,
                 name: response.name,
-                defaultcurrency: response.defaultcurrency,
+                defaultcurrency: response.defaultCurrency,
                 timezone: response.timezone
             }
             let token = jwt.sign(payload, secret, {
@@ -86,6 +86,7 @@ router.get('/userbyid/:id', checkAuth, (req, res) => {
 })
 // get all users
 router.put('/editprofile', checkAuth, (req, res) => {
+    console.log(req.body);
     userSchema.findOneAndUpdate({ email: req.body.email },
         {
             $set: {

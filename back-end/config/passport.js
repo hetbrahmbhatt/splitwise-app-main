@@ -5,7 +5,6 @@ var users = require('../models/users');
 var { secret } = require('../config/config')
 
 function auth() {
-    console.log("HI over herere");
     var options = {};
     options.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
     options.secretOrKey = secret;

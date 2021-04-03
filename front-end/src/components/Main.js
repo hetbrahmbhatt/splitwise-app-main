@@ -8,8 +8,8 @@ import Navbar from './landing-page/navbar';
 import Profile from './users/profile';
 import NewGroup from './groups/new-group';
 import MyGroup from './groups/my-group';
-// import GroupDescription from './groups/group-description';
-// import RecentActivity from '../components/user/recent-activity';
+import GroupDescription from './groups/group-description';
+import RecentActivity from '../components/users/recent-activity';
 // import Dashboard from './user/dashboard';
 
 export class Routing extends Component {
@@ -29,10 +29,10 @@ export class Routing extends Component {
                 {/* Group */}
                 <Route path='/new-group' component={NewGroup} />
                 <Route path='/all-group' component={MyGroup} />
-                {/* <Route path='/group-description' component={GroupDescription} /> */}
+                <Route path='/group-description' component={GroupDescription} />
 
                 {/* Recent Activity */}
-                {/* <Route path='/recent-activity' component={RecentActivity} /> */}
+                <Route path='/recent-activity' component={RecentActivity} />
 
 
             </div>

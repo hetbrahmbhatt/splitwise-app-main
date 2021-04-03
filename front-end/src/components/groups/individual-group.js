@@ -12,7 +12,7 @@ export class IndividualGroup extends Component {
         super(props);
         this.state = {
             groupID: this.props.groupID.groupID,
-            invitedBy: ""
+            invitedBy: "",
         }
 
 
@@ -32,7 +32,8 @@ export class IndividualGroup extends Component {
         var object = {
             userID: cookie.load('id'),
             groupID: this.state.groupID,
-            type: "accept"
+            type: "accept",
+            userName : cookie.load('name')
         }
         // this.props.callGroups();
         axios

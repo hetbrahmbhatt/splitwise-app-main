@@ -43,6 +43,7 @@ var updateUserProfileAction = (data) => (dispatch) => {
     return axios
         .put(BACKEND_URL + "/users/editprofile", data).then(response => {
             if (response.status === 200) {
+                alert(JSON.stringify(response.data));
                 console.log(response.data);
                 if (cookie.load('email') !== response.data.email) {
                     cookie.remove("email", {
@@ -64,11 +65,11 @@ var updateUserProfileAction = (data) => (dispatch) => {
                         maxAge: 90000
                     })
                 }
-                if (cookie.load('defaultcurrency') !== response.data.defaultcurrency) {
+                if (cookie.load('defaultcurrency') !== response.data.defaultCurrency) {
                     cookie.remove("defaultcurrency", {
                         path: '/'
                     });
-                    cookie.save("defaultcurrency", response.data.defaultcurrency, {
+                    cookie.save("defaultcurrency", response.data.defaultCurrency, {
                         path: '/',
                         httpOnly: false,
                         maxAge: 90000
@@ -87,7 +88,7 @@ var updateUserProfileAction = (data) => (dispatch) => {
 
 
                 dispatch(success(response))
-                window.location.assign( "/profile" );
+                window.location.reload() ;
             }
 
         }).catch(err => {
