@@ -5,6 +5,8 @@ import BACKEND_URL from '../../config/config'
 import Modal from 'react-modal';
 import _ from 'lodash';
 import axios from 'axios';
+import description from '../../images/desrciption.png'
+
 import AddExpense from './add-expense'
 import moment from 'moment-timezone';
 import grocerylogo from '../../images/grocery.png'
@@ -13,6 +15,14 @@ import emptyplaceholder from '../../images/empty-placeholder.png'
 import profilePhoto from '../../images/profile-icon.png'
 import groupSummaryByIDAction from '../../actions/getGroupSummaryByGroupID'
 import { connect } from "react-redux";
+// import Accordion from '@material-ui/core/Accordion';
+// import AccordionSummary from '@material-ui/core/AccordionSummary';
+// import AccordionDetails from '@material-ui/core/AccordionDetails';
+// import Typography from '@material-ui/core/Typography';
+// import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { Accordion, Card } from "react-bootstrap";
+import Message from '../groups/message';
+
 
 const customStyles = {
     content: {
@@ -30,7 +40,7 @@ export class GroupDescription extends Component {
 
     constructor(props) {
         super(props)
-        console.log(this.props.location.state.groupData)
+        // console.log(this.props.location.state.groupData)
         if (this.props.location.state) {
             if (this.props.location.state.groupData.image == null) {
                 this.state = {
@@ -67,10 +77,10 @@ export class GroupDescription extends Component {
         }
     }
     async componentDidMount() {
-        this.props.groupSummaryByIDAction(this.state).then(response =>{
+        this.props.groupSummaryByIDAction(this.state).then(response => {
             console.log(this.props);
             this.setState({
-                groupDescription : this.props.groupSummaryData.data
+                groupDescription: this.props.groupSummaryData.data
             })
         })
         const groupID = this.state.groupID;
@@ -217,7 +227,7 @@ export class GroupDescription extends Component {
                             </span>
                         </div>
                         <div className="col-6">
-                        <span><strong>{exp.lendeename}</strong> owes <strong>{exp.lendername}</strong> {exp.currency}{-1 *exp.amount} </span>
+                            <span><strong>{exp.lendeename}</strong> owes <strong>{exp.lendername}</strong> {exp.currency}{-1 * exp.amount} </span>
                             <br></br>
                         </div>
                     </div>
@@ -242,80 +252,225 @@ export class GroupDescription extends Component {
         }
         else {
             groupDescriptionDetails = this.state.groupDescription.map((group, index) => {
-                if (group.settleFlag == 0) {
+                if (group.settleFlag != 0) {
+
                     return (
-                        <div className="row" style={{ height: "100px", borderBottom: "0.01px solid lightgrey", borderLeft: "0.01px solid lightgrey", borderRight: "0.01px solid lightgrey", borderWidth: "thin", marginBottom: "1px" }}>
-                            <div className="col-1" style={{ margin: "20px", color: "grey" }}>
-                                <div className="row">
-                                    {moment(group.createdat).tz(cookie.load("timezone")).format("MMM")}
+                        <Accordion style={{ backgroundColor: "#ffffff",height : "1000px" }}>
+                            <Accordion.Toggle as={Card.Header} eventKey={index + 1}>
+                                <div className="row" style={{ height: "100px", border : "10px solid lightgrey",borderWidth: "thin", backgroundColor: "white", marginBottom: "1px", height: "120px" }}>
+                                    <div className="col-1" style={{ margin: "20px", color: "grey" }}>
+                                        <div className="row">
+                                            {moment(group.createdat).tz(cookie.load("timezone")).format("MMM")}
+                                        </div>
+                                        <div className="row" style={{ fontSize: "30px", marginTop: "-10px" }}>
+                                            {moment(group.createdat).tz(cookie.load("timezone")).format("D")}
+                                        </div>
+                                    </div>
+                                    <div className="col-2">
+                                        <img src={grocerylogo} style={{ "paddingLeft": "0%", marginLeft: "-20px", marginTop: "20px" }} width="60%" height="60%" alt="" />
+                                    </div>
+                                    <div className="col-6" style={{ marginLeft: "-60px", marginTop: "30px" }}>
+                                        <div className="row">
+                                            <h4><b>"{group.name}"</b> and <b>"{group.settlename}"</b>settled up.</h4>
+                                            {moment(group.createdat).tz(cookie.load("timezone")).format("hh:mm a")}
+                                        </div>
+                                    </div>
+                                    <div className="col-3" style={{ marginLeft: "60px", marginTop: "15px", marginRight: "-40px" }}>
+                                        <div className="row" style={{ color: "grey", maxWidth: "20" }}>
+                                            <h6>dues cleared worth </h6>
+                                        </div>
+                                        <div className="row" >
+                                            <h3><b>{group.currency}{group.amount}</b></h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Accordion.Toggle>
 
+                            <Accordion.Collapse eventKey={index + 1}>
+                                <div className="row" style={{ height: "100px",border : "1px solid lightgrey", borderWidth: "thin", backgroundColor: "whitesmoke", marginBottom: "1px", height: "120px" }}>
+                                    <div className="col-1" style={{ margin: "20px", color: "grey" }}>
+                                        <div className="row">
+                                            {moment(group.createdat).tz(cookie.load("timezone")).format("MMM")}
+                                        </div>
+                                        <div className="row" style={{ fontSize: "30px", marginTop: "-10px" }}>
+                                            {moment(group.createdat).tz(cookie.load("timezone")).format("D")}
+                                        </div>
+                                    </div>
+                                    <div className="col-2">
+                                        <img src={grocerylogo} style={{ "paddingLeft": "0%", marginLeft: "-20px", marginTop: "20px" }} width="60%" height="60%" alt="" />
+                                    </div>
+                                    <div className="col-6" style={{ marginLeft: "-60px", marginTop: "30px" }}>
+                                        <div className="row">
+                                            <h4><b>"{group.name}"</b> and <b>"{group.settlename}"</b>settled up.</h4>
+                                            {moment(group.createdat).tz(cookie.load("timezone")).format("hh:mm a")}
+                                        </div>
+                                    </div>
+                                    <div className="col-3" style={{ marginLeft: "60px", marginTop: "15px", marginRight: "-40px" }}>
+                                        <div className="row" style={{ color: "grey", maxWidth: "20" }}>
+                                            <h6>dues cleared worth </h6>
+                                        </div>
+                                        <div className="row" >
+                                            <h3><b>{group.currency}{group.amount}</b></h3>
+                                        </div>
+                                    </div>
+                                    <Message key ={group.userID} groupSumData = {group}/>
                                 </div>
-                                <div className="row" style={{ fontSize: "30px", marginTop: "-10px" }}>
-                                    {moment(group.createdat).tz(cookie.load("timezone")).format("D")}
+                            </Accordion.Collapse>
+                        </Accordion>
 
-                                </div>
-                            </div>
-                            <div className="col-2">
-                                <img src={grocerylogo} style={{ "paddingLeft": "0%", marginLeft: "-20px", marginTop: "20px" }} width="60%" height="60%" alt="" />
-                            </div>
-                            <div className="col-6" style={{ marginLeft: "-60px", marginTop: "30px" }}>
-                                <div className="row">
-                                    <h3>{group.description}</h3>
-                                    <img src={camera} style={{ margin: "8px" }} width="20px" height="20px" alt="" />
-                                </div>
-                                <div className="row">
-                                    {moment(group.createdat).tz(cookie.load("timezone")).format("hh:mm a")}
-
-                                </div>
-                            </div>
-                            <div className="col-3" style={{ marginLeft: "60px", marginTop: "15px", marginRight: "-40px" }}>
-                                <div className="row" style={{ color: "grey" }}>
-                                    {group.userName}
-
-                                </div>
-                                <div className="row">
-                                    <h3><b>{group.currency}{group.amount}</b></h3>
-                                </div>
-                            </div>
-                        </div>
                     )
                 }
                 else {
                     return (
-                        <div className="row" style={{ height: "100px", borderBottom: "0.01px solid lightgrey", borderLeft: "0.01px solid lightgrey", borderRight: "0.01px solid lightgrey", borderWidth: "thin", marginBottom: "1px" ,height:"120px"}}>
-                            <div className="col-1" style={{ margin: "20px", color: "grey" }}>
-                                <div className="row">
-                                    {moment(group.createdat).tz(cookie.load("timezone")).format("MMM")}
+                        <Accordion style={{ backgroundColor: "#ffffff" }}>
+                            <Accordion.Toggle as={Card.Header} eventKey={index + 1}>
+                                <div className="row" style={{ height: "100px", border : "10px solid lightgrey",backgroundColor: "white", borderWidth: "thin", marginBottom: "1px" }}>
+                                    <div className="col-1" style={{ margin: "20px", color: "grey" }}>
+                                        <div className="row">
+                                            {moment(group.createdat).tz(cookie.load("timezone")).format("MMM")}
+                                        </div>
+                                        <div className="row" style={{ fontSize: "30px", marginTop: "-10px" }}>
+                                            {moment(group.createdat).tz(cookie.load("timezone")).format("D")}                                </div>
+                                    </div>
+                                    <div className="col-2">
+                                        <img src={grocerylogo} style={{ "paddingLeft": "0%", marginLeft: "-20px", marginTop: "20px" }} width="60%" height="60%" alt="" />
+                                    </div>
+                                    <div className="col-6" style={{ marginLeft: "-60px", marginTop: "30px" }}>
+                                        <div className="row">
+                                            <h3>{group.description}</h3>
+                                            <img src={camera} style={{ margin: "8px" }} width="20px" height="20px" alt="" />
+                                        </div>
+                                        <div className="row">
+                                            {moment(group.createdat).tz(cookie.load("timezone")).format("hh:mm a")}
+
+                                        </div>
+                                    </div>
+                                    <div className="col-3" style={{ marginLeft: "60px", marginTop: "15px", marginRight: "-40px" }}>
+                                        <div className="row" style={{ color: "grey" }}>
+                                            {group.userName}
+
+                                        </div>
+                                        <div className="row">
+                                            <h3><b>{group.currency}{group.amount}</b></h3>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="row" style={{ fontSize: "30px", marginTop: "-10px" }}>
-                                    {moment(group.createdat).tz(cookie.load("timezone")).format("D")}
+                            </Accordion.Toggle>
+                            <Accordion.Collapse eventKey={index + 1} style= {{height : "1000px"}}>
+                                <div>
+                                    <div className="row" style={{ height: "350px", marginLeft: "50px" }}>
+                                        <div className="col-2">
+                                            <img src={description} style={{ marginTop: "60px" }} width="100px" height="100px" alt="" />
+
+                                        </div>
+                                        <div className="col-3">
+                                            <div className="row">
+                                                <div className="col-2" style={{ marginTop: "60px" }}>
+                                                    <h4>{group.description}</h4>
+                                                </div>
+                                            </div>
+                                            <div className="row" style={{ marginLeft: "0px" }}>
+                                                <h3><b>{group.currency}{group.amount}</b></h3>
+                                            </div>
+                                            <div className="row" style={{ marginLeft: "0px" }}>
+                                                <div className="col-4"></div>
+                                                <span style={{ color: "grey" }}>Added by {group.userName} on    {' '}
+                                                    {moment(group.createdat).tz(cookie.load("timezone")).format("D")}{' '}
+                                                    {moment(group.createdat).tz(cookie.load("timezone")).format("MMM")}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="col-4">
+                                            <Message key ={group.userID} groupSumData = {group}/>
+                                            </div>
+                                    </div>
+                                    <div className="row">
+
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-2">
-                                <img src={grocerylogo} style={{ "paddingLeft": "0%", marginLeft: "-20px", marginTop: "20px" }} width="60%" height="60%" alt="" />
-                            </div>
-                            <div className="col-6" style={{ marginLeft: "-60px", marginTop: "30px" }}>
-                                <div className="row">
-                                    <h4><b>"{group.name}"</b> and <b>"{group.settlename}"</b>settled up.</h4>
-                                    {moment(group.createdat).tz(cookie.load("timezone")).format("hh:mm a")}
-                                </div>
-                            </div>
-                            <div className="col-3" style={{ marginLeft: "60px", marginTop: "15px", marginRight: "-40px" }}>
-                                <div className="row" style={{ color: "grey", maxWidth: "20" }}>
-                                    <h6>dues cleared worth </h6>
-                                </div>
-                                <div className="row" >
-                                    <h3><b>{group.currency}{group.amount}</b></h3>
-                                </div>
-                            </div>
-                        </div>
+                            </Accordion.Collapse>
+
+                        </Accordion>
+
                     )
                 }
             })
+
+            // groupDescriptionDetails = this.state.groupDescription.map((group, index) => {
+            //     if (group.settleFlag == 0) {
+            //         return (
+            //             <div className="row" style={{ height: "100px", borderBottom: "0.01px solid lightgrey", borderLeft: "0.01px solid lightgrey", borderRight: "0.01px solid lightgrey", borderWidth: "thin", marginBottom: "1px" }}>
+            //                 <div className="col-1" style={{ margin: "20px", color: "grey" }}>
+            //                     <div className="row">
+            //                         {moment(group.createdat).tz(cookie.load("timezone")).format("MMM")}
+            //                     </div>
+            //                     <div className="row" style={{ fontSize: "30px", marginTop: "-10px" }}>
+            //                         {moment(group.createdat).tz(cookie.load("timezone")).format("D")}                                </div>
+            //                 </div>
+            //                 <div className="col-2">
+            //                     <img src={grocerylogo} style={{ "paddingLeft": "0%", marginLeft: "-20px", marginTop: "20px" }} width="60%" height="60%" alt="" />
+            //                 </div>
+            //                 <div className="col-6" style={{ marginLeft: "-60px", marginTop: "30px" }}>
+            //                     <div className="row">
+            //                         <h3>{group.description}</h3>
+            //                         <img src={camera} style={{ margin: "8px" }} width="20px" height="20px" alt="" />
+            //                     </div>
+            //                     <div className="row">
+            //                         {moment(group.createdat).tz(cookie.load("timezone")).format("hh:mm a")}
+
+            //                     </div>
+            //                 </div>
+            //                 <div className="col-3" style={{ marginLeft: "60px", marginTop: "15px", marginRight: "-40px" }}>
+            //                     <div className="row" style={{ color: "grey" }}>
+            //                         {group.userName}
+
+            //                     </div>
+            //                     <div className="row">
+            //                         <h3><b>{group.currency}{group.amount}</b></h3>
+            //                     </div>
+            //                 </div>
+            //             </div>
+            //         )
+            //     }
+            //     else {
+            //         return (
+            //             <div className="row" style={{ height: "100px", borderBottom: "0.01px solid lightgrey", borderLeft: "0.01px solid lightgrey", borderRight: "0.01px solid lightgrey", borderWidth: "thin", marginBottom: "1px", height: "120px" }}>
+            //                 <div className="col-1" style={{ margin: "20px", color: "grey" }}>
+            //                     <div className="row">
+            //                         {moment(group.createdat).tz(cookie.load("timezone")).format("MMM")}
+            //                     </div>
+            //                     <div className="row" style={{ fontSize: "30px", marginTop: "-10px" }}>
+            //                         {moment(group.createdat).tz(cookie.load("timezone")).format("D")}
+            //                     </div>
+            //                 </div>
+            //                 <div className="col-2">
+            //                     <img src={grocerylogo} style={{ "paddingLeft": "0%", marginLeft: "-20px", marginTop: "20px" }} width="60%" height="60%" alt="" />
+            //                 </div>
+            //                 <div className="col-6" style={{ marginLeft: "-60px", marginTop: "30px" }}>
+            //                     <div className="row">
+            //                         <h4><b>"{group.name}"</b> and <b>"{group.settlename}"</b>settled up.</h4>
+            //                         {moment(group.createdat).tz(cookie.load("timezone")).format("hh:mm a")}
+            //                     </div>
+            //                 </div>
+            //                 <div className="col-3" style={{ marginLeft: "60px", marginTop: "15px", marginRight: "-40px" }}>
+            //                     <div className="row" style={{ color: "grey", maxWidth: "20" }}>
+            //                         <h6>dues cleared worth </h6>
+            //                     </div>
+            //                     <div className="row" >
+            //                         <h3><b>{group.currency}{group.amount}</b></h3>
+            //                     </div>
+            //                 </div>
+            //             </div>
+            //         )
+            //     }
+            // })
         }
         return (
 
             <div>
+                <div>
+
+                </div>
                 <script src="moment.js"></script>
                 <script src="moment-timezone-with-data.js"></script>
                 {redirectVar}
@@ -354,7 +509,6 @@ export class GroupDescription extends Component {
 }
 
 const matchStateToProps = (state) => {
-    console.log("inside matchStatetoProps", state)
     return {
         error: state.groupSummaryByIDReducer.error,
         groupSummaryData: state.groupSummaryByIDReducer.groupSummaryData

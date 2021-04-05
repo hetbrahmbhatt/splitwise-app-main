@@ -26,13 +26,10 @@ var error = (err) => {
 var groupGetByIDAction = (data) => (dispatch) => {
     axios.defaults.headers.common["authorization"] = cookie.load('token')
     axios.defaults.withCredentials = true;
-    console.log(data);
     return  axios
-        .get(BACKEND_URL + "/groups/groupbyid/" + data).then(response => {
+        .get(BACKEND_URL + "/users/userbyid/" + data).then(response => {
             if (response.status === 200) {
-                dispatch(success(response, data));
-
-            }
+                dispatch(success(response, data));            }
         }).catch((err) => {
             dispatch(error(err, data))
         });

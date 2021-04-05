@@ -1,5 +1,15 @@
 const mongoose = require('mongoose')
 var Schema = mongoose.Schema;
+var individialMessageSchema = new Schema({
+    name: String,
+    message: String
+},
+    {
+        timestamps: true
+    }
+)
+
+
 
 var groupSummary = new Schema({
     userID: String,
@@ -8,8 +18,9 @@ var groupSummary = new Schema({
     amount: Number,
     groupID: String,
     groupName: String,
-    description :String,
-    settleFlag : String
+    description: String,
+    settleFlag: String,
+    messages: [individialMessageSchema],
 },
     { timestamps: true }
 );

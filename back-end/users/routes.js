@@ -84,6 +84,17 @@ router.get('/userbyid/:id', checkAuth, (req, res) => {
         res.status(400).send(error)
     })
 })
+//get recent Activity for a user 
+router.post('/recentactivity', checkAuth, (req, res) => {
+    console.log("Body", req.body);
+    console.log(req.body.userID);
+    userSchema.find({ _id: req.body.userID }).then(docs => {
+        console.log(docs);
+        res.status(200).send(JSON.stringify(docs))
+    }).catch(error => {
+        res.status(400).send(error)
+    })
+})
 // get all users
 router.put('/editprofile', checkAuth, (req, res) => {
     console.log(req.body);
@@ -114,6 +125,8 @@ router.get('/searchbyemail', checkAuth, (req, res) => {
         res.status(200).send(JSON.stringify(response));
     })
 });
+
+
 //get users based on name
 router.get('/searchbyname', checkAuth, (req, res) => {
     userSchema.find({ "name": { $regex: req.query.name_like } }).then(response => {

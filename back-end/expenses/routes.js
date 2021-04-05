@@ -197,7 +197,7 @@ router.post('/new', checkAuth, (req, res) => {
 router.get('/recentactivity/:id', checkAuth, (req, res) => {
     console.log("Over here");
     console.log(req.params.id)
-    recentActivitySchema.find({ userID: req.params.id }).sort({ timestamp: '-1' }).then(docs => {
+    recentActivitySchema.find({ userID: req.params.id }).sort({ createdAt: '-1' }).then(docs => {
         console.log("Recent Activity by User", docs)
         res.status(200).send(docs)
     }).catch(error => {

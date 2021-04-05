@@ -5,7 +5,6 @@ var mongoose = require('../config/db-config');
 var groupSchema = require('../models/groups');
 const userSchema = require('../models/users');
 const groupSummarySchema = require('../models/groupSummary');
-
 var jwt = require('jsonwebtoken');
 var { secret } = require('../config/config');
 var kafka = require('../kafka/client');
@@ -175,6 +174,37 @@ router.get('/groupsummarybyid/:id', checkAuth, (req, res) => {
         res.status(200).send(docs)
     }).catch(error => {
         console.log("Error in Fetching Group Summary", error)
+    })
+});
+router.put('/removemessage/', checkAuth, (req, res) => {
+    console.log(req.body)
+    // var messageData = {
+    //     name: req.body.userName,
+    //     message: req.body.messageString
+    // }
+    groupSummarySchema.findOneAndUpdate({ _id: req.body.groupSummaryID }
+        , { $pull: { messages: { _id: req.body.messageID } } }, { new: true }
+    ).then(doc => {
+        res.status(200).send(doc);
+        console.log("Notes/Comments Delete", doc)
+    }).catch(error => {
+        console.log("error", error);
+    })
+});
+router.put('/message', checkAuth, (req, res) => {
+    console.log(req.body)
+    const _id = ObjectId(req.body.groupSummaryID);
+    var messageData = {
+        name: req.body.userName,
+        message: req.body.messageString
+    }
+    groupSummarySchema.findOneAndUpdate({ _id: _id }
+        , { $push: { messages: messageData } }, { new: true }
+    ).then(doc => {
+        res.status(200).send(doc);
+        console.log("Notes/Comments Added", doc)
+    }).catch(error => {
+        console.log("error", error);
     })
 });
 module.exports = router;

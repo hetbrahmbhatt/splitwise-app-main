@@ -72,7 +72,6 @@ export class RecentActivity extends Component {
             })
     }
     handlePageClick = (e) => {
-
         this.setState({
             offset: this.state.perPage * e.selected,
         })
@@ -118,7 +117,14 @@ export class RecentActivity extends Component {
         }
     }
     async componentDidMount() {
-        this.props.recentactivityAction(this.state.perPage).then(response => {
+        axios.defaults.headers.common["authorization"] = cookie.load('token')
+        axios.defaults.withCredentials = true;
+        const groups = await axios.get(BACKEND_URL + '/users/userbyid/' + cookie.load('id'));
+        this.setState({
+            groups : groups.data[0].acceptedGroups
+        })
+        console.log(groups.data[0].acceptedGroups);
+        this.props.recentactivityAction(this.state).then(response => {
             console.log(this.props.userData.data);
             if (this.props.userData.data.length == 0) {
                 this.setState({
@@ -133,6 +139,7 @@ export class RecentActivity extends Component {
                 })
             }
         })
+        this.props.groupGetByIDAction(cookie.load('id'));
         console.log(this.props);
 
     }
@@ -140,6 +147,7 @@ export class RecentActivity extends Component {
         window.location.reload();
     };
     render() {
+        console.log(this.state);
         let redirectTo = null;
         if (!(cookie.load("auth"))) {
             redirectTo = <Redirect to="/" />
@@ -150,7 +158,7 @@ export class RecentActivity extends Component {
             { value: 'ASC', label: 'Most Recent Last' },
         ]
         let groupOptions = this.state.groups.map(function (group) {
-            return { value: group.groupid, label: group.name };
+            return { value: group.groupID, label: group.groupName };
         })
         let recentactivityDetails = null;
         if (this.state.emptyStateFlag) {
@@ -282,13 +290,12 @@ const matchStateToProps = (state) => {
     return {
         error: state.recentActivityReducer.error,
         userData: state.recentActivityReducer.userData,
-        groupData : state.getGroupByIDReducer.groupData
+        groupData : state.getByIDReducer.userData
 
     }
 
 }
 const matchDispatchToProps = (dispatch) => {
-    // console.log(dispatch)
     return {
         recentactivityAction: (data) => dispatch(recentactivityAction(data)),
         groupGetByIDAction: (data) => dispatch(groupGetByIDAction(data)),
