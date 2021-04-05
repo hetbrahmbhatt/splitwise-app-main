@@ -4,6 +4,8 @@ import BACKEND_URL from '../../config/config';
 import axios from 'axios';
 import grocerylogo from '../../images/grocery.png'
 import emptyplaceholder from '../../images/empty-placeholder.png'
+import comment from '../../images/comment.png'
+
 import moment from 'moment-timezone';
 import Select from 'react-select';
 import { Redirect } from 'react-router'
@@ -28,7 +30,7 @@ export class RecentActivity extends Component {
             orderByValue: "",
             orderByFlag: false,
             offset: 0,
-            perPage: 5,
+            perPage: 2,
             pageCount: 0
         }
     }
@@ -77,6 +79,13 @@ export class RecentActivity extends Component {
         })
 
     };
+    handlePaginationChange = (e) => {
+        console.log(e);
+        this.setState({
+            perPage: e.value,
+        })
+
+    };
     handleOrderByChange = e => {
         this.setState({
             orderByFlag: true,
@@ -121,7 +130,7 @@ export class RecentActivity extends Component {
         axios.defaults.withCredentials = true;
         const groups = await axios.get(BACKEND_URL + '/users/userbyid/' + cookie.load('id'));
         this.setState({
-            groups : groups.data[0].acceptedGroups
+            groups: groups.data[0].acceptedGroups
         })
         console.log(groups.data[0].acceptedGroups);
         this.props.recentactivityAction(this.state).then(response => {
@@ -157,6 +166,12 @@ export class RecentActivity extends Component {
             { value: 'DESC', label: 'Most Recent First' },
             { value: 'ASC', label: 'Most Recent Last' },
         ]
+        let pageOptions = [
+            { value: '2', label: '2' },
+            { value: '5', label: '5' },
+            { value: '10', label: '10' },
+
+        ]
         let groupOptions = this.state.groups.map(function (group) {
             return { value: group.groupID, label: group.groupName };
         })
@@ -191,6 +206,16 @@ export class RecentActivity extends Component {
                     groupDivision = <p style={{ fontSize: "20px" }}><b>"{group.username}"</b> and <b>"{group.settlename}"</b> settled up in <b>"{group.name}".</b></p>
                     groupPayingDivision = <div style={{ 'color': '#20BF9F', fontSize: "18px" }}><b> {group.currency} dues cleared  </b></div>
 
+                }
+                else if (Number(group.commentFlag) == 1) {
+                    if (group.userName == cookie.load('name')) {
+                        groupDivision = <p style={{ fontSize: "20px" }}><b>You</b> added a comment <b>"{group.message}"</b> in <b>"{group.groupName}".</b></p>
+
+                    }
+                    else {
+                        groupDivision = <p style={{ fontSize: "20px" }}><b>"{group.userName}"</b> added a comment <b>"{group.message}"</b> in <b>"{group.groupName}".</b></p>
+
+                    }
                 }
                 else {
                     if (group.payeeID == cookie.load('id')) {
@@ -257,7 +282,13 @@ export class RecentActivity extends Component {
                         options={orderByOptions}
                     />
                     <button class="btn btn-info" style={{ marginLeft: "100px", marginTop: "20px", backgroundColor: "#20BF9F" }} onClick={this.onClear}>Clear Value</button>
-
+                    <Select
+                        style={{ width: "400px", marginLeft: "-30px",marginTop : "100px" }}
+                        name="form-field-name"
+                        onChange={this.handlePaginationChange}
+                        placeholder="Select Pagination Options"
+                        options={pageOptions}
+                    />
                 </div>
 
                 <div className="col-6">
@@ -290,7 +321,7 @@ const matchStateToProps = (state) => {
     return {
         error: state.recentActivityReducer.error,
         userData: state.recentActivityReducer.userData,
-        groupData : state.getByIDReducer.userData
+        groupData: state.getByIDReducer.userData
 
     }
 

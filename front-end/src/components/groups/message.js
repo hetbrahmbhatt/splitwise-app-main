@@ -17,7 +17,8 @@ export class Messages extends Component {
             messagesPopUp: false,
             reply: "",
             conversations: this.props.groupSumData.messages,
-            groupSummaryID : this.props.groupSumData._id
+            groupSummaryID : this.props.groupSumData._id,
+            groupName : this.props.groupSumData.groupName
         }
         console.log(this.props.groupSumData)
 
@@ -63,6 +64,8 @@ export class Messages extends Component {
             userName: cookie.load('name'),
             groupSummaryDescription: this.props.groupSumData.description,
             messageString: this.state.reply,
+            groupName : this.state.groupName,
+            groupID : this.props.groupSumData.groupID
         }
         axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;

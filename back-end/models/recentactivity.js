@@ -10,7 +10,9 @@ var recentactivity = new Schema({
     description: String,
     amount: Number,
     timestamp: String,
-    settleflag: String
+    settleflag: String,
+    commentFlag: String,
+    message : String
 },
     { timestamps: true }
 );

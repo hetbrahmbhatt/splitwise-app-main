@@ -86,25 +86,6 @@ router.post('/new', checkAuth, (req, res) => {
         })
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        console.log(takingAmount);
-        console.log(givingAmount);
         for (let i = 0; i < doc[0].membersSchema.length; i++) {
             if (doc[0].membersSchema[i].userID == req.body.userID) {
                 for (let i = 0; i < doc[0].membersSchema.length; i++) {
