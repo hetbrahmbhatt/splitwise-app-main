@@ -7,7 +7,7 @@ var getGroupByIDReducer = ( state = initialState, action ) => {
     let newState = { ...state }
     switch ( action.type ) {
         case "group_get_success":
-            newState.groupData = action.payload.response.data;
+            newState.groupData = action.payload.response;
             newState.error = false;
             return newState;
         case "group_get_fail":

@@ -78,8 +78,8 @@ router.post('/login', (req, res) => {
 router.get('/userbyid/:id', checkAuth, (req, res) => {
     console.log(req.params.id);
     userSchema.find({ _id: req.params.id }).then(docs => {
-        console.log(docs);
-        res.status(200).send(JSON.stringify(docs))
+        console.log("USER by ID docs",docs);
+        res.status(200).send(JSON.stringify(docs));
     }).catch(error => {
         res.status(400).send(error)
     })

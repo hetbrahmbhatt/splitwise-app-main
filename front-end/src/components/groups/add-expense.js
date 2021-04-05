@@ -22,7 +22,7 @@ export class AddExpense extends Component {
                 description: "",
                 amount: "",
                 amountFlag: false,
-                userName : cookie.load('name')
+                userName: cookie.load('name')
             }
         }
         else {
@@ -35,7 +35,7 @@ export class AddExpense extends Component {
                 description: "",
                 amount: "",
                 amountFlag: false,
-                userName : cookie.load('name')
+                userName: cookie.load('name')
             }
         }
     }
@@ -45,43 +45,27 @@ export class AddExpense extends Component {
                 amountFlag: true
             })
         }
-        else
-        {
+        else {
             this.setState({
-                amountFlag : false,
+                amountFlag: false,
                 [inp.target.name]: inp.target.value
             })
         }
     }
     handleSubmit = e => {
         e.preventDefault();
-        if(this.state.description == ''){
+        if (this.state.description == '') {
             toast.error("Please enter description");
             return;
         }
 
         if (!this.state.amountFlag) {
-            this.props.addExpenseAction(this.state).then(response =>{
+            this.props.addExpenseAction(this.state).then(response => {
                 console.log("over here");
+                window.location.assign('/gruoup-description');
             })
-            // axios
-            //     .post(BACKEND_URL + "/groups/expenses", this.state).then(response => {
-            //         console.log(response);
-            //         if (response.status == 200) {
-            //             console.log(response);
-            //             toast.success("Group Updated Successfully");
-            //         }
-            //     }).catch(err => {
-            //         if (err.response == null) {
-
-            //         }
-            //         else {
-
-            //         }
-            //         // toast.error(err.response.data);
-            //     })
         }
-        else{
+        else {
             toast.error("Please enter an amount greater than 0");
 
         }

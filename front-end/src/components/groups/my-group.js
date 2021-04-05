@@ -20,7 +20,7 @@ export class MyGroup extends Component {
             groups: [],
             acceptedGroups: [],
             searchInput: "",
-            
+
             emptygroupsFlag: false,
             emptyAcceptedGroupsFlag: false
         }
@@ -29,6 +29,16 @@ export class MyGroup extends Component {
         console.log(e.target.name, e.target.value)
         this.setState({
             [e.target.name]: e.target.value
+        })
+    }
+
+    reload = (e) => {
+        alert("hi");
+        this.props.groupGetActionForUser(cookie.load("id")).then(response => {
+            this.setState({
+                groups: this.props.userData.data[0].invitedGroups,
+                acceptedGroups: this.props.userData.data[0].acceptedGroups,
+            });
         })
     }
     async componentDidMount() {
@@ -83,13 +93,13 @@ export class MyGroup extends Component {
 
         //TODO: See the search query option
 
-        // let searchedGroups = this.state.acceptedGroups.filter((group) => {
-        //     if (group.groupName.toLowerCase().includes(this.state.searchInput.toLowerCase())) {
-        //         return group;
-        //     }
-        //     // console.log(group.gropName.toLowerCase().includes(this.state.searchInput.toLowerCase()))
-        //     // return group.groupName.toLowerCase().includes(this.state.searchInput.toLowerCase())
-        // })
+        let searchedGroups = this.state.acceptedGroups.filter((group) => {
+            if (group.groupName.toLowerCase().includes(this.state.searchInput.toLowerCase())) {
+                return group;
+            }
+            // console.log(group.gropName.toLowerCase().includes(this.state.searchInput.toLowerCase()))
+            // return group.groupName.toLowerCase().includes(this.state.searchInput.toLowerCase())
+        })
         if (this.state.groups.length == 0) {
             groupInvitationDetails = (
                 <div style={{ margin: "200px" }}>
@@ -103,7 +113,7 @@ export class MyGroup extends Component {
             groupInvitationDetails = this.state.groups.map((group) => {
                 return (
                     <div>
-                        <IndividualGroup  key={group.groupID} groupID={group} />
+                        <IndividualGroup changeStatus={this.reload} key={group.groupID} groupID={group} />
                     </div>
 
                 )
@@ -119,18 +129,18 @@ export class MyGroup extends Component {
 
         }
         else {
-            groupAcceptedDetails = this.state.acceptedGroups.map((group) => {
+            groupAcceptedDetails = searchedGroups.map((group) => {
                 console.log(group);
-            //     return (
-            //         <div>
-            //             <IndividualGroup key={Math.random()} groupID={group} />
-            //         </div>
+                //     return (
+                //         <div>
+                //             <IndividualGroup key={Math.random()} groupID={group} />
+                //         </div>
 
-            //     )
-            // });
+                //     )
+                // });
                 return (
                     <div>
-                        <AcceptedGroup  key={group.groupID} acceptedGroupData={group} />
+                        <AcceptedGroup key={group.groupID} acceptedGroupData={group} />
                     </div>
 
                 )

@@ -13,18 +13,24 @@ export class IndividualGroup extends Component {
         this.state = {
             groupID: this.props.groupID.groupID,
             invitedBy: "",
+            groupName : this.props.groupID.groupName
         }
 
 
     }
     async componentDidMount() {
+        console.log(this.props);
         console.log(this.state)
-        this.props.groupGetByIDAction(this.props.groupID.groupID).then(response => {
-            this.setState({
-                invitedBy: this.props.groupID.invitedBy,
-                groupName: this.props.groupData[0].groupName
-            })
+        this.setState({
+            invitedBy: this.props.groupID.invitedBy,
+            groupName: this.props.groupID.groupName,
         })
+        // this.props.groupGetByIDAction(this.props.groupID.groupID).then(response => {
+        //     this.setState({
+        //         invitedBy: this.props.groupID.invitedBy,
+        //         // groupName: this.props.groupData[0].groupName
+        //     })
+        // })
     }
     acceptButtonClick = e => {
         e.preventDefault();
@@ -33,14 +39,15 @@ export class IndividualGroup extends Component {
             userID: cookie.load('id'),
             groupID: this.state.groupID,
             type: "accept",
-            userName : cookie.load('name')
+            userName: cookie.load('name'),
+            groupName : this.state.groupName
         }
         // this.props.callGroups();
         axios
             .put(BACKEND_URL + "/groups/invite", object).then(response => {
                 if (response.status == 200) {
                     console.log(response.data);
-                    return this.props.callGroups;
+                    window.location.assign('/all-group');
                     // this.props.groupGetByIDAction(this.props.groupID.groupID).then(response => {
                     //     console.log(this.props.groupData[0].groupName);
                     //     this.setState({

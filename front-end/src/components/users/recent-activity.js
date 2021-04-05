@@ -24,6 +24,7 @@ export class RecentActivity extends Component {
             emptyStateFlag: false,
             selectedOption: "",
             groups: [],
+            userID: cookie.load('id'),
             groupsFlag: false,
             activitiesValue: "",
             activitiesFlag: false,
@@ -31,7 +32,9 @@ export class RecentActivity extends Component {
             orderByFlag: false,
             offset: 0,
             perPage: 2,
-            pageCount: 0
+            pageCount: 0,
+            groupIDSelected: "",
+            orderBy: ""
         }
     }
     handleChange = e => {
@@ -39,39 +42,39 @@ export class RecentActivity extends Component {
         console.log(e.value);
         this.setState({
             activitiesValue: e.value,
-            activitiesFlag: true
+            activitiesFlag: true,
+            groupIDSelected: e.value,
+            orderBy: '-1'
         })
-        var obj = {
-            userID: cookie.load('id'),
-            groupID: e.value,
-            orderBy: 'DESC'
-        };
-        axios
-            .post(BACKEND_URL + "/groups/recentactivitybygroups", obj).then(response => {
-                if (response.status === 200) {
-                    console.log(response.data);
-                    if (response.data.length == 0) {
-                        this.setState({
-                            emptyStateFlag: true
-                        })
-                    }
-                    else {
-                        this.setState({
-                            recentactivity: response.data,
-                            emptyStateFlag: false
-                        })
-                    }
-                    //window.location.assign("/users/dashboard")
-                }
-            }).catch(err => {
-                if (err.response == null) {
+        this.props.recentactivityAction(this.state).then(response => {
 
-                }
-                else {
+        })
+        // axios
+        //     .post(BACKEND_URL + "/groups/recentactivitybygroups", obj).then(response => {
+        //         if (response.status === 200) {
+        //             console.log(response.data);
+        //             if (response.data.length == 0) {
+        //                 this.setState({
+        //                     emptyStateFlag: true
+        //                 })
+        //             }
+        //             else {
+        //                 this.setState({
+        //                     recentactivity: response.data,
+        //                     emptyStateFlag: false
+        //                 })
+        //             }
+        //             //window.location.assign("/users/dashboard")
+        //         }
+        //     }).catch(err => {
+        //         if (err.response == null) {
 
-                }
-                // toast.error(err.response.data);
-            })
+        //         }
+        //         else {
+
+        //         }
+        //         // toast.error(err.response.data);
+        //     })
     }
     handlePageClick = (e) => {
         this.setState({
@@ -129,9 +132,22 @@ export class RecentActivity extends Component {
         axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;
         const groups = await axios.get(BACKEND_URL + '/users/userbyid/' + cookie.load('id'));
-        this.setState({
-            groups: groups.data[0].acceptedGroups
-        })
+        console.log(groups.data);
+        if (groups.data[0].acceptedGroups.length != 0) {
+            for (let i = 0; i <= groups.data.length; i++) {
+                const data = await axios.get(BACKEND_URL + '/groups/groupbyid/' + groups.data[0].acceptedGroups[i].groupID);
+                console.log(data);
+                this.setState({
+                    groups: [...this.state.groups, data.data[0]]
+
+                })
+
+            }
+        }
+
+        // this.setState({
+        //     groups: groups.data[0].acceptedGroups
+        // })
         console.log(groups.data[0].acceptedGroups);
         this.props.recentactivityAction(this.state).then(response => {
             console.log(this.props.userData.data);
@@ -173,7 +189,7 @@ export class RecentActivity extends Component {
 
         ]
         let groupOptions = this.state.groups.map(function (group) {
-            return { value: group.groupID, label: group.groupName };
+            return { value: group._id, label: group.groupName };
         })
         let recentactivityDetails = null;
         if (this.state.emptyStateFlag) {
@@ -281,13 +297,17 @@ export class RecentActivity extends Component {
                         placeholder="Select Order by"
                         options={orderByOptions}
                     />
+
+
                     <button class="btn btn-info" style={{ marginLeft: "100px", marginTop: "20px", backgroundColor: "#20BF9F" }} onClick={this.onClear}>Clear Value</button>
+                    <h4>Pagination Options</h4>
                     <Select
-                        style={{ width: "400px", marginLeft: "-30px",marginTop : "100px" }}
+                        style={{ width: "400px", marginLeft: "-30px", marginTop: "100px" }}
                         name="form-field-name"
                         onChange={this.handlePaginationChange}
                         placeholder="Select Pagination Options"
                         options={pageOptions}
+                        defaultValue={{ label: "2", value: "2" }}
                     />
                 </div>
 
