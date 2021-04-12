@@ -176,27 +176,38 @@ router.post('/new', checkAuth, (req, res) => {
     })
 })
 router.post('/recentactivity', checkAuth, (req, res) => {
-    console.log("Over here");
+    console.log("Over here in recent activity");
     console.log(req.body);
     if (req.body.orderByFlag && req.body.activitiesFlag) {
-
-    }
-    else if (req.body.orderByFlag) {
-
-    }
-    else if (req.body.activitiesFlag) {
-        console.log("Recent Activity by User in Activitiees Flag valur")
-
-        recentActivitySchema.find({ userID: req.body.userID , groupID : req.body.activitiesValue}).sort({ createdAt: '-1' }).then(docs => {
+        console.log("Hi");
+        console.log("Here in orderby and activitiesFlag ");
+        recentActivitySchema.find({ userID: req.body.userID, groupID: req.body.groupID }).sort({ createdAt: req.body.orderBy }).then(docs => {
             console.log("Recent Activity by User in Activitiees Flag valur", docs)
             res.status(200).send(docs)
         }).catch(error => {
             console.log("Error in Recent Activity", error)
         })
-        console.log("over herere re r")
+        console.log("over herere rer")
+    }
+    else if (req.body.orderByFlag && !req.body.activitiesFlag) {
+        recentActivitySchema.find({ userID: req.body.userID }).sort({ createdAt: req.body.createdAt }).then(docs => {
+            console.log("Recent Activity by User", docs)
+            res.status(200).send(docs)
+        }).catch(error => {
+            console.log("Error in Recent Activity", error)
+        })
+    }
+    else if (req.body.activitiesFlag) {
+        console.log("Recent Activity by User in Activitiees Flag valur")
+        recentActivitySchema.find({ userID: req.body.userID, groupID: req.body.groupIDSelected }).sort({ createdAt: '-1' }).then(docs => {
+            console.log("Recent Activity by User in Activitiees Flag valur", docs)
+            res.status(200).send(docs)
+        }).catch(error => {
+            console.log("Error in Recent Activity", error)
+        })
+        console.log("over herere rer")
     }
     else {
-        console.log("over fgdrfgrdgdrggegeregegegefrgegregegerghere");
         recentActivitySchema.find({ userID: req.body.userID }).sort({ createdAt: '-1' }).then(docs => {
             console.log("Recent Activity by User", docs)
             res.status(200).send(docs)
@@ -204,7 +215,5 @@ router.post('/recentactivity', checkAuth, (req, res) => {
             console.log("Error in Recent Activity", error)
         })
     }
-
-
 });
 module.exports = router;

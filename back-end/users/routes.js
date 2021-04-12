@@ -10,6 +10,14 @@ var path = require('path');
 var fs = require('fs');
 var ObjectId = require('mongodb').ObjectID;
 var { secret } = require('../config/config')
+const AWS = require('aws-sdk');
+// Enter copied or downloaded access ID and secret key here
+const ID = 'AKIAV7ZXMAHEWXCCV226';
+const SECRET = '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';
+const s3 = new AWS.S3({
+    accessKeyId: ID,
+    secretAccessKey: SECRET
+});
 var { auth, checkAuth } = require('../config/passport')
 auth();
 //signup
@@ -78,7 +86,7 @@ router.post('/login', (req, res) => {
 router.get('/userbyid/:id', checkAuth, (req, res) => {
     console.log(req.params.id);
     userSchema.find({ _id: req.params.id }).then(docs => {
-        console.log("USER by ID docs",docs);
+        console.log("USER by ID docs", docs);
         res.status(200).send(JSON.stringify(docs));
     }).catch(error => {
         res.status(400).send(error)
@@ -134,14 +142,11 @@ router.get('/searchbyname', checkAuth, (req, res) => {
     })
 });
 router.post('/uploadprofileimage', (req, res) => {
-    console.log(req.files);
-    if (req.files === null) {
-        return res.status(400).send('No File Upload');
-    }
+
     const file = req.files.profileImage;
     //Get the userID,file name from frontend
+    var fileName = req.files.profileImage.name.split(',')[0];
     var userID = req.files.profileImage.name.split(',')[1];
-    const fileName = req.files.profileImage.name.split(',')[0];
     var pathToImage = path.join(__dirname, '../public');
     const filePathwithoutfileName = pathToImage + '/images/profilepics/' + userID;
     const filePath = pathToImage + '/images/profilepics/' + userID + '/' + fileName;
@@ -156,6 +161,28 @@ router.post('/uploadprofileimage', (req, res) => {
             return res.status(500).end(err);
         }
         else {
+            console.log(req.files);
+            if (req.files === null) {
+                return res.status(400).send('No File Upload');
+            }
+            console.log(filePath)
+            const fileContent = fs.readFileSync(filePath);
+            console.log(Date.now());
+            // Setting up S3 upload parameters
+            fileName = fileName + '_'+userID;
+            const params = {
+                Bucket: 'splitwise-app-main',
+                Key: fileName, // File name you want to save as in S3
+                Body: fileContent
+            };
+
+            // Uploading files to the bucket
+            s3.upload(params, function (err, data) {
+                if (err) {
+                    throw err;
+                }
+                console.log(`File uploaded successfully. ${data.Location}`);
+            });
             userSchema.findOneAndUpdate({ _id: ObjectId(userID) },
                 {
                     $set: {

@@ -19,7 +19,7 @@ export class Profile extends Component {
         language: "",
         profileImageUpdate: false,
         updatedProfileImage: "",
-        profileImagePath: "",
+        profileImagePath: "https://splitwise-app-main.s3.us-east-2.amazonaws.com/michael-photo.png",
         emailError: false,
         error: false
     }
@@ -147,7 +147,7 @@ export class Profile extends Component {
             console.log(this.props);
             const userID = cookie.load("id")
             console.log(userID);
-            axios.defaults.headers.common[ "authorization" ] = cookie.load( 'token' )
+            axios.defaults.headers.common["authorization"] = cookie.load('token')
             axios.defaults.withCredentials = true;
             const response = await axios.get(BACKEND_URL + "/users/userbyid/" + userID);
             console.log(response.data[0]);
@@ -168,7 +168,7 @@ export class Profile extends Component {
             }
             else {
                 this.setState({
-                    profileImagePath: BACKEND_URL + '/images/profilepics/' + cookie.load('id') + '/' + response.data[0].image
+                    profileImagePath: 'https://splitwise-app-main.s3.us-east-2.amazonaws.com/michael-photo.png_606f7da299771a0c293ac668'
                 })
             }
         }

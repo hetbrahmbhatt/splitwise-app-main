@@ -46,35 +46,20 @@ export class RecentActivity extends Component {
             groupIDSelected: e.value,
             orderBy: '-1'
         })
-        this.props.recentactivityAction(this.state).then(response => {
+        let object = {
+            activitiesFlag: true,
+            groupIDSelected: e.value,
+            orderBy: '-1',
+            userID: cookie.load('id'),
+        }
 
+        console.log(this.state);
+        this.props.recentactivityAction(object).then(response => {
+            console.log(this.props.userData);
+            this.setState({
+                recentactivity: this.props.userData.data
+            })
         })
-        // axios
-        //     .post(BACKEND_URL + "/groups/recentactivitybygroups", obj).then(response => {
-        //         if (response.status === 200) {
-        //             console.log(response.data);
-        //             if (response.data.length == 0) {
-        //                 this.setState({
-        //                     emptyStateFlag: true
-        //                 })
-        //             }
-        //             else {
-        //                 this.setState({
-        //                     recentactivity: response.data,
-        //                     emptyStateFlag: false
-        //                 })
-        //             }
-        //             //window.location.assign("/users/dashboard")
-        //         }
-        //     }).catch(err => {
-        //         if (err.response == null) {
-
-        //         }
-        //         else {
-
-        //         }
-        //         // toast.error(err.response.data);
-        //     })
     }
     handlePageClick = (e) => {
         this.setState({
@@ -98,34 +83,30 @@ export class RecentActivity extends Component {
             var obj = {
                 userID: cookie.load('id'),
                 groupID: this.state.activitiesValue,
-                orderBy: e.value
+                orderBy: e.value,
+                orderByFlag: true,
+                activitiesFlag: true
             }
-            axios
-                .post(BACKEND_URL + "/groups/recentactivitybygroups", obj).then(response => {
-                    if (response.status === 200) {
-                        console.log(response.data);
-                        if (response.data.length == 0) {
-                            this.setState({
-                                emptyStateFlag: true
-                            })
-                        }
-                        else {
-                            this.setState({
-                                recentactivity: response.data,
-                                emptyStateFlag: false
-                            })
-                        }
-                        //window.location.assign("/users/dashboard")
-                    }
-                });
-            console.log("------------------>")
+            this.props.recentactivityAction(obj).then(response => {
+                console.log(this.props.userData);
+                this.setState({
+                    recentactivity: this.props.userData.data
+                })
+            })
         }
         else {
             var obj = {
                 userID: cookie.load('id'),
-                groupID: null,
-                orderBy: e.value
+                createdAt: e.value,
+                orderByFlag: true,
+                activitiesFlag: false
             }
+            this.props.recentactivityAction(obj).then(response => {
+                console.log(this.props.userData);
+                this.setState({
+                    recentactivity: this.props.userData.data
+                })
+            })
         }
     }
     async componentDidMount() {
@@ -179,8 +160,8 @@ export class RecentActivity extends Component {
         }
         console.log(this.state);
         let orderByOptions = [
-            { value: 'DESC', label: 'Most Recent First' },
-            { value: 'ASC', label: 'Most Recent Last' },
+            { value: '-1', label: 'Most Recent First' },
+            { value: '1', label: 'Most Recent Last' },
         ]
         let pageOptions = [
             { value: '2', label: '2' },
@@ -226,7 +207,6 @@ export class RecentActivity extends Component {
                 else if (Number(group.commentFlag) == 1) {
                     if (group.userName == cookie.load('name')) {
                         groupDivision = <p style={{ fontSize: "20px" }}><b>You</b> added a comment <b>"{group.message}"</b> in <b>"{group.groupName}".</b></p>
-
                     }
                     else {
                         groupDivision = <p style={{ fontSize: "20px" }}><b>"{group.userName}"</b> added a comment <b>"{group.message}"</b> in <b>"{group.groupName}".</b></p>

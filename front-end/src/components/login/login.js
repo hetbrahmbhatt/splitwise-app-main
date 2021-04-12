@@ -60,7 +60,7 @@ export class login extends Component {
     handleSubmit = e => {
         e.preventDefault();
         if (!this.state.error) {
-            this.props.loginAction( this.state )
+            this.props.loginAction(this.state)
         };
     }
 
@@ -69,13 +69,13 @@ export class login extends Component {
         let renderError = null
         let redirectVar = null
         let invalidError = null
-        if ( cookie.load( 'auth' )) {
+        if (cookie.load('auth')) {
             redirectVar = <Redirect to='/dashboard' />
         }
         if (this.state.error) {
             renderError = <div style={{ 'color': 'red' }}>{this.state.errorMessage}</div>
         }
-        if(this.props.error){
+        if (this.props.error) {
             invalidError = <div style={{ 'color': 'red' }}>{this.props.message}</div>
         }
         return (
@@ -122,8 +122,8 @@ export class login extends Component {
         )
     }
 }
-const matchStateToProps = ( state ) => {
-    console.log( "inside matchStatetoProps", state )
+const matchStateToProps = (state) => {
+    console.log("inside matchStatetoProps", state)
     return {
         error: state.loginReducer.error,
         message: state.loginReducer.message
@@ -131,10 +131,10 @@ const matchStateToProps = ( state ) => {
 
 }
 
-const matchDispatchToProps = ( dispatch ) => {
+const matchDispatchToProps = (dispatch) => {
     return {
-        loginAction: ( data ) => dispatch( loginAction( data ) ),
+        loginAction: (data) => dispatch(loginAction(data)),
     }
 }
 
-export default connect( matchStateToProps, matchDispatchToProps )(login )
+export default connect(matchStateToProps, matchDispatchToProps)(login)

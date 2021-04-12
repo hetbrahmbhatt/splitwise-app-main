@@ -33,11 +33,11 @@ var loginAction = (data) => (dispatch) => {
             let decoded = jwt_decode(response.data.split(' ')[1])
             console.log("decoded", decoded)
             if (response.status === 200) {
-                cookie.save( "token", response.data, {
+                cookie.save("token", response.data, {
                     path: '/',
                     httpOnly: false,
                     maxAge: 90000
-                } )
+                })
                 cookie.save("auth", true, {
                     path: '/',
                     httpOnly: false,

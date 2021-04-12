@@ -17,8 +17,8 @@ export class Messages extends Component {
             messagesPopUp: false,
             reply: "",
             conversations: this.props.groupSumData.messages,
-            groupSummaryID : this.props.groupSumData._id,
-            groupName : this.props.groupSumData.groupName
+            groupSummaryID: this.props.groupSumData._id,
+            groupName: this.props.groupSumData.groupName
         }
         console.log(this.props.groupSumData)
 
@@ -36,10 +36,10 @@ export class Messages extends Component {
             axios.defaults.headers.common["authorization"] = cookie.load('token')
             axios.defaults.withCredentials = true;
             var obj = {
-                groupSummaryID : this.state.groupSummaryID,
-                messageID : e.target.value
+                groupSummaryID: this.state.groupSummaryID,
+                messageID: e.target.value
             }
-            return axios.put(BACKEND_URL + '/groups/removemessage',obj).then(response => {
+            return axios.put(BACKEND_URL + '/groups/removemessage', obj).then(response => {
                 console.log(response.data);
                 // dispatch(success(response, data))
                 this.setState({
@@ -64,8 +64,8 @@ export class Messages extends Component {
             userName: cookie.load('name'),
             groupSummaryDescription: this.props.groupSumData.description,
             messageString: this.state.reply,
-            groupName : this.state.groupName,
-            groupID : this.props.groupSumData.groupID
+            groupName: this.state.groupName,
+            groupID: this.props.groupSumData.groupID
         }
         axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;

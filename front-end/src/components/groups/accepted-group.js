@@ -39,7 +39,6 @@ export class AcceptedGroup extends Component {
                 }
             }).catch((err) => {
             });
-
     }
     toggleGroupPopUp = (e) => {
         this.setState({

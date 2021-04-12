@@ -28,10 +28,9 @@ var recentActivityAction = (data) => (dispatch) => {
     axios.defaults.withCredentials = true;
     console.log(data);
     return axios
-        .post(BACKEND_URL + "/expenses/recentactivity/",data).then(response => {
+        .post(BACKEND_URL + "/expenses/recentactivity/", data).then(response => {
             if (response.status === 200) {
-                console.log(response);
-                let pageCount = Math.ceil( response.data.length / data.perPage )
+                let pageCount = Math.ceil(response.data.length / data.perPage)
                 dispatch(success(response, pageCount));
             }
         }).catch((err) => {
