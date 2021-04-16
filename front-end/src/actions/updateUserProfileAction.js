@@ -43,7 +43,6 @@ var updateUserProfileAction = (data) => (dispatch) => {
     return axios
         .put(BACKEND_URL + "/users/editprofile", data).then(response => {
             if (response.status === 200) {
-                alert(JSON.stringify(response.data));
                 console.log(response.data);
                 if (cookie.load('email') !== response.data.email) {
                     cookie.remove("email", {

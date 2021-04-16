@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router'
+import { Link } from 'react-router-dom'
+
 import cookie from "react-cookies";
 import _ from 'lodash';
-
+//TODO: LEAVEGROUP
 export class logout extends Component {
     render() {
         var cookies = null;

@@ -6,6 +6,8 @@ var groupSchema = require('../models/groups');
 const userSchema = require('../models/users');
 const recentActivitySchema = require('../models/recentactivity');
 const groupSummarySchema = require('../models/groupSummary');
+const DebtsSchema = require('../models/debts');
+const groupBalanceSchema = require('../models/groupBalance');
 var jwt = require('jsonwebtoken');
 var { secret } = require('../config/config');
 var kafka = require('../kafka/client');
@@ -16,9 +18,187 @@ var { secret } = require('../config/config')
 var { auth, checkAuth } = require('../config/passport')
 auth()
 router.post('/new', checkAuth, (req, res) => {
+    console.log(req.body);
+    groupSchema.find({ _id: req.body.groupID },
+    ).then(doc => {
+        let totalGroupMembers = doc[0].membersSchema.length;
+        console.log(req.body);
+        let takeAmount = Number((req.body.amount) / totalGroupMembers);
+        console.log(takeAmount);
+        if (Number.isInteger(takeAmount)) {
+
+        }
+        else {
+            takeAmount = takeAmount.toString();
+            takeAmount = takeAmount.slice(0, (takeAmount.indexOf(".")) + 3);
+        }
+        console.log("Take Amount", takeAmount);
+        var groupMembersminusonee = totalGroupMembers - 1;
+        let takingAmountForRecentActivitys = (groupMembersminusonee) * (req.body.amount / totalGroupMembers);
+        if (Number.isInteger(takingAmountForRecentActivitys)) {
+
+        }
+        else {
+            takingAmountForRecentActivitys = takingAmountForRecentActivitys.toString();
+            takingAmountForRecentActivitys = takingAmountForRecentActivitys.slice(0, (takingAmountForRecentActivitys.indexOf(".")) + 3);
+        }
+        for (let i = 0; i < doc[0].membersSchema.length; i++) {
+            if (doc[0].membersSchema[i].userID < req.body.userID) {
+                console.log("Over here in userfwefwfweffwfw");
+                console.log(doc[0].membersSchema[i].userID);
+                DebtsSchema.find({
+                    userID1: doc[0].membersSchema[i].userID,
+                    userID2: req.body.userID,
+                    groupID: req.body.groupID,
+                    currency: req.body.currency,
+                }).then(response => {
+                    console.log("Length of response", response.length);
+
+                    if (response.length == 0) {
+                        let newDebts1 = new DebtsSchema({
+                            userID1: doc[0].membersSchema[i].userID,
+                            userID1Name: doc[0].membersSchema[i].userName,
+                            userID2: req.body.userID,
+                            userID2Name: req.body.userName,
+                            groupID: req.body.groupID,
+                            groupName: req.body.groupName,
+                            currency: req.body.currency,
+                            amount: takeAmount
+                        })
+                        newDebts1.save().then(response => {
+                            console.log("New Debts Saved")
+                        })
+                    }
+                    else {
+                        console.log("Here");
+
+                        console.log("Response1234343", response);
+                        console.log(response[0]);
+                        console.log(response[0]._id);
+                        DebtsSchema.findOne(
+                            { _id: ObjectId(response[0]._id) },
+                        ).then(response1 => {
+
+                            if (response1 == null) {
+
+                            }
+                            else {
+                                console.log("QERFEFEFEFEFREFEFEFRERFE", response1);
+                                let newAmount = Number(response1.amount) + Number(takeAmount);
+                                console.log(takeAmount);
+                                console.log("newAmount", newAmount);
+                                newAmount = Number(newAmount);
+                                DebtsSchema.findOneAndUpdate({ _id: ObjectId(response1._id) },
+                                    {
+                                        $set: {
+                                            amount: newAmount,
+                                        }
+                                    }
+                                ).then(resposne => {
+                                    console.log(resposne)
+                                })
+                            }
+
+                        })
+                    }
+
+                    console.log("OIver cxedfwdfwdedsdedwdwddewdwdewedewdwsdwsdrw")
+                })
+
+            }
+            else if (doc[0].membersSchema[i].userID > req.body.userID) {
+                DebtsSchema.find({
+                    userID1: req.body.userID,
+                    userID2: doc[0].membersSchema[i].userID,
+                    groupID: req.body.groupID,
+                    currency: req.body.currency,
+                }).then(response => {
+                    console.log("Length of response", response.length);
+                    if (response.length == 0) {
+                        let newDebts1 = new DebtsSchema({
+                            userID1: req.body.userID,
+                            userID1Name: req.body.userName,
+                            userID2: doc[0].membersSchema[i].userID,
+                            userID2Name: doc[0].membersSchema[i].userName,
+                            groupID: req.body.groupID,
+                            groupName: req.body.groupName,
+                            currency: req.body.currency,
+                            amount: -1 * takeAmount
+                        })
+                        newDebts1.save().then(response => {
+                            console.log("New Debts Saved")
+                        })
+                    }
+                    else {
+                        console.log("Here");
+
+                        console.log("Response1234343", response);
+                        console.log(response[0]);
+                        console.log(response[0]._id);
+                        DebtsSchema.findOne(
+                            { _id: ObjectId(response[0]._id) },
+                        ).then(response1 => {
+
+                            if (response1 == null) {
+
+                            }
+                            else {
+                                console.log("QERFEFEFEFEFREFEFEFRERFE", response1);
+                                console.log(takeAmount);
+                                takeAmount = Number(takeAmount);
+                                let newAmount = response1.amount - (takeAmount);
+                                console.log("newAmount", newAmount);
+                                newAmount = Number(newAmount);
+                                DebtsSchema.findOneAndUpdate({ _id: ObjectId(response1._id) },
+                                    {
+                                        $set: {
+                                            amount: newAmount,
+                                        }
+                                    }
+                                ).then(resposne => {
+                                    console.log(resposne)
+                                })
+                            }
+
+                        })
+                    }
+
+                    console.log("OIver cxedfwdfwdedsdedwdwddewdwdewedewdwsdwsdrw")
+                })
+            }
+        }
+        for (let i = 0; i < doc[0].membersSchema.length; i++) {
+            if (doc[0].membersSchema[i].userID != req.body.userID) {
+                let groupBalance = new groupBalanceSchema({
+                    userID: doc[0].membersSchema[i].userID,
+                    useerName: doc[0].membersSchema[i].userName,
+                    groupID: req.body.groupID,
+                    groupName: req.body.groupName,
+                    amount: -1 * takeAmount,
+                    currency: req.body.currency,
+                })
+                groupBalance.save().then(response => {
+                    console.log("Group Balance  Saved")
+                })
+            }
+            else if (doc[0].membersSchema[i].userID == req.body.userID) {
+                let groupBalance = new groupBalanceSchema({
+                    userID: req.body.userID,
+                    useerName: req.body.userName,
+                    groupID: req.body.groupID,
+                    groupName: req.body.groupName,
+                    amount: takingAmountForRecentActivitys,
+                    currency: req.body.currency,
+                })
+                groupBalance.save().then(response => {
+                    console.log("Group Balance  opposite Saved")
+                })
+            }
+        }
+
+    })
     console.log(req.body)
     let ts = Date.now();
-
     let date_ob = new Date(ts);
     let date = date_ob.getDate().toString();
     let month = (date_ob.getMonth() + 1).toString();
@@ -30,6 +210,7 @@ router.post('/new', checkAuth, (req, res) => {
     ).then(doc => {
         let totalGroupMembers = doc[0].membersSchema.length;
         let takingAmount = ((req.body.amount) / totalGroupMembers);
+
         var groupMembersminusone = totalGroupMembers - 1;
         let takingAmountForRecentActivity = (groupMembersminusone) * (req.body.amount / totalGroupMembers);
         let givingAmount = -1 * ((req.body.amount) / totalGroupMembers);
@@ -187,11 +368,9 @@ router.post('/recentactivity', checkAuth, (req, res) => {
         }).catch(error => {
             console.log("Error in Recent Activity", error)
         })
-        console.log("over herere rer")
     }
     else if (req.body.orderByFlag && !req.body.activitiesFlag) {
         recentActivitySchema.find({ userID: req.body.userID }).sort({ createdAt: req.body.createdAt }).then(docs => {
-            console.log("Recent Activity by User", docs)
             res.status(200).send(docs)
         }).catch(error => {
             console.log("Error in Recent Activity", error)

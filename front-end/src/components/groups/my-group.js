@@ -33,7 +33,6 @@ export class MyGroup extends Component {
     }
 
     reload = (e) => {
-        alert("hi");
         this.props.groupGetActionForUser(cookie.load("id")).then(response => {
             this.setState({
                 groups: this.props.userData.data[0].invitedGroups,
@@ -178,9 +177,7 @@ const matchStateToProps = (state) => {
         error: state.getByIDReducer.error,
         userData: state.getByIDReducer.userData
     }
-
 }
-
 const matchDispatchToProps = (dispatch) => {
     return {
         groupGetActionForUser: (data) => dispatch(groupGetActionForUser(data)),

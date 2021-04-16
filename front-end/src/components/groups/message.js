@@ -45,13 +45,12 @@ export class Messages extends Component {
                 this.setState({
                     conversations: response.data.messages
                 })
-                this.refs.someText.value = "";
+                this.someText.value = "";
             }).catch(err => {
                 // dispatch(error(err))
             })
         }
         else {
-            alert("Outside answer")
         }
         console.log(e.target.value)
     }

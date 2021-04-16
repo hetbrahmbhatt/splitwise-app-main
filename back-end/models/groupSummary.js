@@ -8,9 +8,6 @@ var individialMessageSchema = new Schema({
         timestamps: true
     }
 )
-
-
-
 var groupSummary = new Schema({
     userID: String,
     currency: String,

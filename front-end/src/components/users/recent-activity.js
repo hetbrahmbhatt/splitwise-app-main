@@ -4,21 +4,17 @@ import BACKEND_URL from '../../config/config';
 import axios from 'axios';
 import grocerylogo from '../../images/grocery.png'
 import emptyplaceholder from '../../images/empty-placeholder.png'
-import comment from '../../images/comment.png'
-
 import moment from 'moment-timezone';
 import Select from 'react-select';
-import { Redirect } from 'react-router'
+import { Redirect } from 'react-router';
 import recentactivityAction from '../../actions/recentActivityAction';
 import { connect } from "react-redux";
 import ReactPaginate from 'react-paginate';
 import '../css/pagination.css';
-import groupGetByIDAction from '../../actions/getGroupByIDAction'
-
+import groupGetByIDAction from '../../actions/getGroupByIDAction';
 export class RecentActivity extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             recentactivity: [],
             emptyStateFlag: false,
@@ -115,7 +111,7 @@ export class RecentActivity extends Component {
         const groups = await axios.get(BACKEND_URL + '/users/userbyid/' + cookie.load('id'));
         console.log(groups.data);
         if (groups.data[0].acceptedGroups.length != 0) {
-            for (let i = 0; i <= groups.data.length; i++) {
+            for (let i = 0; i < groups.data.length; i++) {
                 const data = await axios.get(BACKEND_URL + '/groups/groupbyid/' + groups.data[0].acceptedGroups[i].groupID);
                 console.log(data);
                 this.setState({
