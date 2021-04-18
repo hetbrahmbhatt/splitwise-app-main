@@ -92,27 +92,20 @@ export class GroupDescription extends Component {
         const groupSummary = await axios
             .get(BACKEND_URL + "/groups/groupsummarybyid/" + this.state.groupID)
         console.log(groupSummary);
-        this.setState({
-            groupDescription: groupSummary.data
-        })
-        const groupID = this.state.groupID;
-        console.log(groupID);
-        // const response = await axios.get(BACKEND_URL + "/groups/description/" + groupID);
+        if (groupSummary.data.length == 0) {
+            if (groupSummary.data.length == 0) {
+                this.setState({
+                    emptyStateFlag: true
+                })
+            }
+        }
+        else {
+            this.setState({
+                groupDescription: groupSummary.data
+            })
+        }
 
-        // console.log(response.data);
-        // if (response.data.length == 0) {
-        //     if (response.data.length == 0) {
-        //         this.setState({
-        //             emptyStateFlag: true
-        //         })
-        //     }
-        // }
-        // response.data.map((groupDescription) => {
-        //     this.setState({
-        //         groupDescription: [...this.state.groupDescription, groupDescription]
-        //     })
-        // })
-        console.log("here");
+        const groupID = this.state.groupID;
         const individualData = await axios.get(BACKEND_URL + "/groups/individualdata/" + groupID);
         console.log(individualData.data);
         for (let i = 0; i < individualData.data.length; i++) {

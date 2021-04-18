@@ -9,7 +9,7 @@ var membersSchema = new Schema({
 var groupSchema = new Schema({
     groupID: String,
     userID: String,
-    groupName: { type: String, unique: true, dropDups: true },
+    groupName: { type: String, unique: true, index: true, dropDups: true },
     timestamp: String,
     count: Number,
     image: String,
@@ -19,5 +19,5 @@ var groupSchema = new Schema({
 },
     { collection: 'master_group' }
 );
-
+mongoose.model('groupSchema', groupSchema).createIndexes();
 module.exports = mongoose.model('groupSchema', groupSchema);

@@ -4,7 +4,7 @@ import cookie from "react-cookies";
 import _ from 'lodash';
 import axios from 'axios';
 import BACKEND_URL from '../../config/config';
-import emptyplaceholder from '../../images/empty-placeholder.png'
+import emptyplaceholder from '../../images/empty-placeholder.png';
 import TotalOwe from './total-owe';
 import TotalGiving from './total-giving';
 

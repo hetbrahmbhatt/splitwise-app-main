@@ -31,33 +31,10 @@ var groupAddAction = (data) => (dispatch) => {
             if (response.status === 200) {
                 window.location.assign("/all-group");
             }
+
+        }).catch((err) => {
+            dispatch(error(err, data))
         });
-        //         const formData = new FormData();
-        //         formData.append('profileImage', this.state.updatedProfileImage, this.state.updatedProfileImage.name + "," + response.data.groupID)
-        //         const config = {
-        //             headers: {
-        //                 'content-type': 'multipart/form-data'
-        //             }
-        //         }
-        //         axios
-        //             .post(BACKEND_URL + '/groups/uploadprofileimage', formData, config).then((response) => {
-        //                 this.setState({
-        //                     profileImagePath: BACKEND_URL + '/images/grouppics/' + response.data.groupID + '/' + response.data.fileName
-
-        //                 })
-
-        //             }).catch(err => {
-        //                 toast.error("Error in image upload")
-        //             })
-        //     }
-
-        // }).catch(err => {
-        //     if (err.response == null) {
-
-        //     }
-        //     else
-        //         toast.error(err.response.data);
-        // })
 }
 
 export default groupAddAction

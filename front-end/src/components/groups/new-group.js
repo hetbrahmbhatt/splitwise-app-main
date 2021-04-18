@@ -11,7 +11,7 @@ import groupAddAction from '../../actions/groupAddAction'
 export class NewGroup extends Component {
     state = {
         userID: cookie.load('id'),
-        userName : cookie.load('name'),
+        userName: cookie.load('name'),
         groupName: "",
         selectedUsers: [],
         groupError: false,
@@ -26,7 +26,7 @@ export class NewGroup extends Component {
     }
     loadOptionsForName = async (inp, callback) => {
         console.log("hi");
-        axios.defaults.headers.common[ "authorization" ] = cookie.load( 'token' )
+        axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;
         const response = await axios.get(BACKEND_URL + "/users/searchbyname?name_like=" + inp);
         console.log(response.data);
@@ -35,8 +35,8 @@ export class NewGroup extends Component {
             value: i._id
         })));
     }
-    loadOptionsForEmail = async (inp,callback) => {
-        axios.defaults.headers.common[ "authorization" ] = cookie.load( 'token' )
+    loadOptionsForEmail = async (inp, callback) => {
+        axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;
         const response = await axios.get(BACKEND_URL + "/users/searchbyemail?email_like=" + inp);
         console.log(response.data);
@@ -94,43 +94,16 @@ export class NewGroup extends Component {
         if (!this.state.error) {
             console.log(this.props);
             this.props.groupAddAction(this.state)
-            // console.log(this.state);
-            // axios
-            //     .post(BACKEND_URL + "/groups/new", this.state).then(response => {
-            //         if (response.status === 200) {
-            //             toast.success("Group Created Successfully");
-            //             window.location.assign("/all-group");
-            //             const formData = new FormData();
-            //             formData.append('profileImage', this.state.updatedProfileImage, this.state.updatedProfileImage.name + "," + response.data.groupID)
-            //             const config = {
-            //                 headers: {
-            //                     'content-type': 'multipart/form-data'
-            //                 }
-            //             }
-            //             axios
-            //                 .post(BACKEND_URL + '/groups/uploadprofileimage', formData, config).then((response) => {
-            //                     this.setState({
-            //                         profileImagePath: BACKEND_URL + '/images/grouppics/' + response.data.groupID + '/' + response.data.fileName
-
-            //                     })
-
-            //                 }).catch(err => {
-            //                     toast.error("Error in image upload")
-            //                 })
-            //         }
-
-            //     }).catch(err => {
-            //         if (err.response == null) {
-
-            //         }
-            //         else
-            //             toast.error(err.response.data);
-            //     })
         }
     }
 
     render() {
         let redirectTo = null;
+        let duplicateGroup = null;
+        console.log(this.props)
+        if (this.props.error) {
+            duplicateGroup = <div style={{ 'color': 'red' }}>"Sorry ! This group name already exists"</div>
+        }
         if (!(cookie.load("auth"))) {
             redirectTo = <Redirect to="/" />
         }
@@ -178,10 +151,12 @@ export class NewGroup extends Component {
                         <h5>Start a new group</h5>
                         <h3>My group shall be called...</h3>
                         <form onSubmit={this.handleSubmit} id="Login">
-                            <input placeholder={this.state.groupName} type="text" id="groupName" name="groupName" style={{ "width": "300px", "marginBottom": "40px" }} onChange={this.handleInputChange} ></input>
+                            <input placeholder={this.state.groupName} ref="groupName" type="text" id="groupName" name="groupName" style={{ "width": "300px", "marginBottom": "40px" }} onChange={this.handleInputChange} ></input>
+                            {duplicateGroup}
+
                             <div onChange={this.handleRadioButtonChange}>
                                 <input type="radio" value="email" name="search" /> Search by email
-                                <input style={{marginLeft : "20px"}}type="radio" value="name" name="search" /> Search by name
+                                <input style={{ marginLeft: "20px" }} type="radio" value="name" name="search" /> Search by name
                             </div>
                             {nameDivision}
                             {emailDivision}
@@ -196,19 +171,19 @@ export class NewGroup extends Component {
     }
 }
 
-const matchStateToProps = ( state ) => {
-    console.log( "inside matchStatetoProps", state )
+const matchStateToProps = (state) => {
+    console.log("inside matchStatetoProps", state)
     return {
-        error: state.searchEmailReducer.error,
+        error: state.insertGroupReducer.error,
         data: state.searchEmailReducer.emailData
     }
 
 }
 
-const matchDispatchToProps = ( dispatch ) => {
+const matchDispatchToProps = (dispatch) => {
     return {
-        groupAddAction: ( data ) => dispatch( groupAddAction( data ) ),
+        groupAddAction: (data) => dispatch(groupAddAction(data)),
     }
 }
 
-export default connect( matchStateToProps, matchDispatchToProps )(NewGroup )
+export default connect(matchStateToProps, matchDispatchToProps)(NewGroup)
