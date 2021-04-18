@@ -13,23 +13,31 @@ export class TotalOwe extends Component {
         if (this.props.totalOweData.userID1 == cookie.load('id')) {
             this.state = {
                 groupName: this.props.totalOweData.groupName,
-                id: this.props.totalOweData.userID2,
-                name: this.props.totalOweData.userID2Name,
+                userid: this.props.totalOweData.userID2,
+                userName: this.props.totalOweData.userID2Name,
                 groupID: this.props.totalOweData.groupID,
                 currency: this.props.totalOweData.currency,
                 sessionID: cookie.load('id'),
-                amount: this.props.totalOweData.amount
+                amount: this.props.totalOweData.amount,
+                sessionName : cookie.load('name'),
+                debtID: this.props.totalOweData._id,
+
+
             }
         }
         else if (this.props.totalOweData.userID2 == cookie.load('id')) {
             this.state = {
                 groupName: this.props.totalOweData.groupName,
-                id: this.props.totalOweData.userID1,
-                name: this.props.totalOweData.userID1Name,
+                userid: this.props.totalOweData.userID1,
+                userName: this.props.totalOweData.userID1Name,
                 groupID: this.props.totalOweData.groupID,
                 currency: this.props.totalOweData.currency,
                 sessionID: cookie.load('id'),
-                amount: this.props.totalOweData.amount
+                amount: this.props.totalOweData.amount,
+                sessionName : cookie.load('name'),
+                debtID: this.props.totalOweData._id,
+
+
             }
         }
 
@@ -37,6 +45,7 @@ export class TotalOwe extends Component {
     handleSubmit = e => {
         e.preventDefault();
         axios.post(BACKEND_URL + "/expenses/owingsettleup", this.state).then(response => {
+            window.location.reload();
             if (response) {
                 toast.success("You are all settled up.Please reload the page to update the status.");
 

@@ -19,7 +19,7 @@ export class TotalGiving extends Component {
                 sessionID: cookie.load('id'),
                 currency: this.props.totalGiveData.currency,
                 debtID: this.props.totalGiveData._id,
-                sessionName : cookie.load('name')
+                sessionName: cookie.load('name')
             }
         }
         else if (this.props.totalGiveData.userID2 == cookie.load('id')) {
@@ -32,9 +32,7 @@ export class TotalGiving extends Component {
                 sessionID: cookie.load('id'),
                 currency: this.props.totalGiveData.currency,
                 debtID: this.props.totalGiveData._id,
-                sessionName : cookie.load('name')
-
-
+                sessionName: cookie.load('name')
             }
         }
     };
