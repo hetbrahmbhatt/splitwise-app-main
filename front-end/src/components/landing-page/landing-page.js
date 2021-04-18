@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import landingpagephoto from '../../images/main-page.png'
 import landingpagephoto2 from '../../images/main-page-2.png'
 import airplane from '../../images/airplane.png'
-
 import { BsHouseDoorFill, BsFillHeartFill } from "react-icons/bs";
 import { FaRegSnowflake, FaPlaneDeparture } from "react-icons/fa";
 export class landingPage extends Component {

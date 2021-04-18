@@ -14,6 +14,8 @@ import camera from '../../images/camera.png'
 import emptyplaceholder from '../../images/empty-placeholder.png'
 import profilePhoto from '../../images/profile-icon.png'
 import groupSummaryByIDAction from '../../actions/getGroupSummaryByGroupID'
+import groupInternalDebtAction from '../../actions/getInternalDebtAction'
+
 import { connect } from "react-redux";
 // import Accordion from '@material-ui/core/Accordion';
 // import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -77,32 +79,40 @@ export class GroupDescription extends Component {
         }
     }
     async componentDidMount() {
-        this.props.groupSummaryByIDAction(this.state).then(response => {
-            console.log(this.props);
+        console.log("HI");
+        axios.defaults.withCredentials = true;
+        axios.get(BACKEND_URL + "/expenses/totalinternaldebt/" + this.state.groupID).then(response => {
             this.setState({
-                groupDescription: this.props.groupSummaryData.data
+                totalInternalDebt: response.data
             })
+        });
+        // const totalinternaldebt = await axios.get(BACKEND_URL + "/expenses/totalinternaldebt/" + this.state.groupID);
+        axios.defaults.headers.common["authorization"] = cookie.load('token')
+        axios.defaults.withCredentials = true;
+        const groupSummary = await axios
+            .get(BACKEND_URL + "/groups/groupsummarybyid/" + this.state.groupID)
+        console.log(groupSummary);
+        this.setState({
+            groupDescription: groupSummary.data
         })
         const groupID = this.state.groupID;
-        const response = await axios.get(BACKEND_URL + "/groups/description/" + groupID);
-        const totalinternaldebt = await axios.get(BACKEND_URL + "/expense/totalinternaldebt/" + groupID);
-        console.log(totalinternaldebt);
-        this.setState({
-            totalInternalDebt: totalinternaldebt.data
-        })
-        console.log(response.data);
-        if (response.data.length == 0) {
-            if (response.data.length == 0) {
-                this.setState({
-                    emptyStateFlag: true
-                })
-            }
-        }
-        response.data.map((groupDescription) => {
-            this.setState({
-                groupDescription: [...this.state.groupDescription, groupDescription]
-            })
-        })
+        console.log(groupID);
+        // const response = await axios.get(BACKEND_URL + "/groups/description/" + groupID);
+
+        // console.log(response.data);
+        // if (response.data.length == 0) {
+        //     if (response.data.length == 0) {
+        //         this.setState({
+        //             emptyStateFlag: true
+        //         })
+        //     }
+        // }
+        // response.data.map((groupDescription) => {
+        //     this.setState({
+        //         groupDescription: [...this.state.groupDescription, groupDescription]
+        //     })
+        // })
+        console.log("here");
         const individualData = await axios.get(BACKEND_URL + "/groups/individualdata/" + groupID);
         console.log(individualData.data);
         for (let i = 0; i < individualData.data.length; i++) {
@@ -127,6 +137,7 @@ export class GroupDescription extends Component {
     }
 
     render() {
+        console.log(this.state.totalInternalDebt);
         let individualExpenseDetails = (<div>
             {Object.keys(this.state.individualExpense).map((key) => {
                 return (
@@ -255,9 +266,9 @@ export class GroupDescription extends Component {
                 if (group.settleFlag != 0) {
 
                     return (
-                        <Accordion style={{ backgroundColor: "#ffffff",height : "1000px" }}>
+                        <Accordion style={{ backgroundColor: "#ffffff", height: "1000px" }}>
                             <Accordion.Toggle as={Card.Header} eventKey={index + 1}>
-                                <div className="row" style={{ height: "100px", border : "10px solid lightgrey",borderWidth: "thin", backgroundColor: "white", marginBottom: "1px", height: "120px" }}>
+                                <div className="row" style={{ height: "100px", border: "10px solid lightgrey", borderWidth: "thin", backgroundColor: "white", marginBottom: "1px", height: "120px" }}>
                                     <div className="col-1" style={{ margin: "20px", color: "grey" }}>
                                         <div className="row">
                                             {moment(group.createdat).tz(cookie.load("timezone")).format("MMM")}
@@ -287,7 +298,7 @@ export class GroupDescription extends Component {
                             </Accordion.Toggle>
 
                             <Accordion.Collapse eventKey={index + 1}>
-                                <div className="row" style={{ height: "100px",border : "1px solid lightgrey", borderWidth: "thin", backgroundColor: "whitesmoke", marginBottom: "1px", height: "120px" }}>
+                                <div className="row" style={{ height: "100px", border: "1px solid lightgrey", borderWidth: "thin", backgroundColor: "whitesmoke", marginBottom: "1px", height: "120px" }}>
                                     <div className="col-1" style={{ margin: "20px", color: "grey" }}>
                                         <div className="row">
                                             {moment(group.createdat).tz(cookie.load("timezone")).format("MMM")}
@@ -313,7 +324,7 @@ export class GroupDescription extends Component {
                                             <h3><b>{group.currency}{group.amount}</b></h3>
                                         </div>
                                     </div>
-                                    <Message key ={group.userID} groupSumData = {group}/>
+                                    <Message key={group.userID} groupSumData={group} />
                                 </div>
                             </Accordion.Collapse>
                         </Accordion>
@@ -324,7 +335,7 @@ export class GroupDescription extends Component {
                     return (
                         <Accordion style={{ backgroundColor: "#ffffff" }}>
                             <Accordion.Toggle as={Card.Header} eventKey={index + 1}>
-                                <div className="row" style={{ height: "100px", border : "10px solid lightgrey",backgroundColor: "white", borderWidth: "thin", marginBottom: "1px" }}>
+                                <div className="row" style={{ height: "100px", border: "10px solid lightgrey", backgroundColor: "white", borderWidth: "thin", marginBottom: "1px" }}>
                                     <div className="col-1" style={{ margin: "20px", color: "grey" }}>
                                         <div className="row">
                                             {moment(group.createdat).tz(cookie.load("timezone")).format("MMM")}
@@ -356,7 +367,7 @@ export class GroupDescription extends Component {
                                     </div>
                                 </div>
                             </Accordion.Toggle>
-                            <Accordion.Collapse eventKey={index + 1} style= {{height : "1000px"}}>
+                            <Accordion.Collapse eventKey={index + 1} style={{ height: "1000px" }}>
                                 <div>
                                     <div className="row" style={{ height: "350px", marginLeft: "50px" }}>
                                         <div className="col-2">
@@ -381,8 +392,8 @@ export class GroupDescription extends Component {
                                             </div>
                                         </div>
                                         <div className="col-4">
-                                            <Message key ={group.userID} groupSumData = {group}/>
-                                            </div>
+                                            <Message key={group.userID} groupSumData={group} />
+                                        </div>
                                     </div>
                                     <div className="row">
 
@@ -466,10 +477,9 @@ export class GroupDescription extends Component {
             // })
         }
         return (
-
             <div>
                 <div>
-
+                    {this.state.totalInternalDebt}
                 </div>
                 <script src="moment.js"></script>
                 <script src="moment-timezone-with-data.js"></script>
@@ -511,7 +521,9 @@ export class GroupDescription extends Component {
 const matchStateToProps = (state) => {
     return {
         error: state.groupSummaryByIDReducer.error,
-        groupSummaryData: state.groupSummaryByIDReducer.groupSummaryData
+        groupSummaryData: state.groupSummaryByIDReducer.groupSummaryData,
+        groupInternalDebt: state.getInternalDebtReducer.internalData
+
     }
 
 }
@@ -519,6 +531,8 @@ const matchStateToProps = (state) => {
 const matchDispatchToProps = (dispatch) => {
     return {
         groupSummaryByIDAction: (data) => dispatch(groupSummaryByIDAction(data)),
+        groupInternalDebtAction: (data) => dispatch(groupInternalDebtAction(data)),
+
     }
 }
 

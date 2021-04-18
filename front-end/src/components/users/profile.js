@@ -118,7 +118,6 @@ export class Profile extends Component {
         }
         else if (!this.state.error) {
             if (this.state.profileImageUpdate) {
-                console.log("object")
                 const formData = new FormData();
                 formData.append('profileImage', this.state.updatedProfileImage, this.state.updatedProfileImage.name + "," + this.state.userID)
                 const config = {

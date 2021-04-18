@@ -6,7 +6,6 @@ import AsyncSelect from 'react-select/async'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import { Redirect } from 'react-router'
-import searchByEmailAction from '../../actions/searchbyEmailAction'
 import { connect } from "react-redux";
 import groupAddAction from '../../actions/groupAddAction'
 export class NewGroup extends Component {
@@ -37,15 +36,6 @@ export class NewGroup extends Component {
         })));
     }
     loadOptionsForEmail = async (inp,callback) => {
-        // this.props.searchByEmailAction(inp);
-        // console.log(this.props)
-        // console.log(this.props.data);
-        // var x = Object.keys(this.props.data);
-        // console.log(x);
-        // callback(this.props.data.map(i => ({
-        //     label: i.name,
-        //     value: i.userID
-        // })));
         axios.defaults.headers.common[ "authorization" ] = cookie.load( 'token' )
         axios.defaults.withCredentials = true;
         const response = await axios.get(BACKEND_URL + "/users/searchbyemail?email_like=" + inp);

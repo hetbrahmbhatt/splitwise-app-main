@@ -10,7 +10,7 @@ import NewGroup from './groups/new-group';
 import MyGroup from './groups/my-group';
 import GroupDescription from './groups/group-description';
 import RecentActivity from '../components/users/recent-activity';
-// import Dashboard from './user/dashboard';
+import Dashboard from './users/dashboard';
 
 export class Routing extends Component {
     render() {
@@ -25,6 +25,7 @@ export class Routing extends Component {
                 <Route path='/logout' component={logout} />
                 <Route path='/profile' component={Profile} />
                 {/* <Route path='/dashboard' component={Dashboard} /> */}
+                <Route path='/dashboard' component={Dashboard} />
 
                 {/* Group */}
                 <Route path='/new-group' component={NewGroup} />

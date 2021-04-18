@@ -78,9 +78,6 @@ export class Messages extends Component {
         }).catch(err => {
             // dispatch(error(err))
         })
-        // this.props.userMessageAction(data).then (response => {
-        //     console.log(this.props);
-        // })
     }
 
     toggleMessagesPopUp = (e) => {

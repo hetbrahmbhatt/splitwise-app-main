@@ -11,6 +11,7 @@ import getGroupByIDReducerForAccepted from './groupsReducers/getGroupByIDForAcce
 import editGroupReducer from './groupsReducers/editGroupReducer';
 import addExpenseReducer from './expenseReducers.js/addExpenseReducer';
 import groupSummaryByIDReducer from './groupsReducers/groupSummaryByIDReducer';
+import getInternalDebtReducer from './groupsReducers/getInternalDebtReducer';
 
 var rootReducer = combineReducers({
     SignUpReducer: SignUpReducer,
@@ -25,6 +26,7 @@ var rootReducer = combineReducers({
     addExpenseReducer: addExpenseReducer,
     recentActivityReducer: recentActivityReducer,
     groupSummaryByIDReducer: groupSummaryByIDReducer,
+    getInternalDebtReducer: getInternalDebtReducer,
 
 });
 

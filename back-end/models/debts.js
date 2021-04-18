@@ -7,7 +7,7 @@ var debtsSchema = new Schema({
     userID2Name: String,
     groupID: String,
     groupName: String,
-    currency: String,
+    currency: String,   
     amount: Number
 
 }
