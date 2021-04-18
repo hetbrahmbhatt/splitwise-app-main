@@ -5,7 +5,7 @@ var groupBalance = new Schema({
     useerName: String,
     groupID: String,
     groupName: String,
-    amount: String,
+    amount: Number,
     currency: String,
 },
     { timestamps: true }

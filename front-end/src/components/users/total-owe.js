@@ -36,7 +36,7 @@ export class TotalOwe extends Component {
     };
     handleSubmit = e => {
         e.preventDefault();
-        axios.post(BACKEND_URL + "/expense/owingsettleup", this.state).then(response => {
+        axios.post(BACKEND_URL + "/expenses/owingsettleup", this.state).then(response => {
             if (response) {
                 toast.success("You are all settled up.Please reload the page to update the status.");
 

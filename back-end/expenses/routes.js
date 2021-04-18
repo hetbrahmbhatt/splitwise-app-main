@@ -450,15 +450,105 @@ router.get('/totalinternaldebt/:id', checkAuth, (req, res) => {
     console.log("in total");
     DebtsSchema.find({ groupID: groupID }).then(docs => {
         console.log(docs);
+        res.status(200).send(docs)
     });
 
 })
+router.post('/givingsettleup', checkAuth, (req, response123) => {
+    console.log("Over herre");
+    console.log(req.body)
+    groupSchema.find({ _id: req.body.groupID },
+    ).then(doc => {
+        for (let i = 0; i < doc[0].membersSchema.length; i++) {
+            let recentActivity = new recentActivitySchema({
+                userID: doc[0].membersSchema[i].userID,
+                groupID: req.body.groupID,
+                userName: req.body.userName + " and " + req.body.sessionName + " settled up",
+                currency: req.body.currency,
+                groupName: req.body.groupName,
+                amount: req.body.amount,
+                settleflag: 100
+            })
+            recentActivity.save().then(response => {
+                console.log(response);
+                console.log("Response saved Successfully");
+            })
+        }
+    })
+    let amountToUpdate = 0;
+    if (Number(req.body.amount) > 0) {
+        amountToUpdate = req.body.amount;
+    }
+    else {
+        amountToUpdate = -1 * (req.body.amount);
+    }
+    DebtsSchema.findOneAndUpdate({ _id: ObjectId(req.body.debtID) },
+        {
+            $set: {
+                amount: 0,
+            }
+        }
+    ).then(response => {
+        console.log("Here is the response", response)
+        groupBalanceSchema.find(
+            {
+                userID: req.body.sessionID,
+                groupID: req.body.groupID,
+                currency: req.body.currency
+            }
+        ).then(res => {
+            console.log("Response is", res[0]._id);
+            console.log("here");
+            let newamount = res[0].amount;
+            newamount = Number(newamount) + Number(amountToUpdate);
+            console.log(res._id);
+            groupBalanceSchema.findOneAndUpdate(
+                { _id: ObjectId(res[0]._id) },
+                {
+                    amount: newamount
+                }
+            ).then(resposne => {
+                console.log("G1 updated successfully")
+                if (resposne != null) {
+                    groupBalanceSchema.find(
+                        {
+                            userID: req.body.userid,
+                            groupID: req.body.groupID,
+                            currency: req.body.currency
+                        }
+                    ).then(res => {
+                        console.log("G2 updated successfully")
+                        let newamount = res[0].amount;
+                        newamount = Number(newamount) - Number(amountToUpdate)
+                        groupBalanceSchema.findOneAndUpdate(
+                            { _id: ObjectId(res[0]._id) },
+                            {
+                                amount: newamount
+                            }
+                        ).then(response => {
+                            response123.status(200).send(response);
+                        })
+                    }
+                    )
+                }
+            })
+        }).catch(error => {
+
+        })
+    })
+
+})
+
+
+
+router.post('/owingsettleup', checkAuth, (req, res) => {
+    console.log(req.body)
+})
+
 router.post('/recentactivity', checkAuth, (req, res) => {
     console.log("Over here in recent activity");
     console.log(req.body);
     if (req.body.orderByFlag && req.body.activitiesFlag) {
-        console.log("Hi");
-        console.log("Here in orderby and activitiesFlag ");
         recentActivitySchema.find({ userID: req.body.userID, groupID: req.body.groupID }).sort({ createdAt: req.body.orderBy }).then(docs => {
             console.log("Recent Activity by User in Activitiees Flag valur", docs)
             res.status(200).send(docs)

@@ -28,7 +28,6 @@ router.post('/signup', (req, res) => {
             email: req.body.email,
             password: hash,
             language: "",
-            timezone: "",
             phoneno: "",
             image: "",
         })

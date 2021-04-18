@@ -15,17 +15,9 @@ import emptyplaceholder from '../../images/empty-placeholder.png'
 import profilePhoto from '../../images/profile-icon.png'
 import groupSummaryByIDAction from '../../actions/getGroupSummaryByGroupID'
 import groupInternalDebtAction from '../../actions/getInternalDebtAction'
-
 import { connect } from "react-redux";
-// import Accordion from '@material-ui/core/Accordion';
-// import AccordionSummary from '@material-ui/core/AccordionSummary';
-// import AccordionDetails from '@material-ui/core/AccordionDetails';
-// import Typography from '@material-ui/core/Typography';
-// import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Accordion, Card } from "react-bootstrap";
 import Message from '../groups/message';
-
-
 const customStyles = {
     content: {
         top: '40%',
@@ -79,19 +71,29 @@ export class GroupDescription extends Component {
         }
     }
     async componentDidMount() {
-        console.log("HI");
+        axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;
-        axios.get(BACKEND_URL + "/expenses/totalinternaldebt/" + this.state.groupID).then(response => {
+        const internalDebtResponse = await axios.get(BACKEND_URL + "/expenses/totalinternaldebt/" + this.state.groupID)
+        console.log(internalDebtResponse.data)
+        console.log(internalDebtResponse.data);
+        console.log(Object.entries(internalDebtResponse.data));
+
+        if (internalDebtResponse.data.length == 0) {
+
+        }
+        else {
+            //TODO : Solve this error
             this.setState({
-                totalInternalDebt: response.data
+                // totalInternalDebt  : internalDebtResponse.data
             })
-        });
+        }
+
         // const totalinternaldebt = await axios.get(BACKEND_URL + "/expenses/totalinternaldebt/" + this.state.groupID);
         axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;
         const groupSummary = await axios
             .get(BACKEND_URL + "/groups/groupsummarybyid/" + this.state.groupID)
-        console.log(groupSummary);
+        console.log(groupSummary.data);
         if (groupSummary.data.length == 0) {
             if (groupSummary.data.length == 0) {
                 this.setState({
@@ -101,7 +103,7 @@ export class GroupDescription extends Component {
         }
         else {
             this.setState({
-                groupDescription: groupSummary.data
+                groupDescription: groupSummary.data,
             })
         }
 
@@ -130,7 +132,7 @@ export class GroupDescription extends Component {
     }
 
     render() {
-        console.log(this.state.totalInternalDebt);
+        console.log(this.state);
         let individualExpenseDetails = (<div>
             {Object.keys(this.state.individualExpense).map((key) => {
                 return (

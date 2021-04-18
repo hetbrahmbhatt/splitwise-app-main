@@ -179,10 +179,6 @@ router.get('/groupsummarybyid/:id', checkAuth, (req, res) => {
 });
 router.put('/removemessage/', checkAuth, (req, res) => {
     console.log(req.body)
-    // var messageData = {
-    //     name: req.body.userName,
-    //     message: req.body.messageString
-    // }
     groupSummarySchema.findOneAndUpdate({ _id: req.body.groupSummaryID }
         , { $pull: { messages: { _id: req.body.messageID } } }, { new: true }
     ).then(doc => {
@@ -216,13 +212,12 @@ router.put('/message', checkAuth, (req, res) => {
     const groupID = ObjectId(req.body.groupID);
 
     groupSchema.find({ _id: groupID }).then(doc => {
-        console.log( "Group DOCS",doc)
+        console.log("Group DOCS", doc)
         console.log(doc[0].membersSchema)
-        for(let i= 0; i < doc[0].membersSchema.length; i++)
-        { 
-            if(doc[0].membersSchema[i].userID != req.body.userID){
+        for (let i = 0; i < doc[0].membersSchema.length; i++) {
+            if (doc[0].membersSchema[i].userID != req.body.userID) {
                 let newActivity = new recentActivitySchema({
-                    userID: doc[0].membersSchema[i].userID ,
+                    userID: doc[0].membersSchema[i].userID,
                     payeeID: "",
                     userName: req.body.userName,
                     currency: "",

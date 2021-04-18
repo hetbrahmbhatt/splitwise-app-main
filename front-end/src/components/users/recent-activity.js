@@ -195,9 +195,9 @@ export class RecentActivity extends Component {
                     getAmount = (group.count - 1) * amount;
                 }
                 getAmount = Number(getAmount).toFixed(2);
-                if (Number(group.settleFlag) > 0) {
-                    groupDivision = <p style={{ fontSize: "20px" }}><b>"{group.username}"</b> and <b>"{group.settlename}"</b> settled up in <b>"{group.name}".</b></p>
-                    groupPayingDivision = <div style={{ 'color': '#20BF9F', fontSize: "18px" }}><b> {group.currency} dues cleared  </b></div>
+                if (Number(group.settleflag) > 0) {
+                    groupDivision = <p style={{ fontSize: "20px" }}><b>{group.userName} in <b>"{group.groupName}".</b></b></p>
+                    groupPayingDivision = <div style={{ 'color': '#20BF9F', fontSize: "18px" }}><b> {group.currency} {group.amount > 0 ? group.amount : -1*group.amount} {' '}dues cleared  </b></div>
 
                 }
                 else if (Number(group.commentFlag) == 1) {

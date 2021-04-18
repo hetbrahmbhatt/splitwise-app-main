@@ -18,6 +18,8 @@ export class TotalGiving extends Component {
                 amount: this.props.totalGiveData.amount,
                 sessionID: cookie.load('id'),
                 currency: this.props.totalGiveData.currency,
+                debtID: this.props.totalGiveData._id,
+                sessionName : cookie.load('name')
             }
         }
         else if (this.props.totalGiveData.userID2 == cookie.load('id')) {
@@ -29,12 +31,17 @@ export class TotalGiving extends Component {
                 amount: this.props.totalGiveData.amount,
                 sessionID: cookie.load('id'),
                 currency: this.props.totalGiveData.currency,
+                debtID: this.props.totalGiveData._id,
+                sessionName : cookie.load('name')
+
+
             }
         }
     };
     handleSubmit = e => {
         e.preventDefault();
-        axios.post(BACKEND_URL + "/expense/givingsettleup", this.state).then(response => {
+        axios.post(BACKEND_URL + "/expenses/givingsettleup", this.state).then(response => {
+            window.location.reload();
             if (response) {
                 toast.success("You are all settled up.Please reload the page to update the status.");
             }
