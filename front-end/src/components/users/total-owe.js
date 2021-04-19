@@ -19,7 +19,7 @@ export class TotalOwe extends Component {
                 currency: this.props.totalOweData.currency,
                 sessionID: cookie.load('id'),
                 amount: this.props.totalOweData.amount,
-                sessionName : cookie.load('name'),
+                sessionName: cookie.load('name'),
                 debtID: this.props.totalOweData._id,
 
 
@@ -34,7 +34,7 @@ export class TotalOwe extends Component {
                 currency: this.props.totalOweData.currency,
                 sessionID: cookie.load('id'),
                 amount: this.props.totalOweData.amount,
-                sessionName : cookie.load('name'),
+                sessionName: cookie.load('name'),
                 debtID: this.props.totalOweData._id,
 
 

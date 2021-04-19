@@ -25,6 +25,11 @@ export class DashBoard extends Component {
     async componentDidMount() {
         axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;
+        var userID = cookie.load("id");
+        const negResponse = await axios.get(BACKEND_URL + "/expenses/postotalbalance/" + userID);
+        console.log(negResponse);
+        axios.defaults.headers.common["authorization"] = cookie.load('token')
+        axios.defaults.withCredentials = true;
         const totalGivingResponse1 = await axios.post(BACKEND_URL + "/expenses/totalgiving/" + cookie.load('id'));
         console.log(totalGivingResponse1);
         console.log("Here");

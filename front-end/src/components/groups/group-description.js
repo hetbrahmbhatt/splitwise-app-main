@@ -74,9 +74,9 @@ export class GroupDescription extends Component {
         axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;
         const internalDebtResponse = await axios.get(BACKEND_URL + "/expenses/totalinternaldebt/" + this.state.groupID)
-        console.log(internalDebtResponse.data)
+        console.log(typeof internalDebtResponse.data)
         console.log(internalDebtResponse.data);
-        console.log(Object.entries(internalDebtResponse.data));
+        // console.log(Object.entries(internalDebtResponse.data));
 
         if (internalDebtResponse.data.length == 0) {
 
@@ -84,7 +84,7 @@ export class GroupDescription extends Component {
         else {
             //TODO : Solve this error
             this.setState({
-                // totalInternalDebt  : internalDebtResponse.data
+                // totalInternalDebt: internalDebtResponse.data,
             })
         }
 

@@ -5,7 +5,9 @@ var mongoose = require('../config/db-config');
 var groupSchema = require('../models/groups');
 const userSchema = require('../models/users');
 const groupSummarySchema = require('../models/groupSummary');
-const recentActivitySchema = require('../models/recentactivity')
+const recentActivitySchema = require('../models/recentactivity');
+const debtsSchema = require('../models/debts');
+
 var jwt = require('jsonwebtoken');
 var { secret } = require('../config/config');
 var kafka = require('../kafka/client');
@@ -150,6 +152,47 @@ router.put('/invite', checkAuth, (req, res) => {
         })
     }
 });
+router.post('/leavegroup', (req, response123) => {
+    console.log(req.body)
+
+    debtsSchema.find({
+        $or: [
+            {
+                userID1: req.body.userID,
+                groupID: req.body.groupID,
+                amount: { $ne: 0 }
+            },
+            {
+                userID2: req.body.userID,
+                groupID: req.body.groupID,
+                amount: { $ne: 0 }
+            }
+        ]
+    }).then(response => {
+        console.log(response);
+
+        if (response.length != 0) {
+            response123.send(400)
+        }
+        else {
+            userSchema.findByIdAndUpdate({ _id: req.body.userID }
+                , { $pull: { acceptedGroups: { groupID: req.body.groupID } } }, { new: true }
+            ).then(res => {
+                if (res) {
+                    console.log("over here")
+                    response123.status(200).end();
+                }
+
+            })
+        }
+    })
+
+})
+
+
+
+
+
 // get all users
 router.put('/updategroup/', checkAuth, (req, res) => {
     console.log(req.body);

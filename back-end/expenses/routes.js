@@ -665,4 +665,32 @@ router.post('/recentactivity', checkAuth, (req, res) => {
         })
     }
 });
+router.get('/postotalbalance/:id', (req, res) => {
+
+    console.log("ID isisisi", req.params.id);
+    groupBalanceSchema.aggregate(
+        [
+            // First Stage
+            {
+                $group:
+                {
+                    _id: "$req.params.id",
+                    amount: { $sum: "amount" }
+                }
+            },
+
+        ]
+    ).then(response => {
+        console.log("here");
+        console.log(response);
+    })
+
+
+
+    res.status(200).send("HI");
+    console.log("Here");
+})
+
+
+
 module.exports = router;

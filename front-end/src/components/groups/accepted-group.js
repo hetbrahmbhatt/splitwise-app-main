@@ -51,7 +51,7 @@ export class AcceptedGroup extends Component {
             userID: cookie.load('id'),
             groupID: this.state.groupID
         }
-
+        
         axios
             .post(BACKEND_URL + "/groups/leavegroup", obj).then(response => {
                 if (response.status == 200) {
