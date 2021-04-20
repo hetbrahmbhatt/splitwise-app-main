@@ -62,7 +62,8 @@ export class AddExpense extends Component {
         if (!this.state.amountFlag) {
             this.props.addExpenseAction(this.state).then(response => {
                 console.log("over here");
-                window.location.assign('/gruoup-description');
+                console.log(this.props.expenseData);
+                // window.location.assign('/gruoup-description');
             })
         }
         else {

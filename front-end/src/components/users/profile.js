@@ -137,6 +137,8 @@ export class Profile extends Component {
             }
             console.log(this.state);
             this.props.updateUserProfileAction(this.state).then(response => {
+
+                console.log(this.props.user)
             });
         }
 

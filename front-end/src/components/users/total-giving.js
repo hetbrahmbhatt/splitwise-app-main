@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import cookie from "react-cookies";
 import profilePhoto from '../../images/profile-icon.png'
 import axios from 'axios';
-import BACKEND_URL from '../../config/config'
+import BACKEND_URL from '../../config/config';
+import givingSettleUpAction from '../../actions/givingSettleUpAction';
+import { connect } from "react-redux";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 export class TotalGiving extends Component {
@@ -38,15 +40,19 @@ export class TotalGiving extends Component {
     };
     handleSubmit = e => {
         e.preventDefault();
-        axios.post(BACKEND_URL + "/expenses/givingsettleup", this.state).then(response => {
-            window.location.reload();
-            if (response) {
-                toast.success("You are all settled up.Please reload the page to update the status.");
-            }
-            else {
+        alert("HI");
+        this.props.givingSettleUpAction(this.state).then(response => {
 
-            }
-        });
+        })
+        // axios.post(BACKEND_URL + "/expenses/givingsettleup", this.state).then(response => {
+        //     window.location.reload();
+        //     if (response) {
+        //         toast.success("You are all settled up.Please reload the page to update the status.");
+        //     }
+        //     else {
+
+        //     }
+        // });
 
         console.log(this.state);
     }
@@ -94,4 +100,21 @@ export class TotalGiving extends Component {
     }
 }
 
-export default TotalGiving
+const matchStateToProps = (state) => {
+    console.log("inside matchStatetoProps", state)
+    return {
+        error: state.recentActivityReducer.error,
+        expenseDaata: state.recentActivityReducer.userData,
+        groupData: state.getByIDReducer.userData
+
+    }
+
+}
+const matchDispatchToProps = (dispatch) => {
+    return {
+        givingSettleUpAction: (data) => dispatch(givingSettleUpAction(data)),
+
+    }
+}
+
+export default connect(matchStateToProps, matchDispatchToProps)(TotalGiving)

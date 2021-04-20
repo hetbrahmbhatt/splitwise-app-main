@@ -17,7 +17,7 @@ var ObjectId = require('mongodb').ObjectID;
 var { secret } = require('../config/config')
 var { auth, checkAuth } = require('../config/passport')
 auth()
-router.post('/new', checkAuth, (req, res) => {
+router.post('/new', checkAuth, (req, responsenew123) => {
     console.log(req.body);
     groupSchema.find({ _id: req.body.groupID },
     ).then(doc => {
@@ -393,7 +393,7 @@ router.post('/new', checkAuth, (req, res) => {
                     , { $push: { debts: debts } }, { new: true }
                 ).then(doc => {
                     // console.log("Other ID'S",doc[0].membersSchema[i].userID);
-
+                    responsenew123.status(200).send(doc);
                     console.log("Over here nifhcnihfiedhfeiueiedi");
 
                 }).catch(error => {

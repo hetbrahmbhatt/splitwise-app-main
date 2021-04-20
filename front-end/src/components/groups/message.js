@@ -66,18 +66,26 @@ export class Messages extends Component {
             groupName: this.state.groupName,
             groupID: this.props.groupSumData.groupID
         }
-        axios.defaults.headers.common["authorization"] = cookie.load('token')
-        axios.defaults.withCredentials = true;
-        return axios.put(BACKEND_URL + '/groups/message', data).then(response => {
-            console.log(response.data);
-            // dispatch(success(response, data))
+        this.props.userMessageAction(data).then(response =>{
+            // console.log(this.props.messageData);
             this.setState({
-                conversations: response.data.messages
+                conversations : this.props.messageData.messages
             })
             this.refs.someText.value = "";
-        }).catch(err => {
-            // dispatch(error(err))
-        })
+        });
+        // axios.defaults.headers.common["authorization"] = cookie.load('token')
+        // axios.defaults.withCredentials = true;
+        // return axios.put(BACKEND_URL + '/groups/message', data).then(response => {
+        //     console.log(response.data);
+        //     console.log(this.props);
+        //     // dispatch(success(response, data))
+        //     this.setState({
+        //         conversations: response.data.messages
+        //     })
+        //     this.refs.someText.value = "";
+        // }).catch(err => {
+        //     // dispatch(error(err))
+        // })
     }
 
     toggleMessagesPopUp = (e) => {
@@ -88,6 +96,8 @@ export class Messages extends Component {
     }
 
     render() {
+        console.log(this.props);
+
         let displayConversation = null
         let button = null;
 
@@ -169,7 +179,8 @@ export class Messages extends Component {
 const matchStateToProps = (state) => {
     return {
         error: state.groupSummaryByIDReducer.error,
-        groupSummaryData: state.groupSummaryByIDReducer.groupSummaryData
+        groupSummaryData: state.groupSummaryByIDReducer.groupSummaryData,
+        messageData : state.userMessageReducer.userMessageData
     }
 
 }

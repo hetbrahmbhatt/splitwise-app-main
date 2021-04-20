@@ -43,7 +43,7 @@ var updateUserProfileAction = (data) => (dispatch) => {
     return axios
         .put(BACKEND_URL + "/users/editprofile", data).then(response => {
             if (response.status === 200) {
-                console.log(response.data);
+                console.log(response);
                 if (cookie.load('email') !== response.data.email) {
                     cookie.remove("email", {
                         path: '/'
@@ -85,9 +85,8 @@ var updateUserProfileAction = (data) => (dispatch) => {
                     })
                 }
 
-
                 dispatch(success(response))
-                window.location.reload() ;
+                // window.location.assign('/profile') ;
             }
 
         }).catch(err => {

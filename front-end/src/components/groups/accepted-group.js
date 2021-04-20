@@ -23,7 +23,6 @@ export class AcceptedGroup extends Component {
             invitedByy: this.props.acceptedGroupData.invitedBy,
             groupPopUp: false,
             editGroupPopUp: false,
-
         }
     }
     async componentDidMount() {

@@ -1,13 +1,14 @@
 let initialState = {
-    expenseData : {},
+    expenseData: {},
     error: false,
 }
-var addActionReducer = ( state = initialState, action ) => {
+var addActionReducer = (state = initialState, action) => {
     console.log(action.payload)
+    // alert(JSON.stringify(action.payload));
     let newState = { ...state }
-    switch ( action.type ) {
+    switch (action.type) {
         case "expense_add_success":
-            newState.groupData = action.payload.response.data;
+            newState.expenseData = action.payload.response.data;
             newState.error = false;
             return newState;
         case "expense_add_fail":

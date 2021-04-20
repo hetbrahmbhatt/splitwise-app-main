@@ -29,11 +29,12 @@ var addExpenseAction = (data) => (dispatch) => {
     console.log(data);
     return axios
         .post(BACKEND_URL + "/expenses/new", data).then(response => {
+            console.log(response);
             if (response.status === 200) {
-                dispatch(success(response, data));
+                dispatch(success(response));
             }
         }).catch((err) => {
-            dispatch(error(err, data))
+            dispatch(error(err))
         });
 }
 
