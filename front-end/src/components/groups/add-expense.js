@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import BACKEND_URL from '../../config/config'
 import description from '../../images/desrciption.png'
 import cookie from "react-cookies";
-import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

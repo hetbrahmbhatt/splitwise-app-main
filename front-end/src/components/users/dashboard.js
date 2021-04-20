@@ -25,11 +25,6 @@ export class DashBoard extends Component {
     async componentDidMount() {
         axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;
-        var userID = cookie.load("id");
-        const negResponse = await axios.get(BACKEND_URL + "/expenses/postotalbalance/" + userID);
-        console.log(negResponse);
-        axios.defaults.headers.common["authorization"] = cookie.load('token')
-        axios.defaults.withCredentials = true;
         const totalGivingResponse1 = await axios.post(BACKEND_URL + "/expenses/totalgiving/" + cookie.load('id'));
         console.log(totalGivingResponse1);
         console.log("Here");
@@ -120,7 +115,7 @@ export class DashBoard extends Component {
                                 <p style={{ marginLeft: "550px", marginTop: "30px" }}><h3><strong>Dashboard</strong></h3></p>
                             </div>
                         </div>
-                        <div style={{ backgroundColor: "whitesmoke", height: "100px", borderTop: "0.6px solid lightgrey" }}>
+                        {/* <div style={{ backgroundColor: "whitesmoke", height: "100px", borderTop: "0.6px solid lightgrey" }}>
                             <div className="row">
                                 <div col-2 style={{ marginLeft: "70px", height: "90px", marginTop: "5px", width: "26%", marginRight: "60px", paddingRight: "60px", borderRight: "1px solid lightgrey" }}><h5>total</h5><p style={{ color: "#20BF9F", fontSize: "18px", marginLeft: "-40px" }}><strong>{this.state.totalBalance}</strong></p></div>
                                 <div col-2 style={{ marginLeft: "10px", width: "33%", marginTop: "5px", marginRight: "60px", paddingRight: "90px", borderRight: "1px solid lightgrey" }}><center><h5>you owe</h5><p style={{ color: "#20BF9F", fontSize: "18px", marginLeft: "0px" }}><strong>{this.state.totalPositiveBalance}</strong></p></center></div>
@@ -135,7 +130,7 @@ export class DashBoard extends Component {
 
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                     <div className="col-1">
                     </div>

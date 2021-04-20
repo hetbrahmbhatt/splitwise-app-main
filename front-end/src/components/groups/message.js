@@ -73,19 +73,6 @@ export class Messages extends Component {
             })
             this.refs.someText.value = "";
         });
-        // axios.defaults.headers.common["authorization"] = cookie.load('token')
-        // axios.defaults.withCredentials = true;
-        // return axios.put(BACKEND_URL + '/groups/message', data).then(response => {
-        //     console.log(response.data);
-        //     console.log(this.props);
-        //     // dispatch(success(response, data))
-        //     this.setState({
-        //         conversations: response.data.messages
-        //     })
-        //     this.refs.someText.value = "";
-        // }).catch(err => {
-        //     // dispatch(error(err))
-        // })
     }
 
     toggleMessagesPopUp = (e) => {

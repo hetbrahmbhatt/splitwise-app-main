@@ -444,15 +444,14 @@ router.post('/totalowing/:id', checkAuth, (req, res) => {
         res.status(200).send(JSON.stringify(docs))
     });
 });
-
 router.get('/totalinternaldebt/:id', checkAuth, (req, res) => {
+
     var groupID = req.params.id;
-    console.log("in total");
+    console.log("In total ");
     DebtsSchema.find({ groupID: groupID }).then(docs => {
         console.log(docs);
         res.status(200).send(docs)
     });
-
 })
 router.post('/givingsettleup', checkAuth, (req, response123) => {
     console.log("Over herre");
@@ -622,12 +621,6 @@ router.post('/owingsettleup', checkAuth, (req, response123) => {
 
 })
 
-
-
-router.post('/owingsettleup', checkAuth, (req, res) => {
-    console.log(req.body)
-})
-
 router.post('/recentactivity', checkAuth, (req, res) => {
     console.log("Over here in recent activity");
     console.log(req.body);
@@ -666,31 +659,66 @@ router.post('/recentactivity', checkAuth, (req, res) => {
     }
 });
 router.get('/postotalbalance/:id', (req, res) => {
-
     console.log("ID isisisi", req.params.id);
+    console.log(req.body);
     groupBalanceSchema.aggregate(
         [
             // First Stage
             {
-                $group:
-                {
-                    _id: "$req.params.id",
-                    amount: { $sum: "amount" }
+                $match: {
+                    userID: req.params.id,
+
+                    amount: { $gt: 0 }
                 }
             },
-
+            {
+                $group:
+                {
+                    _id: "$currency",
+                    amount: { $sum: "$amount" }
+                }
+            },
         ]
     ).then(response => {
         console.log("here");
         console.log(response);
+        res.status(200).send(JSON.stringify(response));
     })
-
-
-
-    res.status(200).send("HI");
-    console.log("Here");
 })
 
+router.post('/internalgroupbalance', (req, res) => {
+    console.log(req.body);
+    console.log("over here in internalgroupbalance")
 
+    groupBalanceSchema.find({
+        groupID: req.body.groupID,
+    }).then(response => {
+        res.status(200).send(JSON.stringify(response))
+    })
+
+    // groupBalanceSchema.aggregate(
+    //     [
+    //         // First Stage
+    //         {
+    //             $match: {
+    //                 userID: req.params.id,
+
+    //                 amount: { $gt: 0 }
+    //             }
+    //         },
+    //         {
+    //             $group:
+    //             {
+    //                 _id: "$currency",
+    //                 amount: { $sum: "$amount" }
+    //             }
+    //         },
+    //     ]
+    // ).then(response => {
+    //     console.log("here");
+    //     console.log(response);
+    //     res.status(200).send(JSON.stringify(response));
+    // })
+})
 
 module.exports = router;

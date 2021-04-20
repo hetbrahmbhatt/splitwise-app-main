@@ -49,7 +49,8 @@ export class GroupDescription extends Component {
                     groupDescription: [],
                     emptyStateFlag: false,
                     individualExpense: [],
-                    totalInternalDebt: [],
+                    debt: [],
+                    totalInternalGroupBalance: []
                 }
             }
             else {
@@ -65,28 +66,30 @@ export class GroupDescription extends Component {
                     groupDescription: [],
                     emptyStateFlag: false,
                     individualExpense: [],
-                    totalInternalDebt: []
+                    debt: [],
+                    totalInternalGroupBalance: []
                 }
             }
         }
     }
     async componentDidMount() {
+
+
         axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;
-        const internalDebtResponse = await axios.get(BACKEND_URL + "/expenses/totalinternaldebt/" + this.state.groupID)
-        console.log(typeof internalDebtResponse.data)
-        console.log(internalDebtResponse.data);
-        // console.log(Object.entries(internalDebtResponse.data));
 
-        if (internalDebtResponse.data.length == 0) {
+        const totalinternalGroupBalance = await axios
+            .post(BACKEND_URL + "/expenses/internalgroupbalance/", this.state)
 
-        }
-        else {
-            //TODO : Solve this error
-            this.setState({
-                // totalInternalDebt: internalDebtResponse.data,
-            })
-        }
+        console.log(totalinternalGroupBalance)
+
+        this.setState(
+            {
+                totalInternalGroupBalance: totalinternalGroupBalance.data
+            }
+        )
+
+
 
         // const totalinternaldebt = await axios.get(BACKEND_URL + "/expenses/totalinternaldebt/" + this.state.groupID);
         axios.defaults.headers.common["authorization"] = cookie.load('token')
@@ -107,23 +110,20 @@ export class GroupDescription extends Component {
             })
         }
 
-        const groupID = this.state.groupID;
-        const individualData = await axios.get(BACKEND_URL + "/groups/individualdata/" + groupID);
-        console.log(individualData.data);
-        for (let i = 0; i < individualData.data.length; i++) {
-            const obj = {
-                ref_userid: individualData.data[i].ref_userid
-            }
-            const individualExpense = await axios.post(BACKEND_URL + "/groups/individualexpense/" + groupID, obj);
-            this.setState({
-                individualExpense: [...this.state.individualExpense, individualExpense.data]
-            })
-            // console.log(individualData.data[i].ref_userid);
-
-        }
-        // const individualExpense = await axios.post(BACKEND_URL + "/groups/individualexpense/" + groupID, individualData.data);
-        // console.log(individualExpense.data);
         console.log(this.state);
+
+
+
+        axios.defaults.headers.common["authorization"] = cookie.load('token')
+        axios.defaults.withCredentials = true;
+        const internalDebtResponse = await axios.get(BACKEND_URL + "/expenses/totalinternaldebt/" + this.state.groupID)
+        console.log(typeof internalDebtResponse.data)
+        console.log(internalDebtResponse.data);
+        this.setState(
+            {
+                debt: internalDebtResponse.data
+            }
+        )
     }
     toggleGroupPopUp = (e) => {
         this.setState({
@@ -133,78 +133,75 @@ export class GroupDescription extends Component {
 
     render() {
         console.log(this.state);
-        let individualExpenseDetails = (<div>
-            {Object.keys(this.state.individualExpense).map((key) => {
-                return (
-                    <div key={key}>
-                        {this.state.individualExpense[key].map((dataItem) => {
-                            if (dataItem.currency == null || dataItem.balance == 0) {
-                                return (
-                                    <span></span>
-                                )
-                            }
-                            else {
-                                if (dataItem.balance < 0) {
-                                    return (
-                                        <div className="row" style={{ padding: "30px" }}>
-                                            <div className="col-6">
-                                                <span style={{ width: "100px" }}>
-                                                    <img
-                                                        src={profilePhoto} width="60px" height="60px" alt="" style={{ borderRadius: "50px" }} />
-                                                </span>
-                                            </div>
-                                            <div className="col-6">
-                                                <strong>{dataItem.name}</strong> is owed <span style={{ color: "#FF7F50" }}><strong>{dataItem.currency}{-1 * dataItem.balance}</strong></span>
-                                                <br></br>
-                                            </div>
-                                        </div>
-                                    )
 
-                                }
-                                else {
-                                    if (dataItem.image == null) {
-                                        return (
-                                            <div className="row" style={{ padding: "30px" }}>
-                                                <div className="col-6">
-                                                    <span style={{ width: "100px" }}>
-                                                        <img
-                                                            src={profilePhoto} width="60px" height="60px" alt="" style={{ borderRadius: "50px" }} />
-                                                    </span>
-                                                </div>
-                                                <div className="col-6">
-                                                    <strong>{dataItem.name}</strong> owes <span style={{ color: "green" }}>{dataItem.currency}{dataItem.balance}</span>
-                                                    <br></br>
-                                                </div>
-                                            </div>
 
-                                        )
-                                    }
-                                    else {
-                                        return (
-                                            <div className="row" style={{ padding: "30px" }}>
-                                                <div className="col-6">
-                                                    <span style={{ width: "100px" }}>
-                                                        <img
-                                                            src={profilePhoto} width="60px" height="60px" alt="" style={{ borderRadius: "50px" }} />
-                                                    </span>
-                                                </div>
-                                                <div className="col-6">
-                                                    <strong>{dataItem.name}</strong> owes <span style={{ color: "green" }}>{dataItem.currency}{dataItem.balance}</span>
-                                                    <br></br>
-                                                </div>
-                                            </div>
-                                        )
-                                    }
 
-                                }
-                            }
-                        })}
-                    </div>
-                )
-            })}
-        </div>
-        )
-        let totalInternalDebt = this.state.totalInternalDebt.map((exp, index) => {
+        let individualExpenseDetails = (<div>{
+
+            this.state.totalInternalGroupBalance.map((exp, index) => {
+
+                if (exp.currency == null || exp.amount == 0) {
+                    return (
+                        <span></span>
+                    )
+                }
+                else {
+                    if (exp.amount < 0) {
+                        return (
+                            <div className="row" style={{ padding: "30px" }}>
+                                <div className="col-6">
+                                    <span style={{ width: "100px" }}>
+                                        <img
+                                            src={profilePhoto} width="60px" height="60px" alt="" style={{ borderRadius: "50px" }} />
+                                    </span>
+                                </div>
+                                <div className="col-6">
+                                    <strong>{exp.useerName}</strong> is owed <span style={{ color: "#FF7F50" }}><strong>{exp.currency}{-1 * exp.amount}</strong></span>
+                                    <br></br>
+                                </div>
+                            </div>
+                        )
+
+                    }
+                    else {
+                        if (exp.image == null) {
+                            return (
+                                <div className="row" style={{ padding: "30px" }}>
+                                    <div className="col-6">
+                                        <span style={{ width: "100px" }}>
+                                            <img
+                                                src={profilePhoto} width="60px" height="60px" alt="" style={{ borderRadius: "50px" }} />
+                                        </span>
+                                    </div>
+                                    <div className="col-6">
+                                        <strong>{exp.useerName}</strong> owes <span style={{ color: "green" }}>{exp.currency}{exp.amount}</span>
+                                        <br></br>
+                                    </div>
+                                </div>
+                            )
+                        }
+                        else {
+                            return (
+                                <div className="row" style={{ padding: "30px" }}>
+                                    <div className="col-6">
+                                        <span style={{ width: "100px" }}>
+                                            <img
+                                                src={profilePhoto} width="60px" height="60px" alt="" style={{ borderRadius: "50px" }} />
+                                        </span>
+                                    </div>
+                                    <div className="col-6">
+                                        <strong>{exp.useerName}</strong> owes <span style={{ color: "green" }}>{exp.currency}{exp.amount}</span>
+                                        <br></br>
+                                    </div>
+                                </div>
+                            )
+                        }
+                    }
+                }
+            }
+            )}
+        </div>)
+        let totalInternalDebt = this.state.debt.map((exp, index) => {
             if (exp.amount > 0) {
                 return (
                     <div className="row" style={{ padding: "30px" }}>
@@ -215,7 +212,7 @@ export class GroupDescription extends Component {
                             </span>
                         </div>
                         <div className="col-6">
-                            <span><strong>{exp.lendername}</strong> owes <strong>{exp.lendeename}</strong> {exp.currency}{exp.amount} </span>
+                            <span><strong>{exp.userID1Name}</strong> owes <strong>{exp.userID2Name}</strong> {exp.currency}{exp.amount} </span>
                             <br></br>
                         </div>
                     </div>
@@ -233,7 +230,7 @@ export class GroupDescription extends Component {
                             </span>
                         </div>
                         <div className="col-6">
-                            <span><strong>{exp.lendeename}</strong> owes <strong>{exp.lendername}</strong> {exp.currency}{-1 * exp.amount} </span>
+                            <span><strong>{exp.userID1Name}</strong> owes <strong>{exp.userID2Name}</strong> {exp.currency}{-1 * exp.amount} </span>
                             <br></br>
                         </div>
                     </div>
@@ -503,6 +500,7 @@ export class GroupDescription extends Component {
                         </div>
                         <div class="col-2">
                             {individualExpenseDetails}
+                            {/* {individualExpenseDetails} */}
                         </div>
                     </div>
                 </div>

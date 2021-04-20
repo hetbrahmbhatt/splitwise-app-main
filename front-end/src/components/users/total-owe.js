@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
 import cookie from "react-cookies";
 import profilePhoto from '../../images/profile-icon.png'
-import axios from 'axios';
-import BACKEND_URL from '../../config/config'
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import owingSettleUpAction from '../../actions/owingSettleUpAction';
 import { connect } from "react-redux";
-
 export class TotalOwe extends Component {
     constructor(props) {
         super(props)
@@ -36,29 +33,17 @@ export class TotalOwe extends Component {
                 amount: this.props.totalOweData.amount,
                 sessionName: cookie.load('name'),
                 debtID: this.props.totalOweData._id,
-
-
             }
         }
 
     };
     handleSubmit = e => {
         e.preventDefault();
-        this.props.owingSettleUpAction(this.state).then(response=>{
+        this.props.owingSettleUpAction(this.state).then(response => {
 
             console.log(this.props.owingData);
 
         })
-        // axios.post(BACKEND_URL + "/expenses/owingsettleup", this.state).then(response => {
-        //     window.location.reload();
-        //     if (response) {
-        //         toast.success("You are all settled up.Please reload the page to update the status.");
-
-        //     }
-        //     else {
-
-        //     }
-        // });
 
     }
     render() {

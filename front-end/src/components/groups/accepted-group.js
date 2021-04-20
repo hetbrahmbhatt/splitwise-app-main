@@ -8,10 +8,6 @@ import Modal from 'react-modal';
 import _ from 'lodash';
 import EditGroup from './edit-group';
 import { ToastContainer, toast } from 'react-toastify';
-
-// import getGroupByIDActionForAcceptedGroups from '../../actions/getGroupByIDActionForAcceptedGroups'
-import { connect } from "react-redux";
-
 import 'react-toastify/dist/ReactToastify.css';
 export class AcceptedGroup extends Component {
     constructor(props) {
@@ -50,7 +46,7 @@ export class AcceptedGroup extends Component {
             userID: cookie.load('id'),
             groupID: this.state.groupID
         }
-        
+
         axios
             .post(BACKEND_URL + "/groups/leavegroup", obj).then(response => {
                 if (response.status == 200) {
