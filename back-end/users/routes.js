@@ -22,124 +22,216 @@ var { auth, checkAuth } = require('../config/passport')
 auth();
 //signup
 router.post('/signup', (req, res) => {
-    bcrypt.hash(req.body.password, 10, (err, hash) => {
-        let user = new userSchema({
-            name: req.body.name,
-            email: req.body.email,
-            password: hash,
-            language: "",
-            phoneno: "",
-            image: "",
-        })
-        user.save().then(response => {
-            console.log("Signup successful")
-            console.log(response);
-            let payload = {
-                _id: response._id,
-                email: response.email,
-                name: response.name,
-                defaultcurrency: response.defaultCurrency,
-                timezone: response.timezone
-            }
-            let token = jwt.sign(payload, secret, {
-                expiresIn: 1008000
-            })
-            // res.status(200).send(obj)
-            res.status(200).send("Bearer " + token)
-        }).catch(error => {
-            console.log("Error", error)
-            res.status(400).send(error)
-        })
-    })
-});
-
+    console.log(req.body);
+    kafka.make_request('user_signup', req.body, function (err, results) {
+        if (err) {
+            console.log("Inside err", err);
+            res.status(400).send(err)
+        } else {
+            console.log("Inside else", results);
+            res.status(200).send(results)
+        }
+    });
+})
+// router.post('/signup', (req, res) => {
+//     bcrypt.hash(req.body.password, 10, (err, hash) => {
+//         let user = new userSchema({
+//             name: req.body.name,
+//             email: req.body.email,
+//             password: hash,
+//             language: "",
+//             phoneno: "",
+//             image: "",
+//         })
+//         user.save().then(response => {
+//             console.log("Signup successful")
+//             console.log(response);
+//             let payload = {
+//                 _id: response._id,
+//                 email: response.email,
+//                 name: response.name,
+//                 defaultcurrency: response.defaultCurrency,
+//                 timezone: response.timezone
+//             }
+//             let token = jwt.sign(payload, secret, {
+//                 expiresIn: 1008000
+//             })
+//             // res.status(200).send(obj)
+//             res.status(200).send("Bearer " + token)
+//         }).catch(error => {
+//             console.log("Error", error)
+//             res.status(400).send(error)
+//         })
+//     })
+// });
 
 //login
 router.post('/login', (req, res) => {
-    userSchema.findOne({ email: req.body.email }).then(doc => {
-        if (bcrypt.compareSync(req.body.password, doc.password)) {
-            console.log("Login Successful");
-            let payload = {
-                _id: doc._id,
-                email: doc.email,
-                name: doc.name,
-                defaultcurrency: doc.defaultCurrency,
-                timezone: doc.timezone
-            }
-            let token = jwt.sign(payload, secret, {
-                expiresIn: 1008000
-            })
-            console.log("Login Successfull")
-            res.status(200).send("Bearer " + token)
+    kafka.make_request('user_login', req.body, function (err, results) {
+        console.log('in user_login results');
+
+        if (err) {
+            console.log("Inside err");
+            res.status(400).send("Invalid Credentials")
         } else {
-            console.log("Invalid Credentials")
-            res.status(401).send("Invalid Credentials")
+            console.log("Inside else", results);
+            res.status(200).send(results)
         }
-    }).catch(error => {
-        console.log("User Not Found", error)
-        res.status(400).send("User Not found")
-    })
+    });
+});
+//login
+// router.post('/login', (req, res) => {
+//     userSchema.findOne({ email: req.body.email }).then(doc => {
+//         if (bcrypt.compareSync(req.body.password, doc.password)) {
+//             console.log("Login Successful");
+//             let payload = {
+//                 _id: doc._id,
+//                 email: doc.email,
+//                 name: doc.name,
+//                 defaultcurrency: doc.defaultCurrency,
+//                 timezone: doc.timezone
+//             }
+//             let token = jwt.sign(payload, secret, {
+//                 expiresIn: 1008000
+//             })
+//             console.log("Login Successfull")
+//             res.status(200).send("Bearer " + token)
+//         } else {
+//             console.log("Invalid Credentials")
+//             res.status(401).send("Invalid Credentials")
+//         }
+//     }).catch(error => {
+//         console.log("User Not Found", error)
+//         res.status(400).send("User Not found")
+//     })
 
-})
+// })
 //get by users
-router.get('/userbyid/:id', checkAuth, (req, res) => {
-    console.log(req.params.id);
-    userSchema.find({ _id: req.params.id }).then(docs => {
-        console.log("USER by ID docs", docs);
-        res.status(200).send(JSON.stringify(docs));
-    }).catch(error => {
-        res.status(400).send(error)
-    })
-})
-//get recent Activity for a user 
-router.post('/recentactivity', checkAuth, (req, res) => {
-    console.log("Body", req.body);
-    console.log(req.body.userID);
-    userSchema.find({ _id: req.body.userID }).then(docs => {
-        console.log(docs);
-        res.status(200).send(JSON.stringify(docs))
-    }).catch(error => {
-        res.status(400).send(error)
-    })
-})
-// get all users
-router.put('/editprofile', checkAuth, (req, res) => {
-    console.log(req.body);
-    userSchema.findOneAndUpdate({ email: req.body.email },
-        {
-            $set: {
-                name: req.body.name,
-                email: req.body.email,
-                defaultCurrency: req.body.defaultcurrency,
-                timezone: req.body.timezone,
-                language: req.body.language,
-                phoneno: req.body.phoneno
-            }
+// router.get('/userbyid/:id', checkAuth, (req, res) => {
+//     console.log(req.params.id);
+//     userSchema.find({ _id: req.params.id }).then(docs => {
+//         console.log("USER by ID docs", docs);
+//         res.status(200).send(JSON.stringify(docs));
+//     }).catch(error => {
+//         res.status(400).send(error)
+//     })
+// })
+
+
+router.get('/userbyid/:id', (req, res) => {
+    kafka.make_request('user_about_byID', req.params, function (err, results) {
+        console.log('in user_login results');
+
+        if (err) {
+            console.log("Inside err");
+            res.status(400).send("Invalid Credentials")
+        } else {
+            console.log("Inside else", results);
+            res.status(200).send(results)
         }
-    ).then(response => {
-        console.log("Update successfull")
-        console.log(response);
-        res.status(200).send(response)
-    }).catch(error => {
-        console.log("Error in update", error)
-        res.status(400).send(error)
-    })
+    });
 });
+//get recent Activity for a user
+router.post('/recentactivity', checkAuth, (req, res) => {
+    kafka.make_request('user_get_recentActivity', req.params, function (err, results) {
+        console.log('in user_login results');
 
-//get users based on email
+        if (err) {
+            console.log("Inside err");
+            res.status(400).send("Invalid Credentials")
+        } else {
+            console.log("Inside else", results);
+            res.status(200).send(results)
+        }
+    });
+})
+
+
+// router.post('/recentactivity', checkAuth, (req, res) => {
+//     console.log("Body", req.body);
+//     console.log(req.body.userID);
+//     userSchema.find({ _id: req.body.userID }).then(docs => {
+//         console.log(docs);
+//         res.status(200).send(JSON.stringify(docs))
+//     }).catch(error => {
+//         res.status(400).send(error)
+//     })
+// })
+// get all users
+
+router.put('/editprofile', checkAuth, (req, res) => {
+    kafka.make_request('user_about_update', req.body, function (err, results) {
+        console.log('in User update');
+        if (err) {
+            console.log("Inside err");
+            res.status(400).send("Invalid Credentials")
+        } else {
+            console.log("Inside else", results);
+            res.status(200).send(results)
+        }
+    });
+})
+
+
+// router.put('/editprofile', checkAuth, (req, res) => {
+//     console.log(req.body);
+//     userSchema.findOneAndUpdate({ email: req.body.email },
+//         {
+//             $set: {
+//                 name: req.body.name,
+//                 email: req.body.email,
+//                 defaultCurrency: req.body.defaultcurrency,
+//                 timezone: req.body.timezone,
+//                 language: req.body.language,
+//                 phoneno: req.body.phoneno
+//             }
+//         }
+//     ).then(response => {
+//         console.log("Update successfull")
+//         console.log(response);
+//         res.status(200).send(response)
+//     }).catch(error => {
+//         console.log("Error in update", error)
+//         res.status(400).send(error)
+//     })
+// });
 router.get('/searchbyemail', checkAuth, (req, res) => {
-    userSchema.find({ "email": { $regex: req.query.email_like } }).then(response => {
-        res.status(200).send(JSON.stringify(response));
-    })
+    kafka.make_request('user_search_email', req.query, function (err, results) {
+        console.log('in User Email');
+        if (err) {
+            console.log("Inside err");
+            res.status(400).send("Invalid Credentials")
+        } else {
+            console.log("Inside else", results);
+            res.status(200).send(results)
+        }
+    });
 });
+//get users based on email
+// router.get('/searchbyemail', checkAuth, (req, res) => {
+//     userSchema.find({ "email": { $regex: req.query.email_like } }).then(response => {
+//         res.status(200).send(JSON.stringify(response));
+//     })
+// });
 
-
-//get users based on name
 router.get('/searchbyname', checkAuth, (req, res) => {
-    userSchema.find({ "name": { $regex: req.query.name_like } }).then(response => {
-        res.status(200).send(JSON.stringify(response));
-    })
+    kafka.make_request('user_search_name', req.query, function (err, results) {
+        console.log('in User Name');
+        if (err) {
+            console.log("Inside err");
+            res.status(400).send("Invalid Credentials")
+        } else {
+            console.log("Inside else", results);
+            res.status(200).send(results)
+        }
+    });
 });
+//get users based on name
+// router.get('/searchbyname', checkAuth, (req, res) => {
+//     userSchema.find({ "name": { $regex: req.query.name_like } }).then(response => {
+//         res.status(200).send(JSON.stringify(response));
+//     })
+// });
 router.post('/uploadprofileimage', (req, res) => {
 
     const file = req.files.profileImage;
@@ -168,7 +260,7 @@ router.post('/uploadprofileimage', (req, res) => {
             const fileContent = fs.readFileSync(filePath);
             console.log(Date.now());
             // Setting up S3 upload parameters
-            fileName = fileName + '_'+userID;
+            fileName = fileName + '_' + userID;
             const params = {
                 Bucket: 'splitwise-app-main',
                 Key: fileName, // File name you want to save as in S3

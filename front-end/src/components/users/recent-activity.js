@@ -110,12 +110,12 @@ export class RecentActivity extends Component {
         axios.defaults.withCredentials = true;
         const groups = await axios.get(BACKEND_URL + '/users/userbyid/' + cookie.load('id'));
         console.log(groups.data);
-        if (groups.data[0].acceptedGroups.length != 0) {
-            for (let i = 0; i < groups.data.length; i++) {
-                const data = await axios.get(BACKEND_URL + '/groups/groupbyid/' + groups.data[0].acceptedGroups[i].groupID);
+        if (groups.data.acceptedGroups.length != 0) {
+            for (let i = 0; i < groups.data.acceptedGroups.length; i++) {
+                const data = await axios.get(BACKEND_URL + '/groups/groupbyid/' + groups.data.acceptedGroups[i].groupID);
                 console.log(data);
                 this.setState({
-                    groups: [...this.state.groups, data.data[0]]
+                    groups: [...this.state.groups, data.data]
 
                 })
 
@@ -125,7 +125,7 @@ export class RecentActivity extends Component {
         // this.setState({
         //     groups: groups.data[0].acceptedGroups
         // })
-        console.log(groups.data[0].acceptedGroups);
+        // console.log(groups.data[0].acceptedGroups);
         this.props.recentactivityAction(this.state).then(response => {
             console.log(this.props.userData.data);
             if (this.props.userData.data.length == 0) {
@@ -166,7 +166,7 @@ export class RecentActivity extends Component {
 
         ]
         let groupOptions = this.state.groups.map(function (group) {
-            return { value: group._id, label: group.groupName };
+            return { value: group[0]._id, label: group[0].groupName };
         })
         let recentactivityDetails = null;
         if (this.state.emptyStateFlag) {

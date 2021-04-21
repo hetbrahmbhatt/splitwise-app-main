@@ -35,16 +35,16 @@ export class MyGroup extends Component {
     reload = (e) => {
         this.props.groupGetActionForUser(cookie.load("id")).then(response => {
             this.setState({
-                groups: this.props.userData.data[0].invitedGroups,
-                acceptedGroups: this.props.userData.data[0].acceptedGroups,
+                groups: this.props.userData.data.invitedGroups,
+                acceptedGroups: this.props.userData.data.acceptedGroups,
             });
         })
     }
     async componentDidMount() {
         this.props.groupGetActionForUser(cookie.load("id")).then(response => {
             this.setState({
-                groups: this.props.userData.data[0].invitedGroups,
-                acceptedGroups: this.props.userData.data[0].acceptedGroups,
+                groups: this.props.userData.data.invitedGroups,
+                acceptedGroups: this.props.userData.data.acceptedGroups,
             });
         })
         // const userID = cookie.load("id")

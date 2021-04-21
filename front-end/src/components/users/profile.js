@@ -151,15 +151,15 @@ export class Profile extends Component {
             axios.defaults.headers.common["authorization"] = cookie.load('token')
             axios.defaults.withCredentials = true;
             const response = await axios.get(BACKEND_URL + "/users/userbyid/" + userID);
-            console.log(response.data[0]);
+            console.log(response);
             this.setState({
-                userID: response.data[0]._id,
-                name: response.data[0].name,
-                email: response.data[0].email,
-                defaultcurrency: response.data[0].defaultCurrency,
-                phoneno: response.data[0].phoneno,
-                timezone: response.data[0].timezone,
-                language: response.data[0].language,
+                userID: response.data._id,
+                name: response.data.name,
+                email: response.data.email,
+                defaultcurrency: response.data.defaultCurrency,
+                phoneno: response.data.phoneno,
+                timezone: response.data.timezone,
+                language: response.data.language,
 
             })
             if (response.data[0].image == null) {

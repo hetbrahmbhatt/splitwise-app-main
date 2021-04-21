@@ -1,29 +1,27 @@
 var connection = new require('./kafka/Connection');
-
-
+var mongoose = require('./config/db-config');
 //topic files
-
-
 //users
 var user_login = require('./services/users/user_login');
 var user_signup = require('./services/users/user_signup');
-var user_about_byID = require('./services/users/about_byID');
-var user_about_update = require('./services/users/about_update');
+var user_about_byID = require('./services/users/user_about_byID');
+var user_about_update = require('./services/users/user_about_update');
 var user_get_recentActivity = require('./services/users/user_get_recentActivity');
 var user_search_email = require('./services/users/user_search_email');
 var user_search_name = require('./services/users/user_search_name');
-var user_upload_picture = require('./services/users/upload_picture');
+var user_upload_picture = require('./services/users/user_upload_picture');
 
 
 
 //groups
-var group_about_byID = require('./services/groups/group_byID');
+var group_about_byID = require('./services/groups/group_about_byID');
 var group_create = require('./services/groups/group_create');
 var group_accept = require('./services/groups/group_accept');
 var group_leave = require('./services/groups/group_leave');
 var group_update = require('./services/groups/group_update');
 var group_get_summary = require('./services/groups/group_get_summary');
 var group_add_message = require('./services/groups/group_add_message');
+var group_remove_message = require('./services/groups/group_remove_message');
 
 
 
@@ -36,6 +34,8 @@ var expense_get_totalinternaldebt = require('./services/expenses/expense_get_tot
 var expense_giving_settleup = require('./services/expenses/expense_giving_settleup');
 var expense_owing_settleup = require('./services/expenses/expense_owing_settleup');
 var expense_filter_recentActivity = require('./services/expenses/expense_filter_recentActivity');
+var expense_get_positivetotalbalance = require('./services/expenses/expense_get_positivetotalbalance');
+var expense_get_totalinternalbalance = require('./services/expenses/expenses_get_totalinternalbalance');
 
 
 
@@ -83,7 +83,7 @@ handleTopicRequest("user_about_update", user_about_update)
 handleTopicRequest("user_get_recentActivity", user_get_recentActivity)
 handleTopicRequest("user_search_email", user_search_email)
 handleTopicRequest("user_search_name", user_search_name)
-handleTopicRequest("user_upload_picture", user_upload_picture)
+// handleTopicRequest("user_upload_picture", user_upload_picture)
 
 //groups
 handleTopicRequest("group_about_byID", group_about_byID)
@@ -93,6 +93,7 @@ handleTopicRequest("group_leave", group_leave)
 handleTopicRequest("group_update", group_update)
 handleTopicRequest("group_get_summary", group_get_summary)
 handleTopicRequest("group_add_message", group_add_message)
+handleTopicRequest("group_remove_message", group_remove_message)
 
 
 //expense
@@ -103,5 +104,6 @@ handleTopicRequest("expense_get_totalinternaldebt", expense_get_totalinternaldeb
 handleTopicRequest("expense_giving_settleup", expense_giving_settleup)
 handleTopicRequest("expense_owing_settleup", expense_owing_settleup)
 handleTopicRequest("expense_filter_recentActivity", expense_filter_recentActivity)
-
+handleTopicRequest("expense_get_positivetotalbalance", expense_get_positivetotalbalance)
+handleTopicRequest("expense_get_totalinternalbalance", expense_get_totalinternalbalance)
 
