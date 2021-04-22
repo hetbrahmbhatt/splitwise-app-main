@@ -91,9 +91,32 @@ export class NewGroup extends Component {
             toast.error("Please enter group members");
             return;
         }
+        console.log("Over Here");
         if (!this.state.error) {
-            console.log(this.props);
             this.props.groupAddAction(this.state)
+
+            if (this.state.profileImageUpdate) {
+                alert("Over hrer");
+                const formData = new FormData();
+                formData.append('profileImage', this.state.updatedProfileImage, this.state.updatedProfileImage.name + "," + this.state.userID)
+                const config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                }
+                axios
+                    .post(BACKEND_URL + '/groups/uploadprofileimage', formData, config).then((response) => {
+                        this.setState({
+
+                            profileImagePath: BACKEND_URL + '/images/grouppics/' + cookie.load('id') + '/' + response.data.fileName
+
+                        })
+                        window.location.assign('/all-group')
+                    }).catch(err => {
+                        toast.error("Error in image upload")
+                    })
+            }
+            console.log(this.props);
         }
     }
 

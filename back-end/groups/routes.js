@@ -46,7 +46,12 @@ router.post('/new', checkAuth, (req, res) => {
         if (err) {
             console.log("Inside err");
             res.status(400).send("Invalid Credentials")
-        } else {
+        }
+        else if (results == null) {
+            res.status(400).send("Invalid Credentials")
+
+        }
+        else {
             console.log("Inside else", results);
             res.status(200).send(results)
         }
@@ -519,4 +524,55 @@ router.put('/message', checkAuth, (req, res) => {
     //         console.log("error", error);
     //     })
 });
+
+router.post('/uploadprofileimage', (req, res) => {
+    console.log(req.files);
+    if (req.files === null) {
+        res.status(400).send('No File Upload');
+    }
+    const file = req.files.profileImage;
+    //Get the userID,file name from frontend
+    var groupID = req.files.profileImage.name.split(',')[1];
+    console.log(groupID);
+    const fileName = req.files.profileImage.name.split(',')[0];
+    console.log(fileName);
+    var pathToImage = path.join(__dirname, '../public');
+    const filePathwithoutfileName = pathToImage + '/images/grouppics/' + groupID;
+    const filePath = pathToImage + '/images/grouppics/' + groupID + '/' + fileName;
+    //Create a file with that path
+    if (!fs.existsSync(filePathwithoutfileName)) {
+        fs.mkdirSync(filePathwithoutfileName);
+    }
+    //Move the image to that path
+    file.mv(filePath, err => {
+        if (err) {
+            console.log(err);
+            res.status(500).end(err);
+        }
+        else {
+            console.log("over here")
+            groupSchema.findOneAndUpdate({ _id: ObjectId(groupID) },
+                {
+                    $set: {
+                        image: fileName
+                    }
+                }
+            ).then(response => {
+                console.log("Update successfull")
+                console.log(response);
+                //Send the file name and file path to the client
+                res.json({
+                    fileName: fileName,
+                    filePath: filePath
+                })
+            }).catch(error => {
+                console.log("Error in update", error)
+                res.status(400).send(error)
+            })
+        }
+    })
+})
+
+
+
 module.exports = router;

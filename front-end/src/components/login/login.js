@@ -15,6 +15,7 @@ export class login extends Component {
             password: '',
             error: false,
             errorMessage: '',
+            backendError: false
         }
     }
 
@@ -25,18 +26,38 @@ export class login extends Component {
 
     }
 
+    // handleEmailChange = inp => {
+    //     // console.log( inp.target.name, inp.target.value );
+    //     if (/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(inp.target.value)) {
+    //         this.setState({
+    //             error: true,
+    //             errorMessage: "Special characters not allowed",
+    //             [inp.target.name]: ""
+    //         })
+    //     } else {
+    //         this.setState({
+    //             error: false,
+    //             backendError : false,
+    //             [inp.target.name]: inp.target.value
+    //         })
+    //     }
+    // }
+
+
     handleEmailChange = inp => {
-        // console.log( inp.target.name, inp.target.value );
-        if (/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(inp.target.value)) {
+        console.log(inp.target.name, inp.target.value);
+        if (/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(inp.target.value)) {
             this.setState({
-                error: true,
-                errorMessage: "Special characters not allowed",
-                [inp.target.name]: ""
+                error: false,
+                backendError: false,
+                [inp.target.name]: inp.target.value,
+                errorMessage: " "
             })
         } else {
             this.setState({
-                error: false,
-                [inp.target.name]: inp.target.value
+                error: true,
+                errorMessage: "Please correct email",
+                [inp.target.name]: ""
             })
         }
     }
@@ -60,7 +81,13 @@ export class login extends Component {
     handleSubmit = e => {
         e.preventDefault();
         if (!this.state.error) {
-            this.props.loginAction(this.state)
+            this.props.loginAction(this.state).then(response => {
+                if (this.props.error) {
+                    this.setState({
+                        backendError: true
+                    })
+                }
+            })
         };
     }
 
@@ -75,7 +102,7 @@ export class login extends Component {
         if (this.state.error) {
             renderError = <div style={{ 'color': 'red' }}>{this.state.errorMessage}</div>
         }
-        if (this.props.error) {
+        if (this.state.backendError) {
             invalidError = <div style={{ 'color': 'red' }}>{this.props.message}</div>
         }
         return (

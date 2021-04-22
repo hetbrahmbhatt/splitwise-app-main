@@ -27,7 +27,7 @@ var errorUser = (err, data) => {
 
 
 var loginAction = (data) => (dispatch) => {
-    axios
+   return axios
         .post(BACKEND_URL + '/users/login', data)
         .then((response) => {
             let decoded = jwt_decode(response.data.split(' ')[1])

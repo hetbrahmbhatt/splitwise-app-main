@@ -11,11 +11,9 @@ function auth() {
     passport.use(new JwtStrategy(options, function (jwt_payload, callback) {
         users.findOne({ email: jwt_payload.email }, function (err, user) {
             if (err) {
-                console.log("Error in passport" + err)
                 return callback(err, false);
             }
             if (user) {
-                console.log("HI");
                 callback(null, user);
             } else {
                 callback(null, false);
@@ -26,5 +24,5 @@ function auth() {
     }));
 };
 exports.auth = auth;
-exports.checkAuth = passport.authenticate( 'jwt', { session: false } )
+exports.checkAuth = passport.authenticate('jwt', { session: false })
 

@@ -40,7 +40,7 @@ export class TotalGiving extends Component {
     };
     handleSubmit = e => {
         e.preventDefault();
-        alert("HI");
+        // alert("Hi");
         this.props.givingSettleUpAction(this.state).then(response => {
 
         })

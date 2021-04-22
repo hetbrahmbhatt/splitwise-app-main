@@ -17,7 +17,8 @@ export class signup extends Component {
             password: '',
             error: false,
             errorMessage: "",
-            emailError: false
+            emailError: false,
+            backendError: false
         }
     }
 
@@ -39,6 +40,8 @@ export class signup extends Component {
         } else {
             this.setState({
                 error: true,
+                backendError: false,
+
                 errorMessage: "Please correct email",
                 [inp.target.name]: ""
             })
@@ -67,7 +70,15 @@ export class signup extends Component {
         if (!this.state.error) {
             e.preventDefault();
 
-            this.props.signUpAction(this.state)
+            this.props.signUpAction(this.state).then(response => {
+                if (this.props.error) {
+                    this.setState(
+                        {
+                            backendError: true
+                        }
+                    )
+                }
+            })
 
             // e.preventDefault();
             // axios
@@ -121,9 +132,14 @@ export class signup extends Component {
         let renderError = null
         let emailError = null;
         let redirectVar = null
+        let duplicateEmailError = null
 
         if (this.props.auth) {
             redirectVar = <Redirect to="/dashboard" />
+        }
+        if (this.state.backendError) {
+            duplicateEmailError = <div style={{ 'color': 'red' }}>Email ID already exists</div>
+
         }
         if (this.state.emailError) {
             emailError = <div style={{ 'color': 'red' }}>{this.state.errorMessage}</div>
@@ -151,6 +167,7 @@ export class signup extends Component {
                                         <input type="text" className="form-control" name="email" required
                                             placeholder="Enter Email" onChange={this.handleEmailChange} />
                                         {emailError}
+                                        {duplicateEmailError}
                                     </div>
                                     <div className="form-group">
                                         <input type="password" className="form-control" name="password" required

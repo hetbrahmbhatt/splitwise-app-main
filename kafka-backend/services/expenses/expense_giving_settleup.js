@@ -50,8 +50,6 @@ function handle_request(msg, callback) {
                 currency: req.body.currency
             }
         ).then(res => {
-            console.log("Response is", res[0]._id);
-            console.log("here");
             let newamount = res[0].amount;
             newamount = Number(newamount) + Number(amountToUpdate);
             console.log(res._id);

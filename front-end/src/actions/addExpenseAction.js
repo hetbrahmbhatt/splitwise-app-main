@@ -32,6 +32,9 @@ var addExpenseAction = (data) => (dispatch) => {
             console.log(response);
             if (response.status === 200) {
                 dispatch(success(response));
+                alert("Over here");
+                window.location.reload();
+
             }
         }).catch((err) => {
             dispatch(error(err))

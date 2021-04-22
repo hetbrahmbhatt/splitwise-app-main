@@ -19,7 +19,7 @@ export class Profile extends Component {
         language: "",
         profileImageUpdate: false,
         updatedProfileImage: "",
-        profileImagePath: "https://splitwise-app-main.s3.us-east-2.amazonaws.com/michael-photo.png",
+        profileImagePath: "",
         emailError: false,
         error: false
     }
@@ -139,6 +139,17 @@ export class Profile extends Component {
             this.props.updateUserProfileAction(this.state).then(response => {
 
                 console.log(this.props.user)
+
+                this.setState(
+                    {
+                        name: this.props.user.name,
+                        defaultcurrency: this.props.user.defaultCurrency,
+                        email: this.props.user.email,
+                        timezone: this.props.user.timezone,
+                        phoneno: this.props.user.phoneno,
+                        language: this.props.user.language
+                    }
+                )
             });
         }
 
@@ -162,14 +173,14 @@ export class Profile extends Component {
                 language: response.data.language,
 
             })
-            if (response.data[0].image == null) {
+            if (response.data.image == "") {
                 this.setState({
                     profileImagePath: BACKEND_URL + '/images/avatar.png'
                 })
             }
             else {
                 this.setState({
-                    profileImagePath: 'https://splitwise-app-main.s3.us-east-2.amazonaws.com/michael-photo.png_606f7da299771a0c293ac668'
+                    profileImagePath: BACKEND_URL + '/images/profilepics/' + cookie.load('id') + '/' + response.data.image
                 })
             }
         }

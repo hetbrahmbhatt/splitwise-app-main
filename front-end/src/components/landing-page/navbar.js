@@ -19,17 +19,29 @@ export class Navbar extends Component {
                                 <strong>{name}</strong>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="/dashboard">Dashboard</a>
-                                <a class="dropdown-item" href="/profile">Profile</a>
+                                <Link class="dropdown-item" to={{ pathname: "/dashboard" }}>Dashboard</Link>
+                                {/* <a class="dropdown-item" href="/dashboard">Dashboard</a> */}
+                                <Link class="dropdown-item" to={{ pathname: "/profile" }}>Profile</Link>
+
+
+                                {/* <a class="dropdown-item" href="/profile">Profile</a> */}
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/new-group">Create a New Group</a>
-                                <a class="dropdown-item" href="/all-group">Groups / Invitations</a>
+                                <Link class="dropdown-item" to={{ pathname: "/new-group" }}>Create a New Group</Link>
+
+                                {/* <a class="dropdown-item" href="/new-group">Create a New Group</a> */}
+                                <Link class="dropdown-item" to={{ pathname: "/all-group" }}>Groups / Invitations</Link>
+
+                                {/* <a class="dropdown-item" href="/all-group">Groups / Invitations</a> */}
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/recent-activity">Recent Activities</a>
+                                <Link class="dropdown-item" to={{ pathname: "/recent-activity" }}>Recent Activities</Link>
+
+                                {/* <a class="dropdown-item" href="/recent-activity">Recent Activities</a> */}
                                 <div class="dropdown-divider"></div>
+                                <Link class="dropdown-item" to={{ pathname: "/logout" }}>Logout</Link>
+                                {/* 
                                 <a class="dropdown-item" href="/logout">
                                     Logout
-                                </a>
+                                </a> */}
                             </div>
                         </li>
                     </nav>
@@ -52,12 +64,12 @@ export class Navbar extends Component {
                             <ul class="navbar-nav ml-auto" >
                                 <li class="nav-item" >
                                     <Link to="/login">
-                                    <button type="button" class="btn btn-outline-success" style={{marginRight : "50px"}}>Login</button>
+                                        <button type="button" class="btn btn-outline-success" style={{ marginRight: "50px" }}>Login</button>
                                     </Link>
                                 </li>
                                 <li class="nav-item">
                                     <Link to="/signup">
-                                    <button type="button" class="btn btn-outline-success" style={{backgroundColor : "#20BF9F",color : "white",marginRight : "20px"}}>Sign-up</button>
+                                        <button type="button" class="btn btn-outline-success" style={{ backgroundColor: "#20BF9F", color: "white", marginRight: "20px" }}>Sign-up</button>
                                     </Link>
                                 </li>
                             </ul>

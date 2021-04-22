@@ -1,5 +1,8 @@
 var bcrypt = require('bcrypt');
 const userSchema = require('../../models/users');
+var jwt = require('jsonwebtoken');
+var { secret } = require('../../config/config');
+
 function handle_request(msg, callback) {
     let req = {
         body: msg

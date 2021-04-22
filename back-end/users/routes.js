@@ -27,7 +27,12 @@ router.post('/signup', (req, res) => {
         if (err) {
             console.log("Inside err", err);
             res.status(400).send(err)
-        } else {
+        }
+        else if (results == null && err == null) {
+            console.log("Inside err", err);
+            res.status(400).send(err)
+        }
+        else {
             console.log("Inside else", results);
             res.status(200).send(results)
         }
@@ -67,17 +72,49 @@ router.post('/signup', (req, res) => {
 
 //login
 router.post('/login', (req, res) => {
-    kafka.make_request('user_login', req.body, function (err, results) {
-        console.log('in user_login results');
+    userSchema.findOne({ email: req.body.email }).then(doc => {
+        if (bcrypt.compareSync(req.body.password, doc.password)) {
+            console.log("Login Successful");
+            let payload = {
+                _id: doc._id,
+                email: doc.email,
+                name: doc.name,
+                defaultcurrency: doc.defaultCurrency,
+                timezone: doc.timezone
+            }
+            let token = jwt.sign(payload, secret, {
+                expiresIn: 1008000
+            })
+            // callback(null, "Bearer " + token)
 
-        if (err) {
-            console.log("Inside err");
-            res.status(400).send("Invalid Credentials")
+            console.log("Login Successfull")
+            res.status(200).send("Bearer " + token)// res.status( 200 ).send( "Bearer " + token )
         } else {
-            console.log("Inside else", results);
-            res.status(200).send(results)
+            console.log("Invalid Credentials")
+            // res.status( 401 ).send( "Invalid Credentials" )
+            // callback( "Invalid credentials", null )
         }
-    });
+
+    }).catch(error => {
+        console.log("User Not Found", error)
+        // callback(error, null)
+    })
+    // kafka.make_request('user_login', req.body, function (err, results) {
+    //     console.log('in user_login results');
+
+    //     if (err) {
+    //         console.log("Inside err");
+    //         res.status(400).send("Invalid Credentials")
+    //     }
+    //     else if(results == null && err == null){
+    //         console.log("Inside err", err);
+    //         res.status(400).send(err)
+    //     } 
+    //      else {
+    //         console.log("Inside else", results);
+    //         res.status(200).send(results)
+    //     }
+    // });
 });
 //login
 // router.post('/login', (req, res) => {
@@ -233,11 +270,16 @@ router.get('/searchbyname', checkAuth, (req, res) => {
 //     })
 // });
 router.post('/uploadprofileimage', (req, res) => {
-
+    console.log(req.files);
+    if (req.files === null) {
+        res.status(400).send('No File Upload');
+    }
     const file = req.files.profileImage;
     //Get the userID,file name from frontend
-    var fileName = req.files.profileImage.name.split(',')[0];
     var userID = req.files.profileImage.name.split(',')[1];
+    console.log(userID);
+    const fileName = req.files.profileImage.name.split(',')[0];
+    console.log(fileName);
     var pathToImage = path.join(__dirname, '../public');
     const filePathwithoutfileName = pathToImage + '/images/profilepics/' + userID;
     const filePath = pathToImage + '/images/profilepics/' + userID + '/' + fileName;
@@ -249,31 +291,10 @@ router.post('/uploadprofileimage', (req, res) => {
     file.mv(filePath, err => {
         if (err) {
             console.log(err);
-            return res.status(500).end(err);
+            res.status(500).end(err);
         }
         else {
-            console.log(req.files);
-            if (req.files === null) {
-                return res.status(400).send('No File Upload');
-            }
-            console.log(filePath)
-            const fileContent = fs.readFileSync(filePath);
-            console.log(Date.now());
-            // Setting up S3 upload parameters
-            fileName = fileName + '_' + userID;
-            const params = {
-                Bucket: 'splitwise-app-main',
-                Key: fileName, // File name you want to save as in S3
-                Body: fileContent
-            };
-
-            // Uploading files to the bucket
-            s3.upload(params, function (err, data) {
-                if (err) {
-                    throw err;
-                }
-                console.log(`File uploaded successfully. ${data.Location}`);
-            });
+            console.log("over here")
             userSchema.findOneAndUpdate({ _id: ObjectId(userID) },
                 {
                     $set: {
@@ -294,5 +315,66 @@ router.post('/uploadprofileimage', (req, res) => {
             })
         }
     })
+    //Send the file name and file path to the clien
+    // const file = req.files.profileImage;
+    // //Get the userID,file name from frontend
+    // var fileName = req.files.profileImage.name.split(',')[0];
+    // var userID = req.files.profileImage.name.split(',')[1];
+    // var pathToImage = path.join(__dirname, '../public');
+    // const filePathwithoutfileName = pathToImage + '/images/profilepics/' + userID;
+    // const filePath = pathToImage + '/images/profilepics/' + userID + '/' + fileName;
+    // //Create a file with that path
+    // if (!fs.existsSync(filePathwithoutfileName)) {
+    //     fs.mkdirSync(filePathwithoutfileName);
+    // }
+    // //Move the image to that path
+    // file.mv(filePath, err => {
+    //     if (err) {
+    //         console.log(err);
+    //         return res.status(500).end(err);
+    //     }
+    //     else {
+    //         console.log(req.files);
+    //         if (req.files === null) {
+    //             return res.status(400).send('No File Upload');
+    //         }
+    //         console.log(filePath)
+    //         const fileContent = fs.readFileSync(filePath);
+    //         console.log(Date.now());
+    //         // Setting up S3 upload parameters
+    //         fileName = fileName + '_' + userID;
+    //         const params = {
+    //             Bucket: 'splitwise-app-main',
+    //             Key: fileName, // File name you want to save as in S3
+    //             Body: fileContent
+    //         };
+
+    //         // Uploading files to the bucket
+    //         s3.upload(params, function (err, data) {
+    //             if (err) {
+    //                 throw err;
+    //             }
+    //             console.log(`File uploaded successfully. ${data.Location}`);
+    //         });
+    //         userSchema.findOneAndUpdate({ _id: ObjectId(userID) },
+    //             {
+    //                 $set: {
+    //                     image: fileName
+    //                 }
+    //             }
+    //         ).then(response => {
+    //             console.log("Update successfull")
+    //             console.log(response);
+    //             //Send the file name and file path to the client
+    //             res.json({
+    //                 fileName: fileName,
+    //                 filePath: filePath
+    //             })
+    //         }).catch(error => {
+    //             console.log("Error in update", error)
+    //             res.status(400).send(error)
+    //         })
+    //     }
+    // })
 });
 module.exports = router;

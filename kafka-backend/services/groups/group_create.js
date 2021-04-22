@@ -14,7 +14,6 @@ function handle_request(msg, callback) {
         groupName: req.body.groupName,
         timestamp: Date.now(),
         count: 1,
-        image: req.body.updatedProfileImage,
         invitedBy: req.body.userName
     })
     console.log("over here ")

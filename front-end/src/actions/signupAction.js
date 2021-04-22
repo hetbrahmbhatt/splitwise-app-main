@@ -28,9 +28,10 @@ var errorUser = (err, data) => {
 
 
 var SignUpAction = (data) => (dispatch) => {
-    axios
+   return axios
         .post(BACKEND_URL + '/users/signup', data)
         .then((response) => {
+            // alert(response.status)
             if (response.status === 200) {
                 console.log(response.data);
                 let decoded = jwt_decode(response.data.split(' ')[1])
@@ -75,7 +76,8 @@ var SignUpAction = (data) => (dispatch) => {
                 }
             }
         }).catch((err) => {
-            dispatch(errorUser(err, data))
+            // alert("ovre herer");
+            dispatch(errorUser("Invalid Credentials", data))
         });
 }
 

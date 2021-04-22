@@ -18,15 +18,11 @@ var { secret } = require('../config/config')
 var { auth, checkAuth } = require('../config/passport')
 auth()
 router.post('/new', checkAuth, (req, responsenew123) => {
-    console.log("expense")
     kafka.make_request('expense_new', req.body, function (err, results) {
-        console.log('in group By create results');
         console.log(results)
         if (err) {
-            console.log("Inside err");
             responsenew123.status(400).send("Invalid Credentials")
         } else {
-            console.log("Inside else", results);
             responsenew123.status(200).send(results)
         }
     });
