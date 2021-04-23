@@ -13,7 +13,6 @@ var success = (response) => {
         }
     }
 }
-
 var error = (err) => {
     console.log("err", err)
     return {

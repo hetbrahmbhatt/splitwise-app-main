@@ -230,7 +230,7 @@ export class GroupDescription extends Component {
                             </span>
                         </div>
                         <div className="col-6">
-                            <span><strong>{exp.userID1Name}</strong> owes <strong>{exp.userID2Name}</strong> {exp.currency}{-1 * exp.amount} </span>
+                            <span><strong>{exp.userID2Name}</strong> owes <strong>{exp.userID1Name}</strong> {exp.currency}{-1 * exp.amount} </span>
                             <br></br>
                         </div>
                     </div>
