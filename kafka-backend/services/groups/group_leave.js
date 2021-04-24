@@ -21,7 +21,6 @@ function handle_request(msg, callback) {
             }
         ]
     }).then(response => {
-        console.log(response);
 
         if (response.length != 0) {
             callback(err, null)
@@ -31,7 +30,6 @@ function handle_request(msg, callback) {
                 , { $pull: { acceptedGroups: { groupID: req.body.groupID } } }, { new: true }
             ).then(res => {
                 if (res) {
-                    console.log("over here")
                     callback(null, res)
                 }
             })

@@ -5,9 +5,7 @@ function handle_request(msg, callback) {
     let req = {
         params: msg
     }
-    console.log("In total ");
     DebtsSchema.find({ groupID: req.params.id }).then(docs => {
-        console.log(docs);
         callback(null, docs)
         // res.status(200).send(docs)
     });

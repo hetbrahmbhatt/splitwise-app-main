@@ -10,13 +10,10 @@ function handle_request(msg, callback) {
     let req = {
         body: msg
     }
-    console.log(req.body);
     groupSchema.find({ _id: req.body.groupID },
     ).then(doc => {
         let totalGroupMembers = doc[0].membersSchema.length;
-        console.log(req.body);
         let takeAmount = Number((req.body.amount) / totalGroupMembers);
-        console.log(takeAmount);
         if (Number.isInteger(takeAmount)) {
 
         }
@@ -24,7 +21,6 @@ function handle_request(msg, callback) {
             takeAmount = takeAmount.toString();
             takeAmount = takeAmount.slice(0, (takeAmount.indexOf(".")) + 3);
         }
-        console.log("Take Amount", takeAmount);
         var groupMembersminusonee = totalGroupMembers - 1;
         let takingAmountForRecentActivitys = (groupMembersminusonee) * (req.body.amount / totalGroupMembers);
         if (Number.isInteger(takingAmountForRecentActivitys)) {
@@ -36,15 +32,12 @@ function handle_request(msg, callback) {
         }
         for (let i = 0; i < doc[0].membersSchema.length; i++) {
             if (doc[0].membersSchema[i].userID < req.body.userID) {
-                console.log("Over here in userfwefwfweffwfw");
-                console.log(doc[0].membersSchema[i].userID);
                 DebtsSchema.find({
                     userID1: doc[0].membersSchema[i].userID,
                     userID2: req.body.userID,
                     groupID: req.body.groupID,
                     currency: req.body.currency,
                 }).then(response => {
-                    console.log("Length of response", response.length);
 
                     if (response.length == 0) {
                         let newDebts1 = new DebtsSchema({
@@ -58,15 +51,12 @@ function handle_request(msg, callback) {
                             amount: takeAmount
                         })
                         newDebts1.save().then(response => {
-                            console.log("New Debts Saved")
+
                         })
                     }
                     else {
-                        console.log("Here");
 
                         console.log("Response1234343", response);
-                        console.log(response[0]);
-                        console.log(response[0]._id);
                         DebtsSchema.findOne(
                             { _id: ObjectId(response[0]._id) },
                         ).then(response1 => {
@@ -75,10 +65,7 @@ function handle_request(msg, callback) {
 
                             }
                             else {
-                                console.log("QERFEFEFEFEFREFEFEFRERFE", response1);
                                 let newAmount = Number(response1.amount) + Number(takeAmount);
-                                console.log(takeAmount);
-                                console.log("newAmount", newAmount);
                                 newAmount = Number(newAmount);
                                 DebtsSchema.findOneAndUpdate({ _id: ObjectId(response1._id) },
                                     {
@@ -94,7 +81,6 @@ function handle_request(msg, callback) {
                         })
                     }
 
-                    console.log("OIver cxedfwdfwdedsdedwdwddewdwdewedewdwsdwsdrw")
                 })
 
             }
@@ -105,7 +91,6 @@ function handle_request(msg, callback) {
                     groupID: req.body.groupID,
                     currency: req.body.currency,
                 }).then(response => {
-                    console.log("Length of response", response.length);
                     if (response.length == 0) {
                         let newDebts1 = new DebtsSchema({
                             userID1: req.body.userID,
@@ -124,7 +109,6 @@ function handle_request(msg, callback) {
                     else {
                         console.log("Here");
 
-                        console.log("Response1234343", response);
                         console.log(response[0]);
                         console.log(response[0]._id);
                         DebtsSchema.findOne(
@@ -135,8 +119,6 @@ function handle_request(msg, callback) {
 
                             }
                             else {
-                                console.log("QERFEFEFEFEFREFEFEFRERFE", response1);
-                                console.log(takeAmount);
                                 takeAmount = Number(takeAmount);
                                 let newAmount = response1.amount - (takeAmount);
                                 newAmount = Number(newAmount);
@@ -153,8 +135,6 @@ function handle_request(msg, callback) {
 
                         })
                     }
-
-                    console.log("OIver cxedfwdfwdedsdedwdwddewdwdewedewdwsdwsdrw")
                 })
             }
         }
@@ -239,7 +219,6 @@ function handle_request(msg, callback) {
         }
 
     })
-    console.log(req.body)
     let ts = Date.now();
     let date_ob = new Date(ts);
     let date = date_ob.getDate().toString();
@@ -271,7 +250,6 @@ function handle_request(msg, callback) {
                     settleflag: 0
                 })
                 newRecentActivity.save().then(response => {
-                    console.log("Recent Activity Created successfully")
                 })
             }
             else {
@@ -288,7 +266,6 @@ function handle_request(msg, callback) {
                     settleflag: 0
                 })
                 newRecentActivity.save().then(response => {
-                    console.log("Recent Activity Created successfully")
                 })
             }
 
@@ -305,7 +282,6 @@ function handle_request(msg, callback) {
             settleFlag: 0
         })
         groupSummary.save().then(response => {
-            console.log("Group Summary Saved successfully")
         })
 
 
@@ -327,12 +303,10 @@ function handle_request(msg, callback) {
 
                             // console.log("Logged in user", doc);
                         }).catch(error => {
-                            console.log("Error in update", error)
                             // res.status(400).send(error)
                         })
                     }
                     else {
-                        console.log("fsdkhfhuidruiiu", takingAmountForRecentActivity)
                         let recentActivity = {
                             userID: req.body.userID,
                             userName: req.body.userName,
@@ -347,13 +321,11 @@ function handle_request(msg, callback) {
                         userSchema.findOneAndUpdate({ _id: req.body.userID }
                             , { $push: { recentactivity: recentActivity } }, { new: true }
                         ).then(doc => {
-                            console.log("Logged in user recent activity", doc)
                         })
                     }
                 }
             }
             else {
-                console.log("bjvhvhgcgfccgc", doc[0].membersSchema[i].userID)
                 let recentActivity = {
                     userID: req.body.userID,
                     userName: req.body.userName,
@@ -368,10 +340,7 @@ function handle_request(msg, callback) {
                 userSchema.findOneAndUpdate({ _id: doc[0].membersSchema[i].userID }
                     , { $push: { recentactivity: recentActivity } }, { new: true }
                 ).then(doc => {
-                    console.log("In user recent activity");
-                    console.log("Others recent activity", doc)
                 })
-                console.log("Other Docs", doc);
                 let debts = {
                     userID: doc[0].membersSchema[i].userID,
                     userName: req.body.userName,
@@ -380,13 +349,11 @@ function handle_request(msg, callback) {
                     groupID: doc[0].membersSchema[i].groupID,
                     groupName: req.body.groupName,
                 }
-                console.log("huighuihuiui", doc[0].membersSchema[i].userID)
                 userSchema.findOneAndUpdate({ _id: doc[0].membersSchema[i].userID }
                     , { $push: { debts: debts } }, { new: true }
                 ).then(doc => {
                     // console.log("Other ID'S",doc[0].membersSchema[i].userID);
                     responsenew123.status(200).send(doc);
-                    console.log("Over here nifhcnihfiedhfeiueiedi");
 
                 }).catch(error => {
                     // res.status(400).send(error)

@@ -8,7 +8,6 @@ function handle_request(msg, callback) {
         params: msg
     }
     groupSummarySchema.find({ groupID: req.params.id }).sort({ createdAt: '-1' }).then(docs => {
-        console.log("Group Summary by User", docs)
         callback(null , docs)
     }).catch(error => {
         callback(error , null)

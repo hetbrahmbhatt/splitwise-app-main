@@ -26,7 +26,6 @@ function handle_request(msg, callback) {
             userSchema.findOneAndUpdate({ _id: userID }
                 , { $push: { acceptedGroups: newInvitation } }, { new: true }
             ).then(doc => {
-                console.log("Group Added Successfully", doc)
                 groupSchema.findOneAndUpdate({ _id: groupID },
                     {
                         $inc: {

@@ -8,7 +8,6 @@ function handle_request(msg, callback) {
     let req = {
         body: msg
     }
-    console.log(req.body)
     const _id = ObjectId(req.body.groupSummaryID);
     var messageData = {
         name: req.body.userName,
@@ -31,8 +30,6 @@ function handle_request(msg, callback) {
     const groupID = ObjectId(req.body.groupID);
 
     groupSchema.find({ _id: req.body.groupID }).then(doc => {
-        console.log("Group DOCS", doc)
-        console.log(doc[0].membersSchema)
         for (let i = 0; i < doc[0].membersSchema.length; i++) {
             if (doc[0].membersSchema[i].userID != req.body.userID) {
                 let newActivity = new recentActivitySchema({
@@ -50,7 +47,6 @@ function handle_request(msg, callback) {
                     message: req.body.messageString
                 })
                 newActivity.save().then(response => {
-                    console.log("Recent Activity Added successfully.")
                 })
             }
         }
@@ -59,7 +55,6 @@ function handle_request(msg, callback) {
     })
 
     newRecentActivity.save().then(response => {
-        console.log("Recent Activity Added successfully.")
     })
     groupSummarySchema.findOneAndUpdate({ _id: _id }
         , { $push: { messages: messageData } }, { new: true }

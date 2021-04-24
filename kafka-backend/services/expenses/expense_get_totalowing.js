@@ -19,7 +19,6 @@ function handle_request(msg, callback) {
         ]
 
     }).then(docs => {
-        console.log(docs)
         callback(null , docs)
         // res.status(200).send(JSON.stringify(docs))
     });

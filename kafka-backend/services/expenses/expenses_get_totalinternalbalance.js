@@ -7,7 +7,6 @@ function handle_request(msg, callback) {
     let req = {
         body: msg
     }
-    console.log(req.body)
     groupBalanceSchema.find({
         groupID: req.body.groupID,
     }).then(response => {
