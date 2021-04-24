@@ -3,7 +3,7 @@ var mongoose = require('./config/db-config');
 //topic files
 //users
 var user_login = require('./services/users/user_login');
-var user_signup = require('./services/users/b');
+var user_signup = require('./services/users/user_signup');
 var user_about_byID = require('./services/users/user_about_byID');
 var user_about_update = require('./services/users/user_about_update');
 var user_get_recentActivity = require('./services/users/user_get_recentActivity');
@@ -36,12 +36,6 @@ var expense_owing_settleup = require('./services/expenses/expense_owing_settleup
 var expense_filter_recentActivity = require('./services/expenses/expense_filter_recentActivity');
 var expense_get_positivetotalbalance = require('./services/expenses/expense_get_positivetotalbalance');
 var expense_get_totalinternalbalance = require('./services/expenses/expenses_get_totalinternalbalance');
-
-
-
-
-
-
 function handleTopicRequest(topic_name, fname) {
     //var topic_name = 'root_topic';
     var consumer = connection.getConsumer(topic_name);
