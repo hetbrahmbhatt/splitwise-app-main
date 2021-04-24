@@ -16,7 +16,7 @@ function App() {
           <Main />
         </div>
         <ToastContainer />
-      </BrowserRouter>  
+      </BrowserRouter>
     </Provider>
 
   );
