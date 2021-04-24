@@ -10,6 +10,7 @@ function handle_request(msg, callback) {
     let req = {
         body: msg
     }
+    console.log("Response :-",req.body);
     groupSchema.find({ _id: req.body.groupID },
     ).then(doc => {
         let totalGroupMembers = doc[0].membersSchema.length;
@@ -56,7 +57,6 @@ function handle_request(msg, callback) {
                     }
                     else {
 
-                        console.log("Response1234343", response);
                         DebtsSchema.findOne(
                             { _id: ObjectId(response[0]._id) },
                         ).then(response1 => {
@@ -74,7 +74,6 @@ function handle_request(msg, callback) {
                                         }
                                     }
                                 ).then(resposne => {
-                                    console.log(resposne)
                                 })
                             }
 
@@ -103,14 +102,9 @@ function handle_request(msg, callback) {
                             amount: -1 * takeAmount
                         })
                         newDebts1.save().then(response => {
-                            console.log("New Debts Saved")
                         })
                     }
                     else {
-                        console.log("Here");
-
-                        console.log(response[0]);
-                        console.log(response[0]._id);
                         DebtsSchema.findOne(
                             { _id: ObjectId(response[0]._id) },
                         ).then(response1 => {
@@ -129,7 +123,6 @@ function handle_request(msg, callback) {
                                         }
                                     }
                                 ).then(resposne => {
-                                    console.log(resposne)
                                 })
                             }
 
@@ -182,7 +175,6 @@ function handle_request(msg, callback) {
                     groupID: req.body.groupID,
                     currency: req.body.currency,
                 }).then(response => {
-                    console.log(response);
                     if (response.length == 0) {
                         let groupBalance = new groupBalanceSchema({
                             userID: req.body.userID,
@@ -193,7 +185,6 @@ function handle_request(msg, callback) {
                             currency: req.body.currency,
                         })
                         groupBalance.save().then(response => {
-                            console.log("Group Balance  opposite Saved")
                         })
                     }
                     else {
@@ -208,11 +199,9 @@ function handle_request(msg, callback) {
                                     }
                                 }
                             ).then(resposne => {
-                                console.log(resposne)
                             })
                         })
                     }
-                    console.log("Group Balance Response", response);
                 })
 
             }
