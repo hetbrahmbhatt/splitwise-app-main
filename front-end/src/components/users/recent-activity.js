@@ -58,6 +58,7 @@ export class RecentActivity extends Component {
         })
     }
     handlePageClick = (e) => {
+        alert(this.state.perPage);
         this.setState({
             offset: this.state.perPage * e.selected,
         })
@@ -65,8 +66,9 @@ export class RecentActivity extends Component {
     };
     handlePaginationChange = (e) => {
         console.log(e);
+        alert(e.value);
         this.setState({
-            perPage: e.value,
+            perPage: Number(e.value),
         })
 
     };
@@ -149,7 +151,8 @@ export class RecentActivity extends Component {
         window.location.reload();
     };
     render() {
-        console.log(this.state);
+        console.log("State Options", this.state);
+        console.log("Recent Activity Details", this.state.recentactivity.length)
         let redirectTo = null;
         if (!(cookie.load("auth"))) {
             redirectTo = <Redirect to="/" />
@@ -251,7 +254,7 @@ export class RecentActivity extends Component {
         }
         let pageCount = null;
         pageCount = Math.ceil(this.state.recentactivity.length / this.state.perPage)
-
+        console.log(this.state.perPage)
         return (
             <div className="row">
                 {redirectTo}

@@ -1,18 +1,18 @@
 import SignUpReducer from './signupReducer';
 import { combineReducers } from 'redux';
 import loginReducer from './loginReducer';
-import getUserProfileReducer from './UserReducers/userUpdateReducer';
-import searchEmailReducer from './UserReducers/searchByEmailReducer';
+import getUserProfileReducer from './userReducers/userUpdateReducer';
+import searchEmailReducer from './userReducers/searchByEmailReducer';
 import insertGroupReducer from './groupsReducers/insertGroupReducer';
-import recentActivityReducer from './UserReducers/recentActivityReducer';
-import getByIDReducer from './UserReducers/getByIDUserReducer';
+import recentActivityReducer from './userReducers/recentActivityReducer';
+import getByIDReducer from './userReducers/getByIDUserReducer';
 import getGroupByIDReducer from './groupsReducers/getGroupByIDReducer';
 import getGroupByIDReducerForAccepted from './groupsReducers/getGroupByIDForAccepted';
 import editGroupReducer from './groupsReducers/editGroupReducer';
 import addExpenseReducer from './expenseReducers.js/addExpenseReducer';
 import groupSummaryByIDReducer from './groupsReducers/groupSummaryByIDReducer';
 import getInternalDebtReducer from './groupsReducers/getInternalDebtReducer';
-import userMessageReducer from './UserReducers/userMessageReducer';
+import userMessageReducer from './userReducers/userMessageReducer';
 
 import settleUpReducer from './expenseReducers.js/settleUpReducer';
 
