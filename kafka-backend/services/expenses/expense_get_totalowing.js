@@ -1,6 +1,7 @@
 
 const DebtsSchema = require('../../models/debts');
 
+// get total owing 
 function handle_request(msg, callback) {
     let req = {
         params: msg

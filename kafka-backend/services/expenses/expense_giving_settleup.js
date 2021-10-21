@@ -11,7 +11,7 @@ function handle_request(msg, callback) {
     }
     groupSchema.find({ _id: req.body.groupID },
     ).then(doc => {
-        for (let i = 0; i < doc[0].membersSchema.length; i++) {
+        for (let i = 0; i < doc[0].membersSchema.length; i++) {// update the recent-activity object 
             let recentActivity = new recentActivitySchema({
                 userID: doc[0].membersSchema[i].userID,
                 groupID: req.body.groupID,
@@ -19,7 +19,7 @@ function handle_request(msg, callback) {
                 currency: req.body.currency,
                 groupName: req.body.groupName,
                 amount: req.body.amount,
-                settleflag: 100
+                settleflag: 100 
             })
             recentActivity.save().then(response => {
 
@@ -33,6 +33,7 @@ function handle_request(msg, callback) {
     else {
         amountToUpdate = -1 * (req.body.amount);
     }
+    // update in the debts scchema and group balance schema 
     DebtsSchema.findOneAndUpdate({ _id: ObjectId(req.body.debtID) },
         {
             $set: {

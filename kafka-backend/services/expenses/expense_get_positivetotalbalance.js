@@ -3,7 +3,6 @@ function handle_request(msg, callback) {
     let req = {
         body: msg
     }
-    console.log(req.body)
     groupBalanceSchema.aggregate(
         [
             // First Stage

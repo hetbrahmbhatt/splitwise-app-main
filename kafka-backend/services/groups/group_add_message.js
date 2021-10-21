@@ -26,8 +26,6 @@ function handle_request(msg, callback) {
         commentFlag: 1,
         message: req.body.messageString
     })
-    const groupID = ObjectId(req.body.groupID);
-
     groupSchema.find({ _id: req.body.groupID }).then(doc => {
         for (let i = 0; i < doc[0].membersSchema.length; i++) {
             if (doc[0].membersSchema[i].userID != req.body.userID) {

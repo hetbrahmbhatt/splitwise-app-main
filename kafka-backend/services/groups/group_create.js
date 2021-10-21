@@ -1,15 +1,11 @@
 
 const groupSchema = require('../../models/groups');
 const userSchema = require('../../models/users');
-var ObjectId = require('mongodb').ObjectID;
-
 
 function handle_request(msg, callback) {
     let req = {
         body: msg
     }
-    console.log(req.body);
-
     let newGroup = new groupSchema({
         userID: req.body.userID,
         groupName: req.body.groupName,
@@ -17,15 +13,12 @@ function handle_request(msg, callback) {
         count: 1,
         invitedBy: req.body.userName
     })
-    console.log("over here ")
-
     newGroup.save().then(response => {
         let newGroupObjForInvitee = {
             groupID: response._id,
             groupName: req.body.groupName,
             invitedBy: "You"
         }
-        const _id = ObjectId(req.body.userID);
         userSchema.findByIdAndUpdate({ _id: req.body.userID }
             , { $push: { acceptedGroups: newGroupObjForInvitee } }, { new: true }
         ).then(doc => {
@@ -48,21 +41,15 @@ function handle_request(msg, callback) {
                     ).then(doc => {
                     }).catch(error => {
                         console.log("error", error);
-                        // res.status( 400 ).send( "Error following" );
                     })
                 }
-                // res.status(200).send(doc);
                 callback(null, doc)
 
             })
 
         }).catch(error => {
             callback(error, null)
-
-            // res.status( 400 ).send( "Error following" );
         })
-
-        // res.status(200).send(obj)
     }).catch(error => {
         callback(error, null)
     })

@@ -5,12 +5,8 @@ import signup from './sign-up/sign-up';
 import login from './login/login'
 import logout from './login/logout';
 import Navbar from './landing-page/navbar';
-// import Profile from './user/profile';
 import NewGroup from './groups/new-group';
 import MyGroup from './groups/my-group';
-import GroupDescription from './groups/group-description';
-// import RecentActivity from '../components/user/recent-activity';
-// import Dashboard from './user/dashboard';
 
 export class Routing extends Component {
     render() {

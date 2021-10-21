@@ -1,7 +1,6 @@
 
 const groupSchema = require('../../models/groups');
 const userSchema = require('../../models/users');
-var ObjectId = require('mongodb').ObjectID;
 
 function handle_request(msg, callback) {
     let req = {
@@ -9,15 +8,10 @@ function handle_request(msg, callback) {
     }
     var userID = req.body.userID;
     var groupID = req.body.groupID;
-    console.log(req.body);
-    console.log(userID);
-    console.log(groupID);
     if (req.body.type == 'accept') {
-        console.log("Inside Accept");
         userSchema.findOneAndUpdate({ _id: userID }
             , { $pull: { invitedGroups: { groupID: req.body.groupID } } }, { new: true }
         ).then(doc => {
-            console.log("Invited Group Removed", doc)
             let newInvitation = {
                 groupID: groupID,
                 groupName: req.body.groupName,
@@ -47,9 +41,8 @@ function handle_request(msg, callback) {
                 }).catch(error => {
                     callback(null, doc)
                 })
-                // res.status( 200 ).send( doc );
             }).catch(error => {
-                // res.status( 400 ).send( "Error following" );
+                callback(null,error);
             })
         })
     }
@@ -58,10 +51,8 @@ function handle_request(msg, callback) {
             , { $pull: { invitedGroups: { groupID: req.body.groupID } } }, { new: true }
         ).then(doc => {
             callback(null, doc)
-            console.log("Invited Group Removed", doc)
         }).catch(error => {
             console.log("error", error);
-            callback(error, null)
         })
     }
 }

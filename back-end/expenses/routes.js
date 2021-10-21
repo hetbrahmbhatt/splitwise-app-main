@@ -16,8 +16,8 @@ const {
     OWING_SETTLE_UP
   } = require("../kafka/topics");
 // add an expense
-router.post(CREATE_EXPENSE, checkAuth, (req, res) => {
-    kafka.make_request('expense_new', req.body, function (err, results) {
+router.post("/new", checkAuth, (req, res) => {
+    kafka.make_request(CREATE_EXPENSE, req.body, function (err, results) {
         if (err) {
             res.status(400).send("Error in creating new expense")
         } else {
@@ -27,8 +27,8 @@ router.post(CREATE_EXPENSE, checkAuth, (req, res) => {
 })
 
 // get total giving of a particular user
-router.post(GET_TOTAL_GIVING_EXPENSE, checkAuth, (req, res) => {
-    kafka.make_request('expense_get_totalgiving', req.params, function (err, results) {
+router.post("/totalgiving/:id", checkAuth, (req, res) => {
+    kafka.make_request(GET_TOTAL_GIVING_EXPENSE, req.params, function (err, results) {
         if (err) {
             res.status(400).send("Error in getting the total giving amount")
         } else {
@@ -38,8 +38,8 @@ router.post(GET_TOTAL_GIVING_EXPENSE, checkAuth, (req, res) => {
 });
 
 // get total owing of a particular user
-router.post(GET_TOTAL_OWING_EXPENSE, checkAuth, (req, res) => {
-    kafka.make_request('expense_get_totalowing', req.params, function (err, results) {
+router.post("/totalowing/:id'", checkAuth, (req, res) => {
+    kafka.make_request(GET_TOTAL_OWING_EXPENSE, req.params, function (err, results) {
         if (err) {
             res.status(400).send("Error in getting the total owing amount")
         } else {
@@ -49,8 +49,8 @@ router.post(GET_TOTAL_OWING_EXPENSE, checkAuth, (req, res) => {
 });
 
 // get total internal debt
-router.get(GET_TOTAL_INTERNAL_DEBT, checkAuth, (req, res) => {
-    kafka.make_request('expense_get_totalinternaldebt', req.params, function (err, results) {
+router.get("/totalinternaldebt/:id", checkAuth, (req, res) => {
+    kafka.make_request(GET_TOTAL_INTERNAL_DEBT, req.params, function (err, results) {
         if (err) {
             res.status(400).send("Error in getting the total internal debt")
         } else {
@@ -60,8 +60,8 @@ router.get(GET_TOTAL_INTERNAL_DEBT, checkAuth, (req, res) => {
 })
 
 // settle up all giving transactions
-router.post(GIVING_SETTLE_UP, checkAuth, (req, res) => {
-    kafka.make_request('expense_giving_settleup', req.body, function (err, results) {
+router.post("/givingsettleup", checkAuth, (req, res) => {
+    kafka.make_request(GIVING_SETTLE_UP, req.body, function (err, results) {
         if (err) {
             res.status(400).send("Error in settling up")
         } else {
@@ -71,10 +71,10 @@ router.post(GIVING_SETTLE_UP, checkAuth, (req, res) => {
 })
 
 // settle up all owing transactions
-router.post(OWING_SETTLE_UP, checkAuth, (req, res) => {
-    kafka.make_request('expense_owing_settleup', req.body, function (err, results) {
+router.post("/owingsettleup", checkAuth, (req, res) => {
+    kafka.make_request(OWING_SETTLE_UP, req.body, function (err, results) {
         if (err) {
-            res.status(400).send("Invalid Credentials")
+            res.status(400).send("Error in settling up")
         } else {
             res.status(200).send(results)
         }
@@ -82,10 +82,10 @@ router.post(OWING_SETTLE_UP, checkAuth, (req, res) => {
 })
 
 // get recent-activity 
-router.post(GET_RECENT_ACTIVITY_FILTER_BASED, checkAuth, (req, res) => {
-    kafka.make_request('expense_filter_recentActivity', req.body, function (err, results) {
+router.post("/recentactivity", checkAuth, (req, res) => {
+    kafka.make_request(GET_RECENT_ACTIVITY_FILTER_BASED, req.body, function (err, results) {
         if (err) {
-            res.status(400).send("Invalid Credentials")
+            res.status(400).send("Error in getting recent activity")
         } else {
             res.status(200).send(results)
         }
@@ -93,8 +93,8 @@ router.post(GET_RECENT_ACTIVITY_FILTER_BASED, checkAuth, (req, res) => {
 });
 
 // get positive total balance
-router.get(GET_TOTAL_POSITIVE_BALANCE, (req, res) => {
-    kafka.make_request('expense_get_positivetotalbalance', req.body, function (err, results) {
+router.get("/gettotalpositivebalance", (req, res) => {
+    kafka.make_request(GET_TOTAL_POSITIVE_BALANCE, req.body, function (err, results) {
         if (err) {
             res.status(400).send("Invalid Credentials")
         } else {
@@ -104,8 +104,8 @@ router.get(GET_TOTAL_POSITIVE_BALANCE, (req, res) => {
 })
 
 // get internal group balance 
-router.post(GET_INTERNAL_GROUP_BALANCE, (req, res) => {
-    kafka.make_request('expense_get_totalinternalbalance', req.body, function (err, results) {
+router.post("/gettotalinternalbalance", (req, res) => {
+    kafka.make_request(GET_INTERNAL_GROUP_BALANCE, req.body, function (err, results) {
         if (err) {
             res.status(400).send("Invalid Credentials")
         } else {

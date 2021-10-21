@@ -20,8 +20,8 @@ const {
     UPDATE_PROFILE_IMAGE,
   } = require("../kafka/topics");
 // get group information
-router.get(GET_GROUP_DETAILS, checkAuth, (req, res) => {
-    kafka.make_request('group_about_byID', req.params, function (err, results) {
+router.get("/groupbyid/:id", checkAuth, (req, res) => {
+    kafka.make_request(GET_GROUP_DETAILS, req.params, function (err, results) {
         if (err) {
             res.status(400).send("Invalid Credentials")
         } else {
@@ -31,8 +31,8 @@ router.get(GET_GROUP_DETAILS, checkAuth, (req, res) => {
 });
 
 // create a new group
-router.post(CREATE_NEW_GROUP, checkAuth, (req, res) => {
-    kafka.make_request('group_create', req.body, function (err, results) {
+router.post("/new", checkAuth, (req, res) => {
+    kafka.make_request(CREATE_NEW_GROUP, req.body, function (err, results) {
         if (err) {
             res.status(400).send("Error in creating a group")
         }
@@ -43,8 +43,8 @@ router.post(CREATE_NEW_GROUP, checkAuth, (req, res) => {
 });
 
 // accept group invitation 
-router.put(ACCEPT_GROUP_INVITATION, checkAuth, (req, res) => {
-    kafka.make_request('group_accept', req.body, function (err, results) {
+router.put("/invite", checkAuth, (req, res) => {
+    kafka.make_request(ACCEPT_GROUP_INVITATION, req.body, function (err, results) {
         if (err) {
             res.status(400).send("Error in inviting")
         } else {
@@ -54,8 +54,8 @@ router.put(ACCEPT_GROUP_INVITATION, checkAuth, (req, res) => {
 })
 
 // leave a particular group
-router.post(LEAVE_GROUP, (req, res) => {
-    kafka.make_request('group_leave', req.body, function (err, results) {
+router.post("/leavegroup", (req, res) => {
+    kafka.make_request(LEAVE_GROUP, req.body, function (err, results) {
         if (err) {
             res.status(400).send("Error in leaving a particular group")
         } else {
@@ -65,8 +65,8 @@ router.post(LEAVE_GROUP, (req, res) => {
 })
 
 // update group details
-router.put(UPDATE_GROUP_DETAILS, checkAuth, (req, res) => {
-    kafka.make_request('group_update', req.body, function (err, results) {
+router.put("/updategroup", checkAuth, (req, res) => {
+    kafka.make_request(UPDATE_GROUP_DETAILS, req.body, function (err, results) {
         if (err) {
             res.status(400).send("Error in updating a group")
         } else {
@@ -76,8 +76,8 @@ router.put(UPDATE_GROUP_DETAILS, checkAuth, (req, res) => {
 });
 
 // get group summary 
-router.get(GET_GROUP_SUMMARY, checkAuth, (req, res) => {
-    kafka.make_request('group_get_summary', req.params, function (err, results) {
+router.get("/groupsummarybyid/:id", checkAuth, (req, res) => {
+    kafka.make_request(GET_GROUP_SUMMARY, req.params, function (err, results) {
         if (err) {
             res.status(400).send("Error in getting group summary details")
         } else {
@@ -87,8 +87,8 @@ router.get(GET_GROUP_SUMMARY, checkAuth, (req, res) => {
 });
 
 // remove message (content)
-router.put(DELETE_MESSAGE, checkAuth, (req, res) => {
-    kafka.make_request('group_remove_message', req.body, function (err, results) {
+router.put("/removemessage/", checkAuth, (req, res) => {
+    kafka.make_request(DELETE_MESSAGE, req.body, function (err, results) {
         if (err) {
             res.status(400).send("Error in removing a message")
         } else {
@@ -98,8 +98,8 @@ router.put(DELETE_MESSAGE, checkAuth, (req, res) => {
 });
 
 // create a message
-router.put(CREATE_MESSAGE, checkAuth, (req, res) => {
-    kafka.make_request('group_add_message', req.body, function (err, results) {
+router.put("/message", checkAuth, (req, res) => {
+    kafka.make_request(CREATE_MESSAGE, req.body, function (err, results) {
         if (err) {
             res.status(400).send("Error in adding a message")
         } else {
@@ -109,7 +109,7 @@ router.put(CREATE_MESSAGE, checkAuth, (req, res) => {
 });
 
 // upload a profile picture 
-router.post(UPDATE_PROFILE_IMAGE, (req, res) => {
+router.post("/uploadprofileimage", (req, res) => {
     if (req.files === null) {
         res.status(400).send('No File Upload');
     }

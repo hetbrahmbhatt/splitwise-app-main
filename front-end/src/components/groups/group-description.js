@@ -72,6 +72,7 @@ export class GroupDescription extends Component {
     async componentDidMount() {
         axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;
+        // get total internal group balance
         const totalinternalGroupBalance = await axios
             .post(BACKEND_URL + "/expenses/internalgroupbalance/", this.state)
         this.setState(
@@ -79,10 +80,13 @@ export class GroupDescription extends Component {
                 totalInternalGroupBalance: totalinternalGroupBalance.data
             }
         )
+        // get group summary 
         axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;
         const groupSummary = await axios
-            .get(BACKEND_URL + "/groups/groupsummarybyid/" + this.state.groupID)        
+            .get(BACKEND_URL + "/groups/groupsummarybyid/" + this.state.groupID)  
+            
+        // if no data from back-end, set the empty flag
         if (groupSummary.data.length == 0) {
             if (groupSummary.data.length == 0) {
                 this.setState({
@@ -95,6 +99,8 @@ export class GroupDescription extends Component {
                 groupDescription: groupSummary.data,
             })
         }
+
+        // get total internal debt to display 
         axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;
         const internalDebtResponse = await axios.get(BACKEND_URL + "/expenses/totalinternaldebt/" + this.state.groupID)
@@ -112,6 +118,7 @@ export class GroupDescription extends Component {
     render() {
         let individualExpenseDetails = (<div>{
             this.state.totalInternalGroupBalance.map((exp, index) => {
+                // display the section according to user's owing
                 if (exp.currency == null || exp.amount == 0) {
                     return (
                         <span></span>
@@ -211,7 +218,7 @@ export class GroupDescription extends Component {
         let redirectVar = null
         if (!cookie.load("auth")) {
             redirectVar = <Redirect to="/login" />
-        }
+        } 
         if (this.state.emptyStateFlag) {
             groupDescriptionDetails = (
                 <div style={{ margin: "200px" }}>
@@ -408,7 +415,6 @@ const matchDispatchToProps = (dispatch) => {
     return {
         groupSummaryByIDAction: (data) => dispatch(groupSummaryByIDAction(data)),
         groupInternalDebtAction: (data) => dispatch(groupInternalDebtAction(data)),
-
     }
 }
 

@@ -1,5 +1,4 @@
 var connection =  new require('./kafka/connection');
-var mongoose = require('./config/db-config');
 //topic files
 //users
 var user_login = require('./services/users/user_login');

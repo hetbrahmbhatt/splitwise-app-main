@@ -3,8 +3,7 @@ const DebtsSchema = require('../../models/debts');
 const groupSchema = require('../../models/groups');
 const groupBalanceSchema = require('../../models/groupBalance');
 const recentActivitySchema = require('../../models/recentactivity');
-const userSchema = require('../../models/users');
-const groupSummarySchema = require('../../models/groupSummary');
+
 var ObjectId = require('mongodb').ObjectID;
 function handle_request(msg, callback) {
     let req = {

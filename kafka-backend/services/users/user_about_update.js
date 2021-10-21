@@ -1,6 +1,6 @@
 const userSchema = require('../../models/users');
 
-
+// update profile of a user
 function handle_request(msg, callback) {
     let req = {
         body: msg
@@ -19,7 +19,6 @@ function handle_request(msg, callback) {
                     }
                 }, { new: true }
             ).then(response => {
-                console.log("Update successfull", response)
                 callback(null, response)
             }).catch(error => {
                 console.log("Error in update", error)
@@ -29,32 +28,8 @@ function handle_request(msg, callback) {
         else{
             callback(error, null)
         }
-
     }
-
-    )
-    // userSchema.findOneAndUpdate({ email: req.body.email },
-    //     {
-    //         $set: {
-    //             name: req.body.name,
-    //             email: req.body.email,
-    //             defaultCurrency: req.body.defaultcurrency,
-    //             timezone: req.body.timezone,
-    //             language: req.body.language,
-    //             phoneno: req.body.phoneno
-    //         }
-    //     }, { new: true }
-    // ).then(response => {
-    //     console.log("Update successfull", response)
-    //     callback(null, response)
-    // }).catch(error => {
-    //     console.log("Error in update", error)
-    //     callback(error, null)
-    // })
-
-
-
-
+)
 }
 
 exports.handle_request = handle_request;

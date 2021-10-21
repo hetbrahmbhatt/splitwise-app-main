@@ -6,11 +6,12 @@ const recentActivitySchema = require('../../models/recentactivity');
 const userSchema = require('../../models/users');
 const groupSummarySchema = require('../../models/groupSummary');
 var ObjectId = require('mongodb').ObjectID;
+
+// add new expense
 function handle_request(msg, callback) {
     let req = {
         body: msg
     }
-    console.log("Response :-",req.body);
     groupSchema.find({ _id: req.body.groupID },
     ).then(doc => {
         let totalGroupMembers = doc[0].membersSchema.length;
@@ -25,7 +26,6 @@ function handle_request(msg, callback) {
         var groupMembersminusonee = totalGroupMembers - 1;
         let takingAmountForRecentActivitys = (groupMembersminusonee) * (req.body.amount / totalGroupMembers);
         if (Number.isInteger(takingAmountForRecentActivitys)) {
-
         }
         else {
             takingAmountForRecentActivitys = takingAmountForRecentActivitys.toString();
@@ -289,10 +289,7 @@ function handle_request(msg, callback) {
                         userSchema.findOneAndUpdate({ _id: req.body.userID }
                             , { $push: { debts: debts } }, { new: true }
                         ).then(doc => {
-
-                            // console.log("Logged in user", doc);
                         }).catch(error => {
-                            // res.status(400).send(error)
                         })
                     }
                     else {
@@ -341,18 +338,15 @@ function handle_request(msg, callback) {
                 userSchema.findOneAndUpdate({ _id: doc[0].membersSchema[i].userID }
                     , { $push: { debts: debts } }, { new: true }
                 ).then(doc => {
-                    // console.log("Other ID'S",doc[0].membersSchema[i].userID);
                     responsenew123.status(200).send(doc);
 
                 }).catch(error => {
-                    // res.status(400).send(error)
                 })
             }
         }
     }).catch(error => {
         console.log(error);
         callback(error, null)
-        // res.status(400).send(error)
     })
 }
 

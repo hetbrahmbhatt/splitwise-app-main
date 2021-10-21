@@ -1,4 +1,5 @@
-const userSchema = require('../../models/users');
+const userSchema = require('../../models/users'); 
+// get recent-activity of a user
 function handle_request(msg, callback) {
     let req = {
         params: msg

@@ -1,5 +1,7 @@
 
 const recentActivitySchema = require('../../models/recentactivity');
+
+// filter recent-activity based on the front-end feature
 function handle_request(msg, callback) {
     let req = {
         body: msg

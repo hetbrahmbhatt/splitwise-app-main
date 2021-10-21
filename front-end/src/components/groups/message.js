@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import Modal from 'react-modal';
-// import userMessageAction from '../../../actions/userMessageAction'
 import { connect } from "react-redux";
 import groupSummaryByIDAction from '../../actions/getGroupSummaryByGroupID'
 import userMessageAction from '../../actions/userMessageAction'
@@ -26,6 +24,8 @@ export class Messages extends Component {
             reply: e.target.value
         })
     }
+
+    // delete message 
     handDeleteMessage = (e) => {
         var answer = window.confirm("Are you sure you want to delete this comment?");
         if (answer) {
@@ -46,6 +46,8 @@ export class Messages extends Component {
         else {
         }
     }
+
+    // handle the reply 
     handleReply = () => {
         var data = {
             groupSummaryID: this.props.groupSumData._id,
@@ -60,7 +62,7 @@ export class Messages extends Component {
             this.setState({
                 conversations : this.props.messageData.messages
             })
-            this.refs.someText.value = "";
+            this.refs.someText.value = ""; // remove the value from the input 
         });
     }
     toggleMessagesPopUp = (e) => {
@@ -72,6 +74,7 @@ export class Messages extends Component {
     render() {
         let displayConversation = null
         let button = null;
+        // Display conversation accordingly
         displayConversation = this.state.conversations.map(conversation => {
             if (conversation.name == cookie.load('name')) {
                 button = <button onClick={this.handDeleteMessage} value={conversation._id} className="close"></button>

@@ -1,6 +1,4 @@
 
-const debtsSchema = require('../../models/groups');
-const userSchema = require('../../models/users');
 const groupSummarySchema = require('../../models/groupSummary');
 
 function handle_request(msg, callback) {

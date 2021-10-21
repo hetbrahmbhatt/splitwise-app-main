@@ -3,6 +3,7 @@ const userSchema = require('../../models/users');
 var jwt = require('jsonwebtoken');
 var { secret } = require('../../config/config');
 
+// signup functionality
 function handle_request(msg, callback) {
     let req = {
         body: msg

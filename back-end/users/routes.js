@@ -34,7 +34,7 @@ const s3 = new AWS.S3({
 var { auth, checkAuth } = require('../config/passport')
 auth();
 // signup
-router.post(USER_SIGNUP, (req, res) => {
+router.post('/signup', (req, res) => {
     kafka.make_request(USER_SIGNUP, req.body, function (err, results) {
         if (err) {
             res.status(400).send(err)
@@ -49,7 +49,7 @@ router.post(USER_SIGNUP, (req, res) => {
 })
 
 // login
-router.post(USER_LOGIN, (req, res) => {
+router.post("/login", (req, res) => {
     userSchema.findOne({ email: req.body.email }).then(doc => {
         if (bcrypt.compareSync(req.body.password, doc.password)) {
             let payload = {
@@ -73,8 +73,8 @@ router.post(USER_LOGIN, (req, res) => {
 });
 
 // fetch the details of an user 
-router.get(GET_USER_PROFILE, (req, res) => {
-    kafka.make_request('user_about_byID', req.params, function (err, results) {
+router.get("/userbyid/:id", (req, res) => {
+    kafka.make_request('GET_USER_PROFILE', req.params, function (err, results) {
         if (err) {
             res.status(400).send("Invalid Credentials")
         } else {
@@ -84,8 +84,8 @@ router.get(GET_USER_PROFILE, (req, res) => {
 });
 
 // get recent activity for a user
-router.post(GET_RECENT_ACTIVITY, checkAuth, (req, res) => {
-    kafka.make_request('user_get_recentActivity', req.params, function (err, results) {
+router.post("/recentactivity", checkAuth, (req, res) => {
+    kafka.make_request(GET_RECENT_ACTIVITY, req.params, function (err, results) {
         if (err) {
             res.status(400).send("Invalid Credentials")
         } else {
@@ -95,8 +95,8 @@ router.post(GET_RECENT_ACTIVITY, checkAuth, (req, res) => {
 })
 
 // edit the details of the user 
-router.put(EDIT_PROFILE, checkAuth, (req, res) => {
-    kafka.make_request('user_about_update', req.body, function (err, results) {
+router.put("/editprofile", checkAuth, (req, res) => {
+    kafka.make_request(EDIT_PROFILE, req.body, function (err, results) {
         if (results.email == req.body.originEmail) {
             res.status(400).send("Invalid Credentials");
         }
@@ -107,8 +107,8 @@ router.put(EDIT_PROFILE, checkAuth, (req, res) => {
 })
 
 // search the users by email
-router.get(SEARCH_USER_BY_EMAIL, checkAuth, (req, res) => {
-    kafka.make_request('user_search_email', req.query, function (err, results) {
+router.get("/searchbyemail", checkAuth, (req, res) => {
+    kafka.make_request(SEARCH_USER_BY_EMAIL, req.query, function (err, results) {
         if (err) {
             res.status(400).send("Invalid Credentials")
         } else {
@@ -118,8 +118,8 @@ router.get(SEARCH_USER_BY_EMAIL, checkAuth, (req, res) => {
 });
 
 // search the users by name
-router.get(SEARCH_USER_BY_NAME, checkAuth, (req, res) => {
-    kafka.make_request('user_search_name', req.query, function (err, results) {
+router.get("/searchbyname", checkAuth, (req, res) => {
+    kafka.make_request('SEARCH_USER_BY_NAME', req.query, function (err, results) {
         if (err) {
             res.status(400).send("Invalid Credentials")
         } else {
@@ -129,7 +129,7 @@ router.get(SEARCH_USER_BY_NAME, checkAuth, (req, res) => {
 });
 
 // upload the profile image seprarately
-router.post(UPLOAD_PROFILE_IMAGE, (req, res) => {
+router.post("/uploadprofileimage", (req, res) => {
     if (req.files === null) {
         res.status(400).send('No File Upload');
     }

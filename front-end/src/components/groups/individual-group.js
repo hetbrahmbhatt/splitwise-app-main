@@ -3,7 +3,6 @@ import { Redirect } from 'react-router'
 import cookie from "react-cookies";
 import BACKEND_URL from '../../config/config'
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import groupGetByIDAction from '../../actions/getGroupByIDAction'
 import { connect } from "react-redux";
 
@@ -15,15 +14,13 @@ export class IndividualGroup extends Component {
             invitedBy: "",
             groupName : this.props.groupID.groupName
         }
-
-
     }
     async componentDidMount() {
         this.setState({
             invitedBy: this.props.groupID.invitedBy,
             groupName: this.props.groupID.groupName,
         })
-    }
+    }    
     acceptButtonClick = e => {
         e.preventDefault();
         var object = {

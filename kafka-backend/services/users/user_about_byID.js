@@ -1,4 +1,6 @@
 const userSchema = require('../../models/users');
+
+//find a user by Id
 function handle_request(msg, callback) {
     let req = {
         params: msg

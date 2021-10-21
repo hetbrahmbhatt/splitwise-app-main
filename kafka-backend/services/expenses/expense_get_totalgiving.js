@@ -1,5 +1,7 @@
 
 const DebtsSchema = require('../../models/debts');
+
+// get total giving of a user
 function handle_request(msg, callback) {
     let req = {
         params: msg

@@ -1,5 +1,6 @@
 const userSchema = require('../../models/users');
 
+// find users with the same name
 function handle_request(msg, callback) {
     let req = {
         query: msg

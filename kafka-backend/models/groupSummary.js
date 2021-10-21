@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 var Schema = mongoose.Schema;
-var individialMessageSchema = new Schema({
+var individualMessageSchema = new Schema({
     name: String,
     message: String
 },{timestamps: true}
@@ -14,7 +14,7 @@ var groupSummary = new Schema({
     groupName: String,
     description: String,
     settleFlag: String,
-    messages: [individialMessageSchema],
+    messages: [individualMessageSchema],
 },{ timestamps: true }
 );
 module.exports = mongoose.model('groupSummary', groupSummary);  

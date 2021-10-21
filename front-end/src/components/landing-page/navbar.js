@@ -6,6 +6,7 @@ import splitwiseLogo from '../../images/splitwiseLogo.png'
 
 export class Navbar extends Component {
     render() {
+        // Render navbar based on authority
         if (cookie.load('auth')) {
             var name = cookie.load('name')
             return (
