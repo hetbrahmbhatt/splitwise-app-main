@@ -3,8 +3,6 @@ let initialState = {
     error: false,
 }
 var addActionReducer = (state = initialState, action) => {
-    console.log(action.payload)
-    // alert(JSON.stringify(action.payload));
     let newState = { ...state }
     switch (action.type) {
         case "expense_add_success":

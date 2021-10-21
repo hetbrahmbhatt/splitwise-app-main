@@ -13,7 +13,6 @@ var success = (response) => {
 }
 
 var error = (err) => {
-    console.log("err", err)
     return {
         type: SETTLE_UP_FAIL,
         payload: {
@@ -24,7 +23,6 @@ var error = (err) => {
 var settleupAction = (data) => (dispatch) => {
     axios.defaults.headers.common["authorization"] = cookie.load('token')
     axios.defaults.withCredentials = true;
-    console.log(data);
     return axios.post(BACKEND_URL + "/expenses/givingsettleup", data).then(response => {
 
         // window.location.reload();

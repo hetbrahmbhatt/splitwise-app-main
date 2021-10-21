@@ -3,7 +3,6 @@ let initialState = {
     error: false,
 }
 var searchEmailReducer = ( state = initialState, action ) => {
-    console.log(action.payload)
     let newState = { ...state }
     switch ( action.type ) {
         case "user_search_email_success":

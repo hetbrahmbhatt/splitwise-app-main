@@ -5,7 +5,6 @@ function handle_request ( msg, callback ) {
     let req = {
         query: msg
     }
-
     userSchema.find({ "email": { $regex: req.query.email_like } }).then(response => {
         callback( null, response )
     }
@@ -13,10 +12,6 @@ function handle_request ( msg, callback ) {
         console.log( "Error in update", error )
         callback( error, null )
     } )
-
-
-
-
 }
 
 exports.handle_request = handle_request;

@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import addExpenseAction from '../../actions/addExpenseAction'
 import { connect } from "react-redux";
-
+import { Redirect } from 'react-router'
 export class AddExpense extends Component {
     constructor(props) {
         super(props);
@@ -57,23 +57,21 @@ export class AddExpense extends Component {
             toast.error("Please enter description");
             return;
         }
-
         if (!this.state.amountFlag) {
             this.props.addExpenseAction(this.state).then(response => {
-                console.log("over here");
-                console.log(this.props.expenseData);
-                // window.location.assign('/gruoup-description');
             })
         }
         else {
             toast.error("Please enter an amount greater than 0");
-
         }
     }
     render() {
         let renderError = null;
         if (this.state.amountFlag) {
             renderError = <span style={{ marginTop: '-220px', color: "red" }}>Please enter positive value</span>
+        }
+        if (!(cookie.load("auth"))) {
+            return <Redirect to='/login' />
         }
         return (
             <div>
@@ -89,18 +87,7 @@ export class AddExpense extends Component {
                             All of <b>{this.state.groupName}</b>
                         </p>
                     </div>
-                    <div class="row" >
-                        <h1></h1>
-                    </div>
-                    <div class="row" >
-                        <h1></h1>
-                    </div>
-                    <div class="row" >
-                        <h1></h1>
-                    </div>
-                    <div class="row" >
-                        <div className="col-1">
-                        </div>
+                    <div class="row" ><div className="col-1"></div>
                         <div className="col-3">
                             <img src={description} width="100px" height="100px" alt="" />
                         </div>
@@ -118,19 +105,15 @@ export class AddExpense extends Component {
                     {renderError}
                     <ToastContainer />
                 </div>
-
             </div>
-
         )
     }
 }
 const matchStateToProps = (state) => {
-    console.log("inside matchStatetoProps", state)
     return {
         error: state.addExpenseReducer.error,
         expenseData: state.addExpenseReducer.expenseData
     }
-
 }
 const matchDispatchToProps = (dispatch) => {
     return {

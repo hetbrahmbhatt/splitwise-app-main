@@ -23,8 +23,6 @@ function handle_request(msg, callback) {
                 settleflag: 100
             })
             recentActivity.save().then(response => {
-                console.log(response);
-                console.log("Response saved Successfully");
             })
         }
     })
@@ -42,7 +40,6 @@ function handle_request(msg, callback) {
             }
         }
     ).then(response => {
-        console.log("Here is the response", response)
         groupBalanceSchema.find(
             {
                 userID: req.body.sessionID,
@@ -50,8 +47,6 @@ function handle_request(msg, callback) {
                 currency: req.body.currency
             }
         ).then(res => {
-            console.log("Response is", res[0]._id);
-            console.log("here");
             let newamount = res[0].amount;
             newamount = Number(newamount) - Number(amountToUpdate);
             console.log(res._id);
@@ -60,9 +55,8 @@ function handle_request(msg, callback) {
                 {
                     amount: newamount
                 }
-            ).then(resposne => {
-                console.log("G1 updated successfully")
-                if (resposne != null) {
+            ).then(response => {
+                if (response != null) {
                     groupBalanceSchema.find(
                         {
                             userID: req.body.userid,
@@ -70,7 +64,6 @@ function handle_request(msg, callback) {
                             currency: req.body.currency
                         }
                     ).then(res => {
-                        console.log("G2 updated successfully")
                         let newamount = res[0].amount;
                         newamount = Number(newamount) + Number(amountToUpdate)
                         groupBalanceSchema.findOneAndUpdate(
@@ -80,7 +73,6 @@ function handle_request(msg, callback) {
                             }
                         ).then(response => {
                             callback(null, response)
-                            // response123.status(200).send(response);
                         })
                     }
                     )

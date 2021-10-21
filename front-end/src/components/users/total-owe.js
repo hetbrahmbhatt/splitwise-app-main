@@ -8,7 +8,6 @@ import { connect } from "react-redux";
 export class TotalOwe extends Component {
     constructor(props) {
         super(props)
-        console.log(this.props.totalOweData);
         if (this.props.totalOweData.userID1 == cookie.load('id')) {
             this.state = {
                 groupName: this.props.totalOweData.groupName,
@@ -40,31 +39,25 @@ export class TotalOwe extends Component {
     handleSubmit = e => {
         e.preventDefault();
         this.props.owingSettleUpAction(this.state).then(response => {
-
-            console.log(this.props.owingData);
-
+            
         })
 
     }
     render() {
-        console.log(this.state);
         let amountData = null;
         if (this.state.amount < 0) {
             amountData = <div className="col-3">
                 <div style={{ marginLeft: "10px", marginTop: "20px", color: "#20BF9F" }}><strong>{this.state.currency}{-1 * this.state.amount}</strong></div>
-
             </div>
         }
         else {
             amountData = <div className="col-3">
                 <div style={{ marginLeft: "10px", marginTop: "20px", color: "#20BF9F" }}><strong>{this.state.currency}{this.state.amount}</strong></div>
-
             </div>
         }
         return (
             <form onSubmit={this.handleSubmit} id="totalOwe">
                 <div style={{ margin: "50px" }} >
-
                     <div className="row" style={{ backgroundColor: "#fafafa" }}>
                         <div className="col-2">
                             <img
@@ -78,7 +71,6 @@ export class TotalOwe extends Component {
                         {amountData}
                         <span style={{ marginTop: "20px" }} >IN</span>
                         <div className="col-3">
-
                             <div style={{ marginLeft: "10px", marginTop: "20px" }}><strong>{this.state.groupName}</strong></div>
                         </div>
                     </div>
@@ -87,26 +79,18 @@ export class TotalOwe extends Component {
                     </div>
                 </div>
                 <ToastContainer />
-
             </form>
-
         )
     }
 }
-
-
 const matchStateToProps = (state) => {
-    console.log("inside matchStatetoProps", state)
     return {
         owingData: state.owingSettleUpReducer.owingsettleUpData
     }
-
 }
 const matchDispatchToProps = (dispatch) => {
-    // console.log(dispatch)
     return {
         owingSettleUpAction: (data) => dispatch(owingSettleUpAction(data)),
     }
 }
-
 export default connect(matchStateToProps, matchDispatchToProps)(TotalOwe)

@@ -4,8 +4,6 @@ let initialState = {
     message: ""
 }
 var owingSettleUpReducer = (state = initialState, action) => {
-    console.log(action.payload)
-    // alert(JSON.stringify(action.payload));
     let newState = { ...state }
     switch (action.type) {
         case "owing_settle_up_success":

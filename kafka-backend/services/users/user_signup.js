@@ -8,7 +8,6 @@ function handle_request(msg, callback) {
         body: msg
     }
     bcrypt.hash(req.body.password, 10, (err, hash) => {
-
         let user = new userSchema({
             name: req.body.name,
             email: req.body.email,
@@ -18,8 +17,6 @@ function handle_request(msg, callback) {
             image: "",
         })
         user.save().then(response => {
-            console.log("Signup successful")
-            console.log(response);
             let payload = {
                 _id: response._id,
                 email: response.email,
@@ -30,11 +27,8 @@ function handle_request(msg, callback) {
             let token = jwt.sign(payload, secret, {
                 expiresIn: 1008000
             })
-            // res.status(200).send("Bearer " + token)
-            console.log("Signup successfull")
             callback(null, "Bearer " + token)
         }).catch(error => {
-            console.log("Error", error)
             callback(error, null)
         })
     });

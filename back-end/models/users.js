@@ -55,7 +55,7 @@ var recentactivity = new Schema({
 
 var userSchema = new Schema({
     name: String,
-    email: { type: String, unique: true },
+    email: { type: String, unique: true ,index: true, dropDups: true},
     password: String,
     language: String,
     timezone:  {type: String, default: "America/Los_Angeles" },
@@ -70,5 +70,6 @@ var userSchema = new Schema({
 }
     , { collection: 'users' }
 );
+mongoose.model('userSchema', userSchema).createIndexes();
 
 module.exports = mongoose.model('userSchema', userSchema);  

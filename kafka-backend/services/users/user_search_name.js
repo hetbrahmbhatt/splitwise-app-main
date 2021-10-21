@@ -1,6 +1,5 @@
 const userSchema = require('../../models/users');
 
-
 function handle_request(msg, callback) {
     let req = {
         query: msg
@@ -9,12 +8,8 @@ function handle_request(msg, callback) {
         callback(null, response)
     }
     ).catch(error => {
-        console.log("Error in update", error)
         callback(error, null)
     })
-
-
-
 
 }
 

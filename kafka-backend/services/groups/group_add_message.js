@@ -1,4 +1,3 @@
-const userSchema = require('../../models/users');
 var ObjectId = require('mongodb').ObjectID;
 const recentActivitySchema = require('../../models/recentactivity');
 const groupSchema = require('../../models/groups');
@@ -51,7 +50,6 @@ function handle_request(msg, callback) {
             }
         }
     }).catch(error => {
-        console.log("Error in Fetching Group Summary", error)
     })
 
     newRecentActivity.save().then(response => {
@@ -60,7 +58,6 @@ function handle_request(msg, callback) {
         , { $push: { messages: messageData } }, { new: true }
     ).then(doc => {
         callback(null, doc)
-        console.log("Notes/Comments Added", doc)
     }).catch(error => {
         callback(error, null)
     })

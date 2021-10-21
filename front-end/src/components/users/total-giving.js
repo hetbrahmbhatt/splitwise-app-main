@@ -1,16 +1,13 @@
 import React, { Component } from 'react'
 import cookie from "react-cookies";
 import profilePhoto from '../../images/profile-icon.png'
-import axios from 'axios';
-import BACKEND_URL from '../../config/config';
 import givingSettleUpAction from '../../actions/givingSettleUpAction';
 import { connect } from "react-redux";
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 export class TotalGiving extends Component {
     constructor(props) {
         super(props)
-        console.log(this.props.totalGiveData);
         if (this.props.totalGiveData.userID1 == cookie.load('id')) {
             this.state = {
                 userid: this.props.totalGiveData.userID2,
@@ -40,40 +37,23 @@ export class TotalGiving extends Component {
     };
     handleSubmit = e => {
         e.preventDefault();
-        // alert("Hi");
         this.props.givingSettleUpAction(this.state).then(response => {
-
         })
-        // axios.post(BACKEND_URL + "/expenses/givingsettleup", this.state).then(response => {
-        //     window.location.reload();
-        //     if (response) {
-        //         toast.success("You are all settled up.Please reload the page to update the status.");
-        //     }
-        //     else {
-
-        //     }
-        // });
-
-        console.log(this.state);
     }
     render() {
-        console.log(this.state);
         let amountData = null
         if (this.state.amount < 0) {
             amountData = <div className="col-3">
                 <div style={{ marginLeft: "10px", marginTop: "20px", color: "#FF8C00" }}><strong>{this.state.currency}{-1 * this.state.amount}</strong></div>
-
             </div>
         }
         else {
             amountData = <div className="col-3">
                 <div style={{ marginLeft: "10px", marginTop: "20px", color: "#FF8C00" }}><strong>{this.state.currency}{this.state.amount}</strong></div>
-
             </div>
         }
         return (
             <form onSubmit={this.handleSubmit} id="totalOwe">
-
                 <div style={{ margin: "50px" }} >
                     <div className="row" style={{ backgroundColor: "#fafafa" }}>
                         <div className="col-2">                            <img
@@ -85,30 +65,24 @@ export class TotalGiving extends Component {
                         {amountData}
                         <span style={{ marginTop: "20px" }} >IN</span>
                         <div className="col-3">
-
                             <div style={{ marginLeft: "10px", marginTop: "20px" }}><strong>{this.state.groupName}</strong></div>
                         </div>
                     </div>
                     <div className="row" style={{ marginLeft: "200px", marginTop: "30px" }}>
                         <button type="submit" style={{ backgroundColor: "#FF8C00" }} class="btn btn-primary btn-sm" onSubmit={this.handleSubmit}>Settle-Up</button>
                         <ToastContainer />
-
                     </div>
                 </div>
             </form>
         )
     }
 }
-
 const matchStateToProps = (state) => {
-    console.log("inside matchStatetoProps", state)
     return {
         error: state.recentActivityReducer.error,
         expenseDaata: state.recentActivityReducer.userData,
         groupData: state.getByIDReducer.userData
-
     }
-
 }
 const matchDispatchToProps = (dispatch) => {
     return {

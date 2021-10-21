@@ -1,6 +1,5 @@
 
 const debtsSchema = require('../../models/groups');
-const userSchema = require('../../models/users');
 function handle_request(msg, callback) {
     let req = {
         body: msg
@@ -12,11 +11,8 @@ function handle_request(msg, callback) {
             }
         }
     ).then(doc => {
-        console.log("Update successful")
-        console.log(doc);
         callback(null, doc)
     }).catch(error => {
-        console.log("Error in update", error)
         callback(err, null)
     })
 }

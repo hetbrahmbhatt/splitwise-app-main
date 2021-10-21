@@ -1,6 +1,5 @@
 
 const debtsSchema = require('../../models/debts');
-
 const userSchema = require('../../models/users');
 
 function handle_request(msg, callback) {
@@ -21,7 +20,6 @@ function handle_request(msg, callback) {
             }
         ]
     }).then(response => {
-
         if (response.length != 0) {
             callback(err, null)
         }

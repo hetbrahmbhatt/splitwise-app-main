@@ -24,7 +24,6 @@ export class Routing extends Component {
                 <Route path='/login' component={login} />
                 <Route path='/logout' component={logout} />
                 <Route path='/profile' component={Profile} />
-                {/* <Route path='/dashboard' component={Dashboard} /> */}
                 <Route path='/dashboard' component={Dashboard} />
 
                 {/* Group */}

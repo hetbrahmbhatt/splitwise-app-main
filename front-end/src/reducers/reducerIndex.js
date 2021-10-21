@@ -13,12 +13,8 @@ import addExpenseReducer from './expenseReducers.js/addExpenseReducer';
 import groupSummaryByIDReducer from './groupsReducers/groupSummaryByIDReducer';
 import getInternalDebtReducer from './groupsReducers/getInternalDebtReducer';
 import userMessageReducer from './userReducers/userMessageReducer';
-
 import settleUpReducer from './expenseReducers.js/settleUpReducer';
-
-
 import owingSettleUpReducer from './expenseReducers.js/owingSettleUpReducer';
-
 
 var rootReducer = combineReducers({
     SignUpReducer: SignUpReducer,
@@ -35,9 +31,8 @@ var rootReducer = combineReducers({
     groupSummaryByIDReducer: groupSummaryByIDReducer,
     getInternalDebtReducer: getInternalDebtReducer,
     userMessageReducer: userMessageReducer,
-    settleUpReducer : settleUpReducer,
-    owingSettleUpReducer : owingSettleUpReducer
-
+    settleUpReducer: settleUpReducer,
+    owingSettleUpReducer: owingSettleUpReducer
 });
 
 export default rootReducer

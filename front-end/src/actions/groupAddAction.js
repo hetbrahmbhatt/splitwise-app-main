@@ -16,7 +16,6 @@ var success = (response) => {
 }
 
 var error = (err) => {
-    console.log("err", err)
     return {
         type: GROUP_ADD_FAIL,
         payload: {
@@ -30,7 +29,6 @@ var groupAddAction = (data) => (dispatch) => {
     axios
         .post(BACKEND_URL + "/groups/new", data).then(response => {
             if (response.status === 200) {
-                // alert("HI");
                 window.location.assign("/all-group");
             }
 

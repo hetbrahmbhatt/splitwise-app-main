@@ -4,7 +4,6 @@ function handle_request(msg, callback) {
         params: msg
     }
     userSchema.find({ _id: req.body.userID }).then(docs => {
-        console.log(docs);
         callback(null, docs)
     }).catch(error => {
         callback(error, null)

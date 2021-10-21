@@ -19,22 +19,13 @@ export class IndividualGroup extends Component {
 
     }
     async componentDidMount() {
-        console.log(this.props);
-        console.log(this.state)
         this.setState({
             invitedBy: this.props.groupID.invitedBy,
             groupName: this.props.groupID.groupName,
         })
-        // this.props.groupGetByIDAction(this.props.groupID.groupID).then(response => {
-        //     this.setState({
-        //         invitedBy: this.props.groupID.invitedBy,
-        //         // groupName: this.props.groupData[0].groupName
-        //     })
-        // })
     }
     acceptButtonClick = e => {
         e.preventDefault();
-        console.log(this.state);
         var object = {
             userID: cookie.load('id'),
             groupID: this.state.groupID,
@@ -42,23 +33,10 @@ export class IndividualGroup extends Component {
             userName: cookie.load('name'),
             groupName : this.state.groupName
         }
-        // this.props.callGroups();
         axios
             .put(BACKEND_URL + "/groups/invite", object).then(response => {
                 if (response.status == 200) {
-                    console.log(response.data);
                     window.location.assign('/all-group');
-                    // this.props.groupGetByIDAction(this.props.groupID.groupID).then(response => {
-                    //     console.log(this.props.groupData[0].groupName);
-                    //     this.setState({
-                    //         invitedBy: this.props.groupID.invitedBy,
-                    //         groupName: this.props.groupData[0].groupName
-                    //     })
-                    // })
-                    // toast.success("You are added to " + this.state.groupName + " successfully. Please reload to update status");
-
-                    //window.location.reload();
-
                 }
             });
     }
@@ -72,7 +50,6 @@ export class IndividualGroup extends Component {
         axios
             .put(BACKEND_URL + "/groups/invite", object).then(response => {
                 if (response.status == 200) {
-                    console.log(response.data);
                     window.location.reload();
                 }
             });
@@ -80,20 +57,16 @@ export class IndividualGroup extends Component {
     displayPicture = (name, groupID) => {
         if (name == null) {
             var groupImagePath = BACKEND_URL + "/images/avatar.png"
-
         }
         else {
             var groupImagePath = BACKEND_URL + "/images/grouppics/" + groupID + '/' + name
         }
         return (
-
             <img src={groupImagePath} width="80px" height="80px" alt="" />
-
         )
     }
 
     render() {
-        console.log(this.props);
         if (!(cookie.load("auth"))) {
             return <Redirect to='/login' />
         }
@@ -137,13 +110,10 @@ export class IndividualGroup extends Component {
                     </div>
                 </div>
             </div >
-
         )
     }
 }
-
 const matchStateToProps = (state) => {
-    console.log("inside matchStatetoProps", state)
     return {
         error: state.getGroupByIDReducer.error,
         groupData: state.getGroupByIDReducer.groupData

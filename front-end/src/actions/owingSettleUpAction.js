@@ -11,9 +11,7 @@ var success = (response) => {
         }
     }
 }
-
 var error = (err) => {
-    console.log("err", err)
     return {
         type: OWING_SETTLE_UP_FAIL,
         payload: {
@@ -24,12 +22,8 @@ var error = (err) => {
 var owingsettleupAction = (data) => (dispatch) => {
     axios.defaults.headers.common["authorization"] = cookie.load('token')
     axios.defaults.withCredentials = true;
-    console.log(data);
     return axios.post(BACKEND_URL + "/expenses/owingsettleup", data).then(response => {
-
-        // window.location.reload();
         dispatch(success(response));
-
     }).catch((err) => {
         dispatch(error(err))
     });

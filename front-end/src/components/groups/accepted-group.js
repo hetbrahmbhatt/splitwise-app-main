@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import Modal from 'react-modal';
 import _ from 'lodash';
 import EditGroup from './edit-group';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 export class AcceptedGroup extends Component {
     constructor(props) {
@@ -22,10 +22,8 @@ export class AcceptedGroup extends Component {
         }
     }
     async componentDidMount() {
-        console.log(this.state.groupID);
         axios
             .get(BACKEND_URL + "/groups/groupbyid/" + this.state.groupID).then(response => {
-                console.log(response.data);
                 if (response.status === 200) {
                     this.setState({
                         groupName: response.data[0].groupName,
@@ -33,6 +31,7 @@ export class AcceptedGroup extends Component {
                     })
                 }
             }).catch((err) => {
+                
             });
     }
     toggleGroupPopUp = (e) => {
@@ -41,7 +40,6 @@ export class AcceptedGroup extends Component {
         })
     }
     leaveGroup = (e) => {
-        console.log(this.state);
         var obj = {
             userID: cookie.load('id'),
             groupID: this.state.groupID
@@ -60,19 +58,15 @@ export class AcceptedGroup extends Component {
     displayPicture = (name, groupID) => {
         if (name == null) {
             var groupImagePath = BACKEND_URL + "/images/avatar.png"
-
         }
         else {
             var groupImagePath = BACKEND_URL + "/images/grouppics/" + groupID + '/' + name
         }
         return (
-
             <img src={groupImagePath} width="80px" height="80px" alt="" />
-
         )
     }
     render() {
-        console.log(this.state);
         let invitedDivision = null
         if (!(cookie.load("auth"))) {
             return <Redirect to='/login' />
@@ -125,7 +119,6 @@ export class AcceptedGroup extends Component {
                         <div className="row p-1 m-3"><h2>{this.state.groupName}</h2></div>
                     </div>
                     {invitedDivision}
-
                 </div>
                 <div className="row p-4" style={{ marginLeft: "50px" }}>
                     <div className="col-2">

@@ -15,7 +15,6 @@ var success = (response) => {
 }
 
 var error = (err) => {
-    console.log("err", err)
     return {
         type: USER_SEARCH_EMAIL_FAILED,
         payload: {
@@ -27,14 +26,11 @@ var getAutoCompleteEmail = (data,callback) => (dispatch) => {
     axios.defaults.headers.common["authorization"] = cookie.load('token')
     axios.defaults.withCredentials = true;
     axios.get(BACKEND_URL + "/users/searchbyemail?email_like=" + data).then((response) => {
-        console.log("hi");
-        console.log(response.data);
-        var x = response.data.map(i => ({
+        let obj = response.data.map(i => ({
             label: i.email,
             value: i._id
         }));
-        console.log(x);
-        dispatch(success(response.data, data));
+        dispatch(success(response.data, obj));
 
     }).catch((err) => {
         dispatch(error(err, data));

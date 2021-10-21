@@ -3,7 +3,6 @@ let initialState = {
     error: false,
 }
 var recentActivityReducer = ( state = initialState, action ) => {
-    console.log(action.payload)
     let newState = { ...state }
     switch ( action.type ) {
         case "recent_activity_success":

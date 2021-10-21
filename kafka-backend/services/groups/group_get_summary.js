@@ -8,9 +8,9 @@ function handle_request(msg, callback) {
         params: msg
     }
     groupSummarySchema.find({ groupID: req.params.id }).sort({ createdAt: '-1' }).then(docs => {
-        callback(null , docs)
+        callback(null, docs)
     }).catch(error => {
-        callback(error , null)
+        callback(error, null)
     })
 }
 

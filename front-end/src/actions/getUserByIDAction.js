@@ -15,7 +15,6 @@ var success = (response) => {
 }
 
 var error = (err) => {
-    console.log("err", err)
     return {
         type: USER_GET_FAIL,
         payload: {
@@ -26,11 +25,9 @@ var error = (err) => {
 var userGetByIDAction = (data) => (dispatch) => {
     axios.defaults.headers.common["authorization"] = cookie.load('token')
     axios.defaults.withCredentials = true;
-    console.log(data);
     return axios
         .get(BACKEND_URL + "/users/userbyid/" + cookie.load('id')).then(response => {
             if (response.status === 200) {
-                console.log(response.data)
                 dispatch(success(response, data));
 
             }

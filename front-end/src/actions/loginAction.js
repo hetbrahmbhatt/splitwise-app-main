@@ -71,7 +71,7 @@ var loginAction = (data) => (dispatch) => {
                 dispatch(successUser(response, data));
             }
         })
-        .catch((err) => {
+        .catch((err) => {   
             dispatch(errorUser(err, data))
         });
 }

@@ -21,7 +21,8 @@ export class Profile extends Component {
         updatedProfileImage: "",
         profileImagePath: "",
         emailError: false,
-        error: false
+        error: false,
+        originEmail : cookie.load('email')
     }
     handleEmailChange = inp => {
         console.log(inp.target.name, inp.target.value);
@@ -135,11 +136,7 @@ export class Profile extends Component {
                         toast.error("Error in image upload")
                     })
             }
-            console.log(this.state);
-            this.props.updateUserProfileAction(this.state).then(response => {
-
-                console.log(this.props.user)
-
+            this.props.updateUserProfileAction(this.state).then(response => {s
                 this.setState(
                     {
                         name: this.props.user.name,
@@ -156,13 +153,10 @@ export class Profile extends Component {
     }
     async componentDidMount() {
         try {
-            console.log(this.props);
             const userID = cookie.load("id")
-            console.log(userID);
             axios.defaults.headers.common["authorization"] = cookie.load('token')
             axios.defaults.withCredentials = true;
             const response = await axios.get(BACKEND_URL + "/users/userbyid/" + userID);
-            console.log(response);
             this.setState({
                 userID: response.data._id,
                 name: response.data.name,
@@ -185,13 +179,12 @@ export class Profile extends Component {
             }
         }
         catch (err) {
-            console.log(err)
+            alert("Error in uploading files")
         }
 
     }
 
     render() {
-        console.log(this.state);
         var redirectTo = null;
         var emailError = null;
         const currency = [
@@ -236,7 +229,6 @@ export class Profile extends Component {
             { value: 'Chinese', label: 'Chinese' },
             { value: 'Mandarin', label: 'Mandarin' },
             { value: 'French', label: 'French' },
-
         ]
         if (!(cookie.load("auth"))) {
             redirectTo = <Redirect to="/" />
@@ -295,10 +287,9 @@ export class Profile extends Component {
                                 <div className="row" style={{ "marginLeft": '-300px', "marginTop": '30px' }}>
                                     <div className="col-3">
                                         <label>Your Phone No:</label>
-                                        <input type="text" className="form-control" name="phoneno"
+                                        <input type="number" className="form-control" name="phoneno"
                                             placeholder={this.state.phoneno} onChange={this.handleNumberChange} />
                                     </div>
-
                                     <div className="col-3" style={{ "marginTop": "30px" }}>
                                         <Select
                                             options={language}
@@ -307,7 +298,6 @@ export class Profile extends Component {
                                     </div>
                                 </div>
                                 {renderError}
-
                                 <button type="submit" className="btn btn-success" style={{ "backgroundColor": "#FF8C00", "marginTop": "100px", "marginLeft": "-100px" }} onSubmit={this.handleSubmit}>Save</button>
                             </form>
                         </div>
@@ -318,19 +308,14 @@ export class Profile extends Component {
     }
 }
 const matchStateToProps = (state) => {
-    console.log("inside matchStatetoProps", state)
     return {
         user: state.getUserProfileReducer.userData,
         profileImagePath: state.getUserProfileReducer.profileImagePath,
-
     }
-
 }
 const matchDispatchToProps = (dispatch) => {
-    // console.log(dispatch)
     return {
         updateUserProfileAction: (data) => dispatch(updateUserProfileAction(data)),
     }
 }
-
 export default connect(matchStateToProps, matchDispatchToProps)(Profile)

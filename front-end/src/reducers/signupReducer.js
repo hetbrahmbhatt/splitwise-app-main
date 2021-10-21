@@ -18,5 +18,4 @@ var userSignUp = (state = initialState, action) => {
             return newState;
     }
 }
-
 export default userSignUp

@@ -2,7 +2,6 @@ let initialState = {
     id: "",
 }
 var login = (state = initialState, action) => {
-    console.log(action);
     let newState = { ...state }
     switch (action.type) {
         case "login_success":

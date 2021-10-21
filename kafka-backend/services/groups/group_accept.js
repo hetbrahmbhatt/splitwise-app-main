@@ -43,22 +43,17 @@ function handle_request(msg, callback) {
                     ).then(doc => {
 
                     })
-                    console.log("Update successful")
-                    console.log(response);
                     callback(null, response)
                 }).catch(error => {
-                    console.log("Error in update", error)
                     callback(null, doc)
                 })
                 // res.status( 200 ).send( doc );
             }).catch(error => {
-                console.log("error", error);
                 // res.status( 400 ).send( "Error following" );
             })
         })
     }
     if (req.body.type == "ignore") {
-        console.log("In ignore");
         userSchema.findOneAndUpdate({ _id: userID }
             , { $pull: { invitedGroups: { groupID: req.body.groupID } } }, { new: true }
         ).then(doc => {

@@ -3,7 +3,6 @@ let initialState = {
     error: false,
 }
 var getTotalInternalDebt = (state = initialState, action) => {
-    console.log(action.payload)
     let newState = { ...state }
     switch (action.type) {
         case "debt_get_success":

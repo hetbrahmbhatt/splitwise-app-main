@@ -34,8 +34,6 @@ export class RecentActivity extends Component {
         }
     }
     handleChange = e => {
-        console.log("here")
-        console.log(e.value);
         this.setState({
             activitiesValue: e.value,
             activitiesFlag: true,
@@ -48,29 +46,21 @@ export class RecentActivity extends Component {
             orderBy: '-1',
             userID: cookie.load('id'),
         }
-
-        console.log(this.state);
         this.props.recentactivityAction(object).then(response => {
-            console.log(this.props.userData);
             this.setState({
                 recentactivity: this.props.userData.data
             })
         })
     }
     handlePageClick = (e) => {
-        alert(this.state.perPage);
         this.setState({
             offset: this.state.perPage * e.selected,
         })
-
     };
     handlePaginationChange = (e) => {
-        console.log(e);
-        alert(e.value);
         this.setState({
             perPage: Number(e.value),
         })
-
     };
     handleOrderByChange = e => {
         this.setState({
@@ -86,7 +76,6 @@ export class RecentActivity extends Component {
                 activitiesFlag: true
             }
             this.props.recentactivityAction(obj).then(response => {
-                console.log(this.props.userData);
                 this.setState({
                     recentactivity: this.props.userData.data
                 })
@@ -100,7 +89,6 @@ export class RecentActivity extends Component {
                 activitiesFlag: false
             }
             this.props.recentactivityAction(obj).then(response => {
-                console.log(this.props.userData);
                 this.setState({
                     recentactivity: this.props.userData.data
                 })
@@ -111,23 +99,14 @@ export class RecentActivity extends Component {
         axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;
         const groups = await axios.get(BACKEND_URL + '/users/userbyid/' + cookie.load('id'));
-        console.log(groups.data);
         if (groups.data.acceptedGroups.length != 0) {
             for (let i = 0; i < groups.data.acceptedGroups.length; i++) {
                 const data = await axios.get(BACKEND_URL + '/groups/groupbyid/' + groups.data.acceptedGroups[i].groupID);
-                console.log(data);
                 this.setState({
                     groups: [...this.state.groups, data.data]
-
                 })
-
             }
         }
-
-        // this.setState({
-        //     groups: groups.data[0].acceptedGroups
-        // })
-        // console.log(groups.data[0].acceptedGroups);
         this.props.recentactivityAction(this.state).then(response => {
             console.log(this.props.userData.data);
             if (this.props.userData.data.length == 0) {
@@ -144,20 +123,15 @@ export class RecentActivity extends Component {
             }
         })
         this.props.groupGetByIDAction(cookie.load('id'));
-        console.log(this.props);
-
     }
     onClear = () => {
         window.location.reload();
     };
     render() {
-        console.log("State Options", this.state);
-        console.log("Recent Activity Details", this.state.recentactivity.length)
         let redirectTo = null;
         if (!(cookie.load("auth"))) {
             redirectTo = <Redirect to="/" />
         }
-        console.log(this.state);
         let orderByOptions = [
             { value: '-1', label: 'Most Recent First' },
             { value: '1', label: 'Most Recent Last' },
@@ -166,7 +140,6 @@ export class RecentActivity extends Component {
             { value: '2', label: '2' },
             { value: '5', label: '5' },
             { value: '10', label: '10' },
-
         ]
         let groupOptions = this.state.groups.map(function (group) {
             return { value: group[0]._id, label: group[0].groupName };
@@ -179,7 +152,6 @@ export class RecentActivity extends Component {
                     <h4 style={{ font: "Bookman" }}>Sorry, no activities yet to display!!</h4>
                 </div>
             )
-
         }
         else {
             recentactivityDetails = this.state.recentactivity.slice(this.state.offset, this.state.offset + this.state.perPage).map((group, index) => {
@@ -201,7 +173,6 @@ export class RecentActivity extends Component {
                 if (Number(group.settleflag) > 0) {
                     groupDivision = <p style={{ fontSize: "20px" }}><b>{group.userName} in <b>"{group.groupName}".</b></b></p>
                     groupPayingDivision = <div style={{ 'color': '#20BF9F', fontSize: "18px" }}><b> {group.currency} {group.amount > 0 ? group.amount : -1 * group.amount} {' '}dues cleared  </b></div>
-
                 }
                 else if (Number(group.commentFlag) == 1) {
                     if (group.userName == cookie.load('name')) {
@@ -209,12 +180,10 @@ export class RecentActivity extends Component {
                     }
                     else {
                         groupDivision = <p style={{ fontSize: "20px" }}><b>"{group.userName}"</b> added a comment <b>"{group.message}"</b> in <b>"{group.groupName}".</b></p>
-
                     }
                 }
                 else {
                     if (group.payeeID == cookie.load('id')) {
-                        // amount = group.amount.toFixed(2);
                         amount = group.amount.toString();
                         amount = amount.slice(0, (amount.indexOf(".")) + 3);
                         groupDivision = <p style={{ fontSize: "20px" }}><b>You</b> updated <b>"{group.description}"</b> in <b>"{group.groupName}". </b></p>
@@ -228,10 +197,8 @@ export class RecentActivity extends Component {
                         amount = -1 * amount;
                         groupDivision = <p style={{ fontSize: "18px" }}><b>"{group.userName}"</b> added <b>"{group.description}"</b> in <b>"{group.groupName}".</b></p>
                         groupPayingDivision = <div style={{ 'color': '#FF8C00', fontSize: "18px" }}><b>You owe {group.currency} {amount}</b></div>
-
                     }
                 }
-
                 return (
                     <div>
                         <div className="row" className="row" style={{ height: "100px", borderBottom: "0.01px solid lightgrey", borderLeft: "0.01px solid lightgrey", borderRight: "0.01px solid lightgrey", borderWidth: "thin", marginLeft: "-14px", height: "130px" }}>
@@ -254,11 +221,9 @@ export class RecentActivity extends Component {
         }
         let pageCount = null;
         pageCount = Math.ceil(this.state.recentactivity.length / this.state.perPage)
-        console.log(this.state.perPage)
         return (
             <div className="row">
                 {redirectTo}
-
                 <div className="col-3 p-1 m-3">
                     <Select
                         style={{ width: "300px", marginLeft: "-30px" }}
@@ -276,8 +241,6 @@ export class RecentActivity extends Component {
                         placeholder="Select Order by"
                         options={orderByOptions}
                     />
-
-
                     <button class="btn btn-info" style={{ marginLeft: "100px", marginTop: "20px", backgroundColor: "#20BF9F" }} onClick={this.onClear}>Clear Value</button>
                     <h4>Pagination Options</h4>
                     <Select
@@ -289,9 +252,7 @@ export class RecentActivity extends Component {
                         defaultValue={{ label: "2", value: "2" }}
                     />
                 </div>
-
                 <div className="col-6">
-
                     <div className="row" style={{ height: "80px", backgroundColor: "whitesmoke" }}>
                         <strong style={{ margin: "20px", fontSize: "30px" }}>Recent Activity</strong>
                     </div>
@@ -316,14 +277,11 @@ export class RecentActivity extends Component {
     }
 }
 const matchStateToProps = (state) => {
-    console.log("inside matchStatetoProps", state)
     return {
         error: state.recentActivityReducer.error,
         userData: state.recentActivityReducer.userData,
         groupData: state.getByIDReducer.userData
-
     }
-
 }
 const matchDispatchToProps = (dispatch) => {
     return {

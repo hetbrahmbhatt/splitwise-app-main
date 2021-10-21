@@ -9,8 +9,6 @@ var user_about_update = require('./services/users/user_about_update');
 var user_get_recentActivity = require('./services/users/user_get_recentActivity');
 var user_search_email = require('./services/users/user_search_email');
 var user_search_name = require('./services/users/user_search_name');
-var user_upload_picture = require('./services/users/user_upload_picture');
-
 
 
 //groups
@@ -24,9 +22,7 @@ var group_add_message = require('./services/groups/group_add_message');
 var group_remove_message = require('./services/groups/group_remove_message');
 
 
-
 //messages
-
 var expense_new = require('./services/expenses/expense_new');
 var expense_get_totalgiving = require('./services/expenses/expense_get_totalgiving');
 var expense_get_totalowing = require('./services/expenses/expense_get_totalowing');
@@ -36,18 +32,14 @@ var expense_owing_settleup = require('./services/expenses/expense_owing_settleup
 var expense_filter_recentActivity = require('./services/expenses/expense_filter_recentActivity');
 var expense_get_positivetotalbalance = require('./services/expenses/expense_get_positivetotalbalance');
 var expense_get_totalinternalbalance = require('./services/expenses/expenses_get_totalinternalbalance');
+
+
 function handleTopicRequest(topic_name, fname) {
-    //var topic_name = 'root_topic';
     var consumer = connection.getConsumer(topic_name);
     var producer = connection.getProducer();
-    console.log('server is running ');
     consumer.on('message', function (message) {
-        console.log('message received for ' + topic_name + " ", fname);
-        console.log(JSON.stringify(message.value));
         var data = JSON.parse(message.value);
-
         fname.handle_request(data.data, function (err, res) {
-            console.log('after handle' + res);
             var payloads = [
                 {
                     topic: data.replyTo,
@@ -59,15 +51,11 @@ function handleTopicRequest(topic_name, fname) {
                 }
             ];
             producer.send(payloads, function (err, data) {
-                console.log(data);
             });
             return;
         });
-
     });
 }
-
-
 
 //users
 handleTopicRequest("user_login", user_login)
@@ -77,7 +65,6 @@ handleTopicRequest("user_about_update", user_about_update)
 handleTopicRequest("user_get_recentActivity", user_get_recentActivity)
 handleTopicRequest("user_search_email", user_search_email)
 handleTopicRequest("user_search_name", user_search_name)
-// handleTopicRequest("user_upload_picture", user_upload_picture)
 
 //groups
 handleTopicRequest("group_about_byID", group_about_byID)

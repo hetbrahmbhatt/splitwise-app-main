@@ -3,7 +3,6 @@ let initialState = {
     error: false,
 }
 var groupSummaryByIDReducer = ( state = initialState, action ) => {
-    console.log(action.payload)
     let newState = { ...state }
     switch ( action.type ) {
         case "group_summary_success":

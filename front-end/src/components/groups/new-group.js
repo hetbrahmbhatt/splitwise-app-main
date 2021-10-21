@@ -25,11 +25,9 @@ export class NewGroup extends Component {
 
     }
     loadOptionsForName = async (inp, callback) => {
-        console.log("hi");
         axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;
         const response = await axios.get(BACKEND_URL + "/users/searchbyname?name_like=" + inp);
-        console.log(response.data);
         callback(response.data.map(i => ({
             label: i.name,
             value: i._id
@@ -39,13 +37,11 @@ export class NewGroup extends Component {
         axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;
         const response = await axios.get(BACKEND_URL + "/users/searchbyemail?email_like=" + inp);
-        console.log(response.data);
         callback(response.data.map(i => ({
             label: i.email,
             value: i._id
         })));
     }
-
     handleImageChange = e => {
         this.setState({
             updatedProfileImage: e.target.files[0],
@@ -53,7 +49,6 @@ export class NewGroup extends Component {
         })
     }
     handleRadioButtonChange = (event) => {
-        console.log(event.target.value);
         if (event.target.value == "email") {
             this.setState({
                 emailRadioButton: true,
@@ -67,8 +62,7 @@ export class NewGroup extends Component {
             })
         }
     }
-    handleInputChange = inp => {
-        {
+    handleInputChange = inp => {{
             this.setState({
                 [inp.target.name]: inp.target.value
             })
@@ -82,7 +76,6 @@ export class NewGroup extends Component {
     }
     handleSubmit = e => {
         e.preventDefault();
-        console.log(this.state);
         if (this.state.groupName == "") {
             toast.error("Please enter group name");
             return;
@@ -91,12 +84,9 @@ export class NewGroup extends Component {
             toast.error("Please enter group members");
             return;
         }
-        console.log("Over Here");
         if (!this.state.error) {
             this.props.groupAddAction(this.state)
-
             if (this.state.profileImageUpdate) {
-                alert("Over hrer");
                 const formData = new FormData();
                 formData.append('profileImage', this.state.updatedProfileImage, this.state.updatedProfileImage.name + "," + this.state.userID)
                 const config = {
@@ -107,23 +97,19 @@ export class NewGroup extends Component {
                 axios
                     .post(BACKEND_URL + '/groups/uploadprofileimage', formData, config).then((response) => {
                         this.setState({
-
                             profileImagePath: BACKEND_URL + '/images/grouppics/' + cookie.load('id') + '/' + response.data.fileName
-
                         })
                         window.location.assign('/all-group')
                     }).catch(err => {
                         toast.error("Error in image upload")
                     })
             }
-            console.log(this.props);
         }
     }
 
     render() {
         let redirectTo = null;
         let duplicateGroup = null;
-        console.log(this.props)
         if (this.props.error) {
             duplicateGroup = <div style={{ 'color': 'red' }}>"Sorry ! This group name already exists"</div>
         }
@@ -176,7 +162,6 @@ export class NewGroup extends Component {
                         <form onSubmit={this.handleSubmit} id="Login">
                             <input placeholder={this.state.groupName} ref="groupName" type="text" id="groupName" name="groupName" style={{ "width": "300px", "marginBottom": "40px" }} onChange={this.handleInputChange} ></input>
                             {duplicateGroup}
-
                             <div onChange={this.handleRadioButtonChange}>
                                 <input type="radio" value="email" name="search" /> Search by email
                                 <input style={{ marginLeft: "20px" }} type="radio" value="name" name="search" /> Search by name
@@ -193,20 +178,15 @@ export class NewGroup extends Component {
         )
     }
 }
-
 const matchStateToProps = (state) => {
-    console.log("inside matchStatetoProps", state)
     return {
         error: state.insertGroupReducer.error,
         data: state.searchEmailReducer.emailData
     }
-
 }
-
 const matchDispatchToProps = (dispatch) => {
     return {
         groupAddAction: (data) => dispatch(groupAddAction(data)),
     }
 }
-
 export default connect(matchStateToProps, matchDispatchToProps)(NewGroup)

@@ -15,7 +15,6 @@ var success = (response, imagePath) => {
         }
     }
 }
-
 var error = (err) => {
     console.log("err", err)
     return {
@@ -25,23 +24,14 @@ var error = (err) => {
         }
     }
 }
-
-
 var userMessageAction = (data) => (dispatch) => {
-    console.log("data", data)
     axios.defaults.headers.common["authorization"] = cookie.load('token')
     axios.defaults.withCredentials = true;
     return axios.put(BACKEND_URL + '/groups/message', data).then(response => {
-        console.log(response.data);
         dispatch(success(response, data))
     }).catch(err => {
         dispatch(error(err))
     })
-
-
-
-
-
 }
 
 

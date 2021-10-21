@@ -5,8 +5,6 @@ var individualMessageSchema = new Schema({
     name: String,
     message: String
 })
-
-
 var messageSchema = new Schema({
     userID: String,
     groupID: String,

@@ -5,7 +5,6 @@ import cookie from "react-cookies";
 
 const USER_PROFILE_UPDATE_SUCCESS = "user_profile_update_success";
 const USER_PROFILE_UPDATE_FAILED = "user_profile_update_failed";
-const USER_PROFILE_UPDATE_DEFAULT = "user_profile_update_default"
 var success = (response) => {
     return {
         type: USER_PROFILE_UPDATE_SUCCESS,
@@ -14,9 +13,7 @@ var success = (response) => {
         }
     }
 }
-
 var error = (err) => {
-    console.log("err", err)
     return {
         type: USER_PROFILE_UPDATE_FAILED,
         payload: {
@@ -24,26 +21,12 @@ var error = (err) => {
         }
     }
 }
-
-var def = () => {
-    return {
-        type: USER_PROFILE_UPDATE_DEFAULT,
-        payload: {
-            response: {},
-            data: {}
-        }
-    }
-}
-
-
 var updateUserProfileAction = (data) => (dispatch) => {
     axios.defaults.headers.common[ "authorization" ] = cookie.load( 'token' )
     axios.defaults.withCredentials = true;
-    // alert(data);
     return axios
         .put(BACKEND_URL + "/users/editprofile", data).then(response => {
             if (response.status === 200) {
-                console.log(response);
                 if (cookie.load('email') !== response.data.email) {
                     cookie.remove("email", {
                         path: '/'
@@ -84,11 +67,8 @@ var updateUserProfileAction = (data) => (dispatch) => {
                         maxAge: 90000
                     })
                 }
-
                 dispatch(success(response))
-                // window.location.assign('/profile') ;
             }
-
         }).catch(err => {
             dispatch(error(err))
         })

@@ -24,17 +24,11 @@ function handle_request ( msg, callback ) {
                 expiresIn: 1008000
             })
             callback(null, "Bearer " + token)
-
-            console.log("Login Successfull")
-            // res.status(200).send("Bearer " + token)// res.status( 200 ).send( "Bearer " + token )
         } else {
-            console.log( "Invalid Credentials" )
-            // res.status( 401 ).send( "Invalid Credentials" )
             callback( "Invalid credentials", null )
         }
 
     } ).catch( error => {
-        console.log( "User Not Found", error )
         callback(error, null)
     } )
 

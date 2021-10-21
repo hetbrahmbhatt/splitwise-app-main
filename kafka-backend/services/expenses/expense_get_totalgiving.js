@@ -1,7 +1,5 @@
 
 const DebtsSchema = require('../../models/debts');
-var ObjectId = require('mongodb').ObjectID;
-
 function handle_request(msg, callback) {
     let req = {
         params: msg
@@ -18,9 +16,7 @@ function handle_request(msg, callback) {
             }
         ]
     }).then(docs => {
-        console.log(docs)
         callback(null, docs)
-        // res.status(200).send(JSON.stringify(docs))
     });
 }
 

@@ -6,7 +6,6 @@ import Modal from 'react-modal';
 import _ from 'lodash';
 import axios from 'axios';
 import description from '../../images/desrciption.png'
-
 import AddExpense from './add-expense'
 import moment from 'moment-timezone';
 import grocerylogo from '../../images/grocery.png'
@@ -31,10 +30,8 @@ const customStyles = {
     }
 };
 export class GroupDescription extends Component {
-
     constructor(props) {
         super(props)
-        // console.log(this.props.location.state.groupData)
         if (this.props.location.state) {
             if (this.props.location.state.groupData.image == null) {
                 this.state = {
@@ -73,30 +70,19 @@ export class GroupDescription extends Component {
         }
     }
     async componentDidMount() {
-
-
         axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;
-
         const totalinternalGroupBalance = await axios
             .post(BACKEND_URL + "/expenses/internalgroupbalance/", this.state)
-
-        console.log(totalinternalGroupBalance)
-
         this.setState(
             {
                 totalInternalGroupBalance: totalinternalGroupBalance.data
             }
         )
-
-
-
-        // const totalinternaldebt = await axios.get(BACKEND_URL + "/expenses/totalinternaldebt/" + this.state.groupID);
         axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;
         const groupSummary = await axios
-            .get(BACKEND_URL + "/groups/groupsummarybyid/" + this.state.groupID)
-        console.log(groupSummary.data);
+            .get(BACKEND_URL + "/groups/groupsummarybyid/" + this.state.groupID)        
         if (groupSummary.data.length == 0) {
             if (groupSummary.data.length == 0) {
                 this.setState({
@@ -109,16 +95,9 @@ export class GroupDescription extends Component {
                 groupDescription: groupSummary.data,
             })
         }
-
-        console.log(this.state);
-
-
-
         axios.defaults.headers.common["authorization"] = cookie.load('token')
         axios.defaults.withCredentials = true;
         const internalDebtResponse = await axios.get(BACKEND_URL + "/expenses/totalinternaldebt/" + this.state.groupID)
-        console.log(typeof internalDebtResponse.data)
-        console.log(internalDebtResponse.data);
         this.setState(
             {
                 debt: internalDebtResponse.data
@@ -130,16 +109,9 @@ export class GroupDescription extends Component {
             groupPopUp: !this.state.groupPopUp
         })
     }
-
     render() {
-        console.log(this.state);
-
-
-
         let individualExpenseDetails = (<div>{
-
             this.state.totalInternalGroupBalance.map((exp, index) => {
-
                 if (exp.currency == null || exp.amount == 0) {
                     return (
                         <span></span>
@@ -199,7 +171,7 @@ export class GroupDescription extends Component {
                     }
                 }
             }
-            )}
+        )}
         </div>)
         let totalInternalDebt = this.state.debt.map((exp, index) => {
             if (exp.amount > 0) {
@@ -216,9 +188,7 @@ export class GroupDescription extends Component {
                             <br></br>
                         </div>
                     </div>
-
                 )
-
             }
             else {
                 return (
@@ -236,15 +206,12 @@ export class GroupDescription extends Component {
                     </div>
                 )
             }
-
         });
-        console.log(this.state);
         let groupDescriptionDetails = null;
         let redirectVar = null
         if (!cookie.load("auth")) {
             redirectVar = <Redirect to="/login" />
         }
-
         if (this.state.emptyStateFlag) {
             groupDescriptionDetails = (
                 <div style={{ margin: "200px" }}>
@@ -256,7 +223,6 @@ export class GroupDescription extends Component {
         else {
             groupDescriptionDetails = this.state.groupDescription.map((group, index) => {
                 if (group.settleFlag != 0) {
-
                     return (
                         <Accordion style={{ backgroundColor: "#ffffff", height: "1000px" }}>
                             <Accordion.Toggle as={Card.Header} eventKey={index + 1}>
@@ -288,7 +254,6 @@ export class GroupDescription extends Component {
                                     </div>
                                 </div>
                             </Accordion.Toggle>
-
                             <Accordion.Collapse eventKey={index + 1}>
                                 <div className="row" style={{ height: "100px", border: "1px solid lightgrey", borderWidth: "thin", backgroundColor: "whitesmoke", marginBottom: "1px", height: "120px" }}>
                                     <div className="col-1" style={{ margin: "20px", color: "grey" }}>
@@ -320,7 +285,6 @@ export class GroupDescription extends Component {
                                 </div>
                             </Accordion.Collapse>
                         </Accordion>
-
                     )
                 }
                 else {
@@ -364,7 +328,6 @@ export class GroupDescription extends Component {
                                     <div className="row" style={{ height: "350px", marginLeft: "50px" }}>
                                         <div className="col-2">
                                             <img src={description} style={{ marginTop: "60px" }} width="100px" height="100px" alt="" />
-
                                         </div>
                                         <div className="col-3">
                                             <div className="row">
@@ -388,85 +351,13 @@ export class GroupDescription extends Component {
                                         </div>
                                     </div>
                                     <div className="row">
-
                                     </div>
                                 </div>
                             </Accordion.Collapse>
-
                         </Accordion>
-
                     )
                 }
             })
-
-            // groupDescriptionDetails = this.state.groupDescription.map((group, index) => {
-            //     if (group.settleFlag == 0) {
-            //         return (
-            //             <div className="row" style={{ height: "100px", borderBottom: "0.01px solid lightgrey", borderLeft: "0.01px solid lightgrey", borderRight: "0.01px solid lightgrey", borderWidth: "thin", marginBottom: "1px" }}>
-            //                 <div className="col-1" style={{ margin: "20px", color: "grey" }}>
-            //                     <div className="row">
-            //                         {moment(group.createdat).tz(cookie.load("timezone")).format("MMM")}
-            //                     </div>
-            //                     <div className="row" style={{ fontSize: "30px", marginTop: "-10px" }}>
-            //                         {moment(group.createdat).tz(cookie.load("timezone")).format("D")}                                </div>
-            //                 </div>
-            //                 <div className="col-2">
-            //                     <img src={grocerylogo} style={{ "paddingLeft": "0%", marginLeft: "-20px", marginTop: "20px" }} width="60%" height="60%" alt="" />
-            //                 </div>
-            //                 <div className="col-6" style={{ marginLeft: "-60px", marginTop: "30px" }}>
-            //                     <div className="row">
-            //                         <h3>{group.description}</h3>
-            //                         <img src={camera} style={{ margin: "8px" }} width="20px" height="20px" alt="" />
-            //                     </div>
-            //                     <div className="row">
-            //                         {moment(group.createdat).tz(cookie.load("timezone")).format("hh:mm a")}
-
-            //                     </div>
-            //                 </div>
-            //                 <div className="col-3" style={{ marginLeft: "60px", marginTop: "15px", marginRight: "-40px" }}>
-            //                     <div className="row" style={{ color: "grey" }}>
-            //                         {group.userName}
-
-            //                     </div>
-            //                     <div className="row">
-            //                         <h3><b>{group.currency}{group.amount}</b></h3>
-            //                     </div>
-            //                 </div>
-            //             </div>
-            //         )
-            //     }
-            //     else {
-            //         return (
-            //             <div className="row" style={{ height: "100px", borderBottom: "0.01px solid lightgrey", borderLeft: "0.01px solid lightgrey", borderRight: "0.01px solid lightgrey", borderWidth: "thin", marginBottom: "1px", height: "120px" }}>
-            //                 <div className="col-1" style={{ margin: "20px", color: "grey" }}>
-            //                     <div className="row">
-            //                         {moment(group.createdat).tz(cookie.load("timezone")).format("MMM")}
-            //                     </div>
-            //                     <div className="row" style={{ fontSize: "30px", marginTop: "-10px" }}>
-            //                         {moment(group.createdat).tz(cookie.load("timezone")).format("D")}
-            //                     </div>
-            //                 </div>
-            //                 <div className="col-2">
-            //                     <img src={grocerylogo} style={{ "paddingLeft": "0%", marginLeft: "-20px", marginTop: "20px" }} width="60%" height="60%" alt="" />
-            //                 </div>
-            //                 <div className="col-6" style={{ marginLeft: "-60px", marginTop: "30px" }}>
-            //                     <div className="row">
-            //                         <h4><b>"{group.name}"</b> and <b>"{group.settlename}"</b>settled up.</h4>
-            //                         {moment(group.createdat).tz(cookie.load("timezone")).format("hh:mm a")}
-            //                     </div>
-            //                 </div>
-            //                 <div className="col-3" style={{ marginLeft: "60px", marginTop: "15px", marginRight: "-40px" }}>
-            //                     <div className="row" style={{ color: "grey", maxWidth: "20" }}>
-            //                         <h6>dues cleared worth </h6>
-            //                     </div>
-            //                     <div className="row" >
-            //                         <h3><b>{group.currency}{group.amount}</b></h3>
-            //                     </div>
-            //                 </div>
-            //             </div>
-            //         )
-            //     }
-            // })
         }
         return (
             <div>
@@ -493,24 +384,18 @@ export class GroupDescription extends Component {
                                         <AddExpense groupData={this.state} closePopUp={this.toggleGroupPopUp} />
                                     </Modal>
                                 </div>
-
                             </div>
                             {groupDescriptionDetails}
-
                         </div>
                         <div class="col-2">
                             {individualExpenseDetails}
-                            {/* {individualExpenseDetails} */}
                         </div>
                     </div>
                 </div>
-
             </div>
-
         )
     }
 }
-
 const matchStateToProps = (state) => {
     return {
         error: state.groupSummaryByIDReducer.error,
@@ -518,9 +403,7 @@ const matchStateToProps = (state) => {
         groupInternalDebt: state.getInternalDebtReducer.internalData
 
     }
-
 }
-
 const matchDispatchToProps = (dispatch) => {
     return {
         groupSummaryByIDAction: (data) => dispatch(groupSummaryByIDAction(data)),

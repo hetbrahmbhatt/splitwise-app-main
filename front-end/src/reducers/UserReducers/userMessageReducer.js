@@ -3,9 +3,7 @@ let initialState = {
     error: "",
 }
 var userMessageReducer = (state = initialState, action) => {
-    console.log(action.payload)
     let newState = { ...state }
-
     switch (action.type) {
         case "user_message_success":
             newState.error = false;

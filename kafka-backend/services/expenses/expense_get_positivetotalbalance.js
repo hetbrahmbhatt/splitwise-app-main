@@ -1,8 +1,4 @@
-
-const debtsSchema = require('../../models/groups');
-const userSchema = require('../../models/users');
 const groupBalanceSchema = require('../../models/groupBalance');
-
 function handle_request(msg, callback) {
     let req = {
         body: msg
@@ -27,8 +23,6 @@ function handle_request(msg, callback) {
             },
         ]
     ).then(response => {
-        console.log("here");
-        console.log(response);
         res.status(200).send(JSON.stringify(response));
     })
 }

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Redirect } from 'react-router'
 import cookie from "react-cookies";
 import BACKEND_URL from '../../config/config'
-import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import editGroupAction from '../../actions/editGroupAction'
@@ -51,23 +50,19 @@ export class EditGroup extends Component {
             toast.error("Please enter group name");
             return;
         }
-        console.log(this.state);
-        console.log(this.props);
         this.props.editGroupAction(this.state).then(response => {
-            console.log("over here");
         })
     }
     render() {
-        console.log(this.props);
-        console.log(this.state);
+        if (!(cookie.load("auth"))) {
+            return <Redirect to='/login' />
+        }
         return (
             <div>
                 <h1 style={{ marginLeft: "500px" }}>Edit Group Details</h1>
                 <button className="btn btn-danger" style={{ marginLeft: "1200px", marginTop: "-100px" }} onClick={this.props.closePopUp}>Back</button>
-
                 <div className="row" style={{ "height": "10vh" }}>
                 </div>
-
                 <div className="row" style={{ "height": "100vh" }}>
                     <div className="col-3"></div>
                     <div className="col-2">
@@ -90,7 +85,6 @@ export class EditGroup extends Component {
     }
 }
 const matchStateToProps = (state) => {
-    console.log("inside matchStatetoProps", state)
     return {
         error: state.editGroupReducer.error,
         groupData: state.editGroupReducer.groupData

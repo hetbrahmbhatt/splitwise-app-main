@@ -3,10 +3,7 @@ var Schema = mongoose.Schema;
 var individialMessageSchema = new Schema({
     name: String,
     message: String
-},
-    {
-        timestamps: true
-    }
+},{timestamps: true}
 )
 var groupSummary = new Schema({
     userID: String,
@@ -18,7 +15,6 @@ var groupSummary = new Schema({
     description: String,
     settleFlag: String,
     messages: [individialMessageSchema],
-},
-    { timestamps: true }
+},{ timestamps: true }
 );
 module.exports = mongoose.model('groupSummary', groupSummary);  

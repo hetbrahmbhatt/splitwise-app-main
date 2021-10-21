@@ -9,6 +9,7 @@ function handle_request(msg, callback) {
         body: msg
     }
     console.log(req.body);
+
     let newGroup = new groupSchema({
         userID: req.body.userID,
         groupName: req.body.groupName,
