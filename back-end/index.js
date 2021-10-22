@@ -1,5 +1,5 @@
 //import the require dependencies
-const PORT = 4003;
+const PORT = process.env.PORT || 3001;
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('./config/db-config');
@@ -12,7 +12,8 @@ var cors = require('cors');
 var user = require('./users/routes')
 var groups = require('./groups/routes')
 var expenses = require('./expenses/routes')
-
+const dotenv = require('dotenv');
+dotenv.config();
 // required for fileupload
 const fileUpload = require('express-fileupload');
 app.use(fileUpload());
